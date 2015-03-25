@@ -7,6 +7,10 @@
         {
             "name": "minefield",
             "link": "minefield"
+        },
+        {
+            "name": "WhacAMole",
+            "link": "whac-a-mole"
         }
     ]
 }
