@@ -15,6 +15,10 @@
         {
             "name": "snake",
             "link": "snake"
+        },
+        {
+            "name": "balls",
+            "link": "balls"
         }
     ]
 }
