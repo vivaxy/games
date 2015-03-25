@@ -1,0 +1,27 @@
+body {
+    margin: 0;
+    padding: 0;
+    cursor: default;
+}
+
+div {
+    position: absolute;
+    border: 1px black solid;
+    text-align: center;
+}
+
+.mine {
+    background: rgb(192, 57, 43);
+}
+
+.block {
+    background: rgb(255, 255, 255);
+}
+
+.mark {
+    background: rgb(241, 196, 15);
+}
+
+.field {
+    background: rgb(127, 140, 141);
+}

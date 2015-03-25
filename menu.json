@@ -3,6 +3,10 @@
         {
             "name": "renju",
             "link": "renju"
+        },
+        {
+            "name": "minefield",
+            "link": "minefield"
         }
     ]
 }

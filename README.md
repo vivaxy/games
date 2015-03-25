@@ -2,3 +2,5 @@
 
 # TODO
 
+- renju
+    - fix position
