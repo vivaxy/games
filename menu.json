@@ -11,6 +11,10 @@
         {
             "name": "WhacAMole",
             "link": "whac-a-mole"
+        },
+        {
+            "name": "snake",
+            "link": "snake"
         }
     ]
 }
