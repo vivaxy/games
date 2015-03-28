@@ -19,6 +19,10 @@
         {
             "name": "balls",
             "link": "balls"
+        },
+        {
+            "name": "scratch",
+            "link": "scratch"
         }
     ]
 }

@@ -1,0 +1,12 @@
+/**
+ * @since 2014/10/21 15:50
+ * @author vivaxy
+ */
+body {
+    margin: 0;
+}
+
+canvas {
+    display: block;
+    position: absolute;
+}
