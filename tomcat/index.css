@@ -1,0 +1,106 @@
+/**
+ * @since 2014/9/25 15:59
+ * @author vivaxy
+ */
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+.loading-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: #fff;
+    overflow: hidden;
+}
+
+.loading {
+    height: 100%;
+    background: rgb(72, 91, 110);
+    -webkit-transition: width .3s;
+    transition: width .3s;
+    position: absolute;
+    top: 0;
+    overflow: hidden;
+    left: 0;
+}
+
+.loading-text {
+    font-size: 48px;
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    margin-top: -24px;
+    height: 48px;
+    text-align: center;
+}
+
+.loading-text-outer {
+    left: 50%;
+    margin-left: -150px;
+    text-align: center;
+    color: rgb(72, 91, 110);
+}
+
+.loading-text-inner {
+    color: #fff;
+}
+
+.canvas {
+    display: block;
+    margin: 0 auto;
+}
+
+.button {
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    background: no-repeat center;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+}
+
+.button:hover {
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+}
+
+.cymbal {
+    background-image: url("Buttons/cymbals.png");
+    top: 50%;
+    left: 5%;
+}
+
+.fart {
+    background-image: url("Buttons/fart.png");
+    top: 65%;
+    left: 5%;
+}
+
+.eat {
+    background-image: url("Buttons/larry.png");
+    top: 80%;
+    left: 5%;
+}
+
+.drink {
+    background-image: url("Buttons/milk.png");
+    top: 50%;
+    left: 75%;
+}
+
+.scratch {
+    background-image: url("Buttons/pawn.png");
+    top: 65%;
+    left: 75%;
+}
+
+.pie {
+    background-image: url("Buttons/pie.png");
+    top: 80%;
+    left: 75%;
+}
