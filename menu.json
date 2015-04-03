@@ -1,32 +1,22 @@
-{
-    "menu": [
-        {
-            "name": "renju",
-            "link": "renju"
-        },
-        {
-            "name": "minefield",
-            "link": "minefield"
-        },
-        {
-            "name": "WhacAMole",
-            "link": "whac-a-mole"
-        },
-        {
-            "name": "snake",
-            "link": "snake"
-        },
-        {
-            "name": "balls",
-            "link": "balls"
-        },
-        {
-            "name": "scratch",
-            "link": "scratch"
-        },
-        {
-            "name": "tomcat",
-            "link": "tomcat"
-        }
-    ]
-}
+ [{
+     "name": "renju",
+     "link": "renju"
+ }, {
+     "name": "minefield",
+     "link": "minefield"
+ }, {
+     "name": "WhacAMole",
+     "link": "whac-a-mole"
+ }, {
+     "name": "snake",
+     "link": "snake"
+ }, {
+     "name": "balls",
+     "link": "balls"
+ }, {
+     "name": "scratch",
+     "link": "scratch"
+ }, {
+     "name": "tomcat",
+     "link": "tomcat"
+ }]
