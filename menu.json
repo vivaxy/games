@@ -1,7 +1,11 @@
 [
     {
+        "name": "Eliminate",
+        "link": "eliminate/release/"
+    },
+    {
         "name": "Klotski",
-        "link": "klotski/release/index.html"
+        "link": "klotski/release/"
     },
     {
         "name": "Flappy Bird",
