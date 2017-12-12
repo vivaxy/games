@@ -1,5 +1,9 @@
 [
     {
+        "name": "Flappy Bird",
+        "link": "flappy-bird/dist/html/flappy-bird.html"
+    },
+    {
         "name": "renju",
         "link": "renju/"
     },
