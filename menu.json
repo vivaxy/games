@@ -1,5 +1,9 @@
 [
     {
+        "name": "Klotski",
+        "link": "klotski/release/index.html"
+    },
+    {
         "name": "Flappy Bird",
         "link": "flappy-bird/dist/html/flappy-bird.html"
     },
