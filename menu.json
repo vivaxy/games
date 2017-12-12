@@ -36,6 +36,10 @@
         "link": "tomcat/"
     },
     {
+        "name": "goldrain",
+        "link": "goldrain/"
+    },
+    {
         "name": "catapult",
         "link": "catapult/"
     }
