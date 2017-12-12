@@ -1,0 +1,19 @@
+{
+    "name": "catapult",
+    "version": "1.0.0",
+    "author": "vivaxy",
+    "devDependencies": {
+        "grunt": "*",
+        "grunt-contrib-clean": "*",
+        "grunt-contrib-concat": "*",
+        "grunt-contrib-copy": "*",
+        "grunt-contrib-cssmin": "*",
+        "grunt-contrib-imagemin": "*",
+        "grunt-contrib-jshint": "*",
+        "grunt-contrib-uglify": "*",
+        "grunt-contrib-watch": "*",
+        "grunt-contrib-htmlmin": "*",
+        "grunt-htmlhint": "*",
+        "grunt-markdown": "*"
+    }
+}
