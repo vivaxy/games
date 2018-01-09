@@ -1,5 +1,9 @@
 [
     {
+        "name": "Arkanoid",
+        "link": "arkanoid/dist/html/index.html"
+    },
+    {
         "name": "Eliminate",
         "link": "eliminate/release/"
     },
