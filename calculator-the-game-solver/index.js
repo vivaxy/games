@@ -6,7 +6,7 @@
 const levels = require('./levels');
 const actionParser = require('./action-parser');
 
-const level = 71;
+const level = Object.keys(levels).pop();
 
 const traverse = (actionList, moves, actions, calculate) => {
     if (actionList.length === moves) {
