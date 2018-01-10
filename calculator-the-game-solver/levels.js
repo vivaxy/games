@@ -124,4 +124,26 @@ module.exports = {
             '0=>1'
         ],
     },
+    79: {
+        moves: 7,
+        goal: 424,
+        start: 0,
+        actions: [
+            '/2',
+            '5',
+            '5=>4',
+            'Reverse',
+        ],
+    },
+    80: {
+        moves: 5,
+        goal: 100,
+        start: 99,
+        actions: [
+            '9',
+            '/9',
+            'Reverse',
+            '1=>0',
+        ],
+    },
 };

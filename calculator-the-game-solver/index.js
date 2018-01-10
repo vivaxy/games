@@ -8,34 +8,28 @@ const actionParser = require('./action-parser');
 
 const level = Object.keys(levels).pop();
 
-const traverse = (actionList, moves, actions, calculate) => {
+const traverse = (actionList, moves, actions, start, goal) => {
     if (actionList.length === moves) {
-        if (calculate(actionList)) {
+        const value = actionList.reduce((currentValue, action, index) => {
+            const nextValue = actionParser(action)(currentValue);
+            if (Number.isNaN(nextValue)) {
+                throw new Error('actionList: ' + actionList.join(',') + '; value: ' + currentValue + '; action: ' + action + '; index: ' + index);
+            }
+            return nextValue;
+        }, start);
+        if (value === goal) {
             return actionList;
         }
         return null;
     }
     return actions.reduce((result, action) => {
-        return traverse(actionList.concat(action), moves, actions, calculate) || result;
+        return result || traverse(actionList.concat(action), moves, actions, start, goal);
     }, null);
 };
 
 const solve = () => {
     const { start, goal, actions, moves } = levels[level];
-
-    return traverse([], moves, actions, (actionList) => {
-        const v = actionList.reduce((value, action, index) => {
-            const nextValue = actionParser(action)(value);
-            if (Number.isNaN(nextValue)) {
-                throw new Error('actionList: ' + actionList.join(',') + '; value: ' + value + '; action: ' + action + '; index: ' + index);
-            }
-            return nextValue;
-        }, start);
-        if (v === goal) {
-            return actionList;
-        }
-        return null;
-    });
+    return traverse([], moves, actions, start, goal);
 };
 
 console.log(solve());
