@@ -28,4 +28,4 @@ const traverse = (actionList, moves, actions, start, goal) => {
 
 const level = Object.keys(levels).pop();
 const { start, goal, actions, moves } = levels[level];
-console.log(traverse([], moves, actions, start, goal));
+console.log(traverse([], moves, actions, start, goal).join(', '));

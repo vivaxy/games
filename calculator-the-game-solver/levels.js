@@ -223,4 +223,25 @@ module.exports = {
             'Reverse',
         ],
     },
+    88: {
+        moves: 6,
+        goal: 55,
+        start: 86,
+        actions: [
+            '+2',
+            '+14',
+            'Reverse',
+            '0=>5',
+        ],
+    },
+    90: {
+        moves: 3,
+        goal: 4,
+        start: 1231,
+        actions: [
+            'SUM',
+            '3=>1',
+            '2=>3',
+        ],
+    },
 };
