@@ -146,4 +146,81 @@ module.exports = {
             '1=>0',
         ],
     },
+    81: {
+        moves: 5,
+        goal: 30,
+        start: 8,
+        actions: [
+            '2',
+            '-4',
+            '2=>3',
+            'Reverse',
+        ],
+    },
+    82: {
+        moves: 5,
+        goal: 222,
+        start: 101,
+        actions: [
+            '-1',
+            'Reverse',
+            '0=>2',
+        ],
+    },
+    83: {
+        moves: 5,
+        goal: 500,
+        start: 36,
+        actions: [
+            'x4',
+            '/3',
+            '1=>5',
+            'Reverse',
+        ],
+    },
+    84: {
+        moves: 8,
+        goal: 196,
+        start: 0,
+        actions: [
+            '1',
+            '+12',
+            'Reverse',
+            'x13',
+            '<<',
+        ],
+    },
+    85: {
+        moves: 5,
+        goal: 101,
+        start: 50,
+        actions: [
+            '1=>10',
+            '+50',
+            'Reverse',
+            '5=>1',
+        ],
+    },
+    86: {
+        moves: 6,
+        goal: 2048,
+        start: 1,
+        actions: [
+            '2',
+            'x4',
+            'Reverse',
+            'x10',
+        ],
+    },
+    87: {
+        moves: 5,
+        goal: 123,
+        start: 12,
+        actions: [
+            '12',
+            '+1',
+            '12=>2',
+            'Reverse',
+        ],
+    },
 };
