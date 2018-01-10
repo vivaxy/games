@@ -6,8 +6,6 @@
 const levels = require('./levels');
 const actionParser = require('./action-parser');
 
-const level = Object.keys(levels).pop();
-
 const traverse = (actionList, moves, actions, start, goal) => {
     if (actionList.length === moves) {
         const value = actionList.reduce((currentValue, action, index) => {
@@ -23,13 +21,11 @@ const traverse = (actionList, moves, actions, start, goal) => {
         return null;
     }
     return actions.reduce((result, action) => {
+        // if result has been found, return at once.
         return result || traverse(actionList.concat(action), moves, actions, start, goal);
     }, null);
 };
 
-const solve = () => {
-    const { start, goal, actions, moves } = levels[level];
-    return traverse([], moves, actions, start, goal);
-};
-
-console.log(solve());
+const level = Object.keys(levels).pop();
+const { start, goal, actions, moves } = levels[level];
+console.log(traverse([], moves, actions, start, goal));
