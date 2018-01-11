@@ -27,7 +27,7 @@ const openBrowser = () => {
     const address = server.listeningApp.address();
     const url = `http://${address.address}:${address.port}`;
     console.log(`   server started: ${url}`);
-    open(`${url}/html/flappy-bird.html`);
+    open(`${url}/html/index.html`);
 };
 
 const server = new WebpackDevServer(compiler, devServerOptions);

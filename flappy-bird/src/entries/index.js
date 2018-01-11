@@ -5,10 +5,10 @@
 
 // https://flappybird.me/static/games/flappy-bird_1/
 
-import '../FlappyBird';
+import '../lib';
 
 if (module.hot) {
-    module.hot.accept('../FlappyBird', () => {
+    module.hot.accept('../lib', () => {
         location.reload();
     });
 }
