@@ -56,8 +56,7 @@ module.exports = (action) => {
             return Number(String(value).replace(new RegExp(from, 'g'), to));
         }
         if (action.startsWith('x^')) {
-            const [_, pow] = action.split('x^');
-            return Math.pow(value, pow);
+            return Math.pow(value, Number(action.slice(2)));
         }
         if (action.startsWith('+')) {
             return value + Number(action.slice(1));
