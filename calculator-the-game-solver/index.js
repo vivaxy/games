@@ -8,13 +8,17 @@ const actionParser = require('./action-parser');
 
 const traverse = (actionList, moves, actions, start, goal) => {
     if (actionList.length === moves) {
-        const value = actionList.reduce((currentValue, action, index) => {
-            const nextValue = actionParser(action)(currentValue);
-            if (Number.isNaN(nextValue)) {
-                throw new Error('actionList: ' + actionList.join(',') + '; value: ' + currentValue + '; action: ' + action + '; index: ' + index);
+        let value = start;
+        for (let i = 0; i < actionList.length; i++) {
+            const action = actionList[i];
+            value = actionParser(action)(value);
+            if (parseInt(value) !== value) {
+                return null;
             }
-            return nextValue;
-        }, start);
+            if (Number.isNaN(value)) {
+                throw new Error('actionList: ' + actionList.join(',') + '; value: ' + value + '; action: ' + action + '; index: ' + index);
+            }
+        }
         if (value === goal) {
             return actionList;
         }

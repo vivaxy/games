@@ -27,9 +27,37 @@ module.exports = (action) => {
                 return Number(current) + Number(result);
             });
         }
+        if (action === '<Shift') {
+            let symbol = 1;
+            if (value < 0) {
+                symbol = -1;
+            }
+            const valueString = String(value * symbol);
+            return symbol * Number(valueString.slice(1) + valueString[0]);
+        }
+        if (action === 'Shift>') {
+            let symbol = 1;
+            if (value < 0) {
+                symbol = -1;
+            }
+            const valueString = String(value * symbol);
+            return symbol * Number(valueString.slice(-1) + valueString.slice(0, -1));
+        }
+        if (action === 'Mirror') {
+            let symbol = 1;
+            if (value < 0) {
+                symbol = -1;
+            }
+            const valueString = String(value * symbol);
+            return symbol * Number(valueString + valueString.split('').reverse().join(''));
+        }
         if (action.includes('=>')) {
             const [from, to] = action.split('=>');
             return Number(String(value).replace(new RegExp(from, 'g'), to));
+        }
+        if (action.startsWith('x^')) {
+            const [_, pow] = action.split('x^');
+            return Math.pow(value, pow);
         }
         if (action.startsWith('+')) {
             return value + Number(action.slice(1));
