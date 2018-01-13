@@ -3,10 +3,21 @@
   "version": "1.0.0",
   "description": "Calculator The Game",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "ava",
+    "start": "node ./index.js"
+  },
   "author": "vivaxy",
   "license": "MIT",
   "dependencies": {
     "fs-extra": "^5.0.0"
+  },
+  "devDependencies": {
+    "ava": "^0.24.0"
+  },
+  "ava": {
+    "files": [
+      "**/__test__/**"
+    ]
   }
 }

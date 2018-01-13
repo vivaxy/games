@@ -12,9 +12,12 @@ const actionParser = require('./action-parser');
 const traverse = (actionList, moves, actions, start, goal) => {
     if (actionList.length === moves) {
         let value = start;
-        for (let i = 0; i < actionList.length; i++) {
-            const action = actionList[i];
-            value = actionParser(action)(value);
+        let currentActionList = [...actionList];
+        for (let i = 0; i < currentActionList.length; i++) {
+            const action = currentActionList[i];
+            const result = actionParser(action)({ value, actions: currentActionList.slice(i + 1) });
+            value = result.value;
+            currentActionList = [...currentActionList.slice(0, i + 1), ...result.actions];
             // 小数
             if (parseInt(value) !== value) {
                 return null;
@@ -24,11 +27,11 @@ const traverse = (actionList, moves, actions, start, goal) => {
                 return null;
             }
             if (Number.isNaN(value)) {
-                throw new Error('actionList: ' + actionList.join(',') + '; value: ' + value + '; action: ' + action + '; index: ' + index);
+                throw new Error('actionList: ' + currentActionList.join(',') + '; value: ' + value + '; action: ' + action + '; index: ' + i);
             }
         }
         if (value === goal) {
-            return actionList;
+            return currentActionList;
         }
         return null;
     }
@@ -40,6 +43,7 @@ const traverse = (actionList, moves, actions, start, goal) => {
 
 (async () => {
     const levelKeyList = Object.keys(levels);
+    // const levelKeyList = Object.keys(levels).slice(-1);
     const answers = levelKeyList.reduce((object, level) => {
         const { start, goal, actions, moves } = levels[level];
         return { ...object, [level]: traverse([], moves, actions, start, goal) };
