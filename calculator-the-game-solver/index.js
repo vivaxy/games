@@ -3,6 +3,9 @@
  * @author vivaxy
  */
 
+const path = require('path');
+const fse = require('fs-extra');
+
 const levels = require('./levels');
 const actionParser = require('./action-parser');
 
@@ -12,7 +15,12 @@ const traverse = (actionList, moves, actions, start, goal) => {
         for (let i = 0; i < actionList.length; i++) {
             const action = actionList[i];
             value = actionParser(action)(value);
+            // 小数
             if (parseInt(value) !== value) {
+                return null;
+            }
+            // 过长
+            if (String(value).length > 6) {
                 return null;
             }
             if (Number.isNaN(value)) {
@@ -30,6 +38,12 @@ const traverse = (actionList, moves, actions, start, goal) => {
     }, null);
 };
 
-const level = Object.keys(levels).pop();
-const { start, goal, actions, moves } = levels[level];
-console.log(traverse([], moves, actions, start, goal).join(', '));
+(async () => {
+    const levelKeyList = Object.keys(levels);
+    const answers = levelKeyList.reduce((object, level) => {
+        const { start, goal, actions, moves } = levels[level];
+        return { ...object, [level]: traverse([], moves, actions, start, goal) };
+    }, {});
+    console.log(answers[levelKeyList.pop()].join(', '));
+    await fse.outputFile(path.join(__dirname, 'answers.json'), JSON.stringify(answers, null, 4));
+})();
