@@ -1,5 +1,9 @@
 [
     {
+        "name": "15 Puzzle",
+        "link": "15-puzzle/dist/html/index.html"
+    },
+    {
         "name": "Arkanoid",
         "link": "arkanoid/dist/html/index.html"
     },
