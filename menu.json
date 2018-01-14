@@ -4,16 +4,20 @@
         "link": "15-puzzle/dist/html/index.html"
     },
     {
+        "name": "Calculator The Game Solver",
+        "link": "calculator-the-game-solver/answers.json"
+    },
+    {
         "name": "Arkanoid",
         "link": "arkanoid/dist/html/index.html"
     },
     {
         "name": "Eliminate",
-        "link": "eliminate/release/"
+        "link": "eliminate/release/index.html"
     },
     {
         "name": "Klotski",
-        "link": "klotski/release/"
+        "link": "klotski/release/index.html"
     },
     {
         "name": "Flappy Bird",
@@ -21,42 +25,42 @@
     },
     {
         "name": "renju",
-        "link": "renju/"
+        "link": "renju/index.html"
     },
     {
         "name": "minefield",
-        "link": "minefield/"
+        "link": "minefield/index.html"
     },
     {
         "name": "WhacAMole",
-        "link": "whac-a-mole/"
+        "link": "whac-a-mole/index.html"
     },
     {
         "name": "snake",
-        "link": "snake/"
+        "link": "snake/index.html"
     },
     {
         "name": "balls",
-        "link": "balls/"
+        "link": "balls/index.html"
     },
     {
         "name": "scratch",
-        "link": "scratch/"
+        "link": "scratch/index.html"
     },
     {
         "name": "tomcat",
-        "link": "tomcat/"
+        "link": "tomcat/index.html"
     },
     {
         "name": "jiugongge",
-        "link": "jiugongge/"
+        "link": "jiugongge/index.html"
     },
     {
         "name": "goldrain",
-        "link": "goldrain/"
+        "link": "goldrain/index.html"
     },
     {
         "name": "catapult",
-        "link": "catapult/"
+        "link": "catapult/index.html"
     }
 ]
