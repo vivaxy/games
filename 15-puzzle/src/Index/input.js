@@ -72,6 +72,8 @@ export default class Input extends EventEmitter {
     }
 
     start = (e) => {
+        // start 也要 prevent 才能禁止页面滚动
+        e.preventDefault();
         this.inputStatus = inputStatusValues.TOUCH_DOWN;
         const point = getCoords(e);
         this.resetPoint(point);
