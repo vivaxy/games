@@ -13,13 +13,13 @@ export const gridBorderColor = 'rgb(0, 255, 0)';
 export const tileSpacing = 5;
 export const tileBorderWidth = 5;
 export const getTileSize = ({ size }) => {
-    return (gridSize - tileSpacing * (size + 1)) / size - tileBorderWidth * 2;
+    return (gridSize - tileSpacing * (size + 1) - gridBorderWidth * 2) / size - tileBorderWidth * 2;
 };
 export const tileBorderColor = 'rgb(255, 0, 0)';
 export const getTilePosition = ({ tileWidth, tileHeight, rowIndex, colIndex }) => {
     const eachTileWidth = tileWidth + tileBorderWidth * 2;
     const eachTileHeight = tileHeight + tileBorderWidth * 2;
-    const x = gridX + (colIndex + 1) * tileSpacing + tileBorderWidth + eachTileWidth * colIndex;
-    const y = gridY + (rowIndex + 1) * tileSpacing + tileBorderWidth + eachTileHeight * rowIndex;
+    const x = gridX + (colIndex + 1) * tileSpacing + tileBorderWidth + eachTileWidth * colIndex + gridBorderWidth;
+    const y = gridY + (rowIndex + 1) * tileSpacing + tileBorderWidth + eachTileHeight * rowIndex + gridBorderWidth;
     return { x, y }
 };
