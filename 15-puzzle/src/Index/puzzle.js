@@ -8,10 +8,11 @@ import {
     tileBorderWidth,
     tileBorderColor,
     getTilePosition,
+    tileTypes,
 } from './configs';
 
 class Tile {
-    constructor({ ctx, width, height, x, y }) {
+    constructor({ ctx, width, height, x, y, text, type }) {
         this.ctx = ctx;
         this.width = width;
         this.height = height;
@@ -19,13 +20,37 @@ class Tile {
         this.strokeStyle = tileBorderColor;
         this.x = x;
         this.y = y;
+        this.text = text;
+        this.type = type;
     }
 
-    render() {
+    renderSpaceTile() {
         const ctx = this.ctx;
+        ctx.fillStyle = '#fff';
         ctx.strokeStyle = this.strokeStyle;
         ctx.lineWidth = this.borderWidth;
         ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    renderNormalTile() {
+        const ctx = this.ctx;
+        ctx.fillStyle = '#000';
+        ctx.strokeStyle = this.strokeStyle;
+        ctx.lineWidth = this.borderWidth;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+
+        ctx.font = '48px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#fff';
+        ctx.fillText(this.text, this.x + this.width / 2, this.y + this.height / 2);
+    }
+
+    render() {
+        if (this.type === tileTypes.SPACE) {
+            return this.renderSpaceTile();
+        }
+        return this.renderNormalTile();
     }
 }
 
@@ -71,7 +96,9 @@ export default class Puzzle {
                         tileHeight: height,
                         colIndex,
                         rowIndex,
-                    })
+                    }),
+                    text: String(rowIndex * this.row + colIndex + 1),
+                    type: colIndex === this.col - 1 && rowIndex === this.row - 1 ? tileTypes.SPACE : tileTypes.NORMAL,
                 });
             });
         });

@@ -23,3 +23,8 @@ export const getTilePosition = ({ tileWidth, tileHeight, rowIndex, colIndex }) =
     const y = gridY + (rowIndex + 1) * tileSpacing + tileBorderWidth + eachTileHeight * rowIndex + gridBorderWidth;
     return { x, y }
 };
+
+export const tileTypes = {
+    SPACE: 0,
+    NORMAL: 1,
+};
