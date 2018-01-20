@@ -115,7 +115,7 @@ entryNameList.forEach(function(entryName) {
     webpackConfig.plugins.push(new HtmlWebpackPlugin({
         template: SOURCE_PATH + '/' + TEMPLATE_FOLDER_NAME + '/' + htmlTemplateName + '.html',
         filename: 'html/' + entryName + '.html',
-        hash: false,
+        hash: true,
         inject: 'body',
         chunks: [COMMON_CHUNK_NAME, entryName]
     }));

@@ -111,6 +111,7 @@ export default class Puzzle {
         if (direction === directions.LEFT) {
             if (col <= 0) {
                 this.input.resetPoint(point);
+                return;
             }
             // move left
             const tileRow = this.tileList[row];
@@ -119,6 +120,7 @@ export default class Puzzle {
         } else if (direction === directions.UP) {
             if (row <= 0) {
                 this.input.resetPoint(point);
+                return;
             }
             // move up
             const tileRow = this.tileList[row];
@@ -130,6 +132,7 @@ export default class Puzzle {
         } else if (direction === directions.RIGHT) {
             if (col >= this.col - 1) {
                 this.input.resetPoint(point);
+                return;
             }
             // move right
             const tileRow = this.tileList[row];
@@ -138,6 +141,7 @@ export default class Puzzle {
         } else if (direction === directions.DOWN) {
             if (row >= this.row - 1) {
                 this.input.resetPoint(point);
+                return;
             }
             // move down
             const tileRow = this.tileList[row];
