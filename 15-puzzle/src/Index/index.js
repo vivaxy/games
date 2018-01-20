@@ -15,6 +15,9 @@ class Game {
         const puzzle = new Puzzle({ ctx: canvas.getCtx(), row, col, input });
         this.canvas = canvas;
         this.puzzle = puzzle;
+        document.body.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        });
     }
 
     render() {

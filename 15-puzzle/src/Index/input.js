@@ -78,7 +78,7 @@ export default class Input extends EventEmitter {
     };
 
     move = (e) => {
-        e.stopPropagation();
+        e.preventDefault();
         const point = getCoords(e);
         this.pointX = point.x;
         this.pointY = point.y;
