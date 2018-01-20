@@ -78,13 +78,14 @@ export default class Input extends EventEmitter {
     };
 
     move = (e) => {
+        e.preventDefault();
         const point = getCoords(e);
         this.pointX = point.x;
         this.pointY = point.y;
         this.tryMove();
     };
 
-    end = () => {
+    end = (e) => {
         this.inputStatus = inputStatusValues.TOUCH_UP;
         this.resetPoint(this.invalidPoint);
     };
