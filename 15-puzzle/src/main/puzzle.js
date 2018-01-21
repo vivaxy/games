@@ -4,8 +4,7 @@ import {
     events,
     movementThreshold,
     tileSpacing,
-    mapCanvasToPoint,
-    mapPointToCanvas,
+    size,
 } from './configs';
 
 import Grid from './puzzle/grid';
@@ -82,6 +81,22 @@ export default class Puzzle {
 
     tryMove(direction, point) {
         const tile = this.findSpaceTile();
+        if (tile.colIndex >= size - 1 && point.deltaX > 0) {
+            this.input.setStartPoint({ x: tile.x });
+            return;
+        }
+        if (tile.colIndex <= 0 && point.deltaX < 0) {
+            this.input.setStartPoint({ x: tile.x });
+            return;
+        }
+        if (tile.rowIndex <= 0 && point.deltaY < 0) {
+            this.input.setStartPoint({ y: tile.y });
+            return;
+        }
+        if (tile.rowIndex >= size - 1 && point.deltaY > 0) {
+            this.input.setStartPoint({ y: tile.y });
+            return;
+        }
         tile.deltaX = point.deltaX;
         tile.deltaY = point.deltaY;
     }
@@ -178,8 +193,8 @@ export default class Puzzle {
             }, { list: [], spaceTile: null });
             return { list: [...accRowList, ...rowList], spaceTile: accRowSpaceTile || rowSpaceTile };
         }, { list: [], spaceTile: null });
-        grid.render();
         renders.spaceTile.render();
+        grid.render();
         renders.list.map((tile) => {
             tile.render();
         });

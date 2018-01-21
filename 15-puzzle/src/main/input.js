@@ -61,16 +61,21 @@ export default class Input extends EventEmitter {
         this.emit(events.TRY_MOVE, direction, point);
     }
 
-    moveStartPoint(movement) {
-        this.startPointX += movement.x;
-        this.startPointY += movement.y;
+    setStartPoint({ x = this.startPointX, y = this.startPointY }) {
+        this.startPointX = x;
+        this.startPointY = y;
     }
 
-    resetPoint(point) {
-        this.startPointX = point.x;
-        this.startPointY = point.y;
-        this.pointX = point.x;
-        this.pointY = point.y;
+    moveStartPoint({ x, y }) {
+        this.startPointX += x;
+        this.startPointY += y;
+    }
+
+    resetPoint({ x, y }) {
+        this.startPointX = x;
+        this.startPointY = y;
+        this.pointX = x;
+        this.pointY = y;
     }
 
     start = (e) => {
