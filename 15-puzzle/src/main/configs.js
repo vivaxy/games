@@ -47,6 +47,7 @@ export const directions = {
 export const events = {
     MOVE: 'MOVE',
     TRY_MOVE: 'TRY_MOVE',
+    RESET_SPACE_TILE: 'RESET_SPACE_TILE',
 };
 
 export const browserEvents = {

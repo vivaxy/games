@@ -58,6 +58,11 @@ export default class Puzzle {
                 },
             });
         });
+        this.input.on(events.RESET_SPACE_TILE, () => {
+            const tile = this.findSpaceTile();
+            tile.deltaX = 0;
+            tile.deltaY = 0;
+        });
     }
 
     initializeTileList() {
@@ -83,19 +88,19 @@ export default class Puzzle {
         const tile = this.findSpaceTile();
         if (tile.colIndex >= size - 1 && point.deltaX > 0) {
             this.input.setStartPoint({ x: tile.x });
-            return;
+            point.deltaX = 0;
         }
         if (tile.colIndex <= 0 && point.deltaX < 0) {
             this.input.setStartPoint({ x: tile.x });
-            return;
+            point.deltaX = 0;
         }
         if (tile.rowIndex <= 0 && point.deltaY < 0) {
             this.input.setStartPoint({ y: tile.y });
-            return;
+            point.deltaY = 0;
         }
         if (tile.rowIndex >= size - 1 && point.deltaY > 0) {
             this.input.setStartPoint({ y: tile.y });
-            return;
+            point.deltaY = 0;
         }
         tile.deltaX = point.deltaX;
         tile.deltaY = point.deltaY;

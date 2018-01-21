@@ -94,5 +94,6 @@ export default class Input extends EventEmitter {
     end = (e) => {
         this.inputStatus = inputStatusValues.TOUCH_UP;
         this.resetPoint(this.invalidPoint);
+        this.emit(events.RESET_SPACE_TILE);
     };
 };
