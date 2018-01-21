@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 
-import { movementThreshold, directions, events, browserEvents } from './configs';
+import { directions, events, browserEvents } from './configs';
 
 const inputStatusValues = {
     TOUCH_UP: 0,
@@ -35,33 +35,30 @@ export default class Input extends EventEmitter {
         canvas.addEventListener(browserEvents.TOUCH_CANCEL, this.end, { passive: true });
     }
 
-    tryMove() {
+    getDirection() {
         const xMovement = Math.abs(this.startPointX - this.pointX);
         const yMovement = Math.abs(this.startPointY - this.pointY);
-        const point = { x: this.pointX, y: this.pointY };
         if (xMovement > yMovement) {
-            if (xMovement > movementThreshold) {
-                // left or right
-                if (this.pointX - this.startPointX > 0) {
-                    this.emit(events.MOVE, this.inverse ? directions.RIGHT : directions.LEFT, point);
-                    this.resetPoint(point);
-                } else {
-                    this.emit(events.MOVE, this.inverse ? directions.LEFT : directions.RIGHT, point);
-                    this.resetPoint(point);
-                }
+            if (this.pointX - this.startPointX > 0) {
+                return this.inverse ? directions.RIGHT : directions.LEFT;
+            } else {
+                return this.inverse ? directions.LEFT : directions.RIGHT;
             }
         } else {
-            if (yMovement > movementThreshold) {
-                // up or down
-                if (this.pointY - this.startPointY > 0) {
-                    this.emit(events.MOVE, this.inverse ? directions.DOWN : directions.UP, point);
-                    this.resetPoint(point);
-                } else {
-                    this.emit(events.MOVE, this.inverse ? directions.UP : directions.DOWN, point);
-                    this.resetPoint(point);
-                }
+            if (this.pointY - this.startPointY > 0) {
+                return this.inverse ? directions.DOWN : directions.UP;
+            } else {
+                return this.inverse ? directions.UP : directions.DOWN;
             }
         }
+    }
+
+    tryMove() {
+        const xMovement = this.pointX - this.startPointX;
+        const yMovement = this.pointY - this.startPointY;
+        const point = { deltaX: xMovement, deltaY: yMovement, x: this.pointX, y: this.pointY };
+        const direction = this.getDirection();
+        this.emit(events.TRY_MOVE, direction, point);
     }
 
     resetPoint(point) {

@@ -12,34 +12,33 @@ export const gridY = 200;
 export const gridBorderColor = 'rgb(0, 255, 0)';
 
 // tile
-export const tileSpacing = 5;
+export const tileSpacing = 10;
 export const tileBorderWidth = 5;
-export const tileSize = (gridSize - tileSpacing * (size + 1) - gridBorderWidth * 2) / size - tileBorderWidth * 2;
+export const tileSize = (gridSize - tileSpacing * (size + 1) - gridBorderWidth * 2) / size; // border 在内
 export const tileBorderColor = 'rgb(255, 0, 0)';
 export const getTilePosition = ({ rowIndex, colIndex }) => {
-    const eachTileWidth = tileSize + tileBorderWidth * 2;
-    const eachTileHeight = tileSize + tileBorderWidth * 2;
-    const x = gridX + (colIndex + 1) * tileSpacing + tileBorderWidth + eachTileWidth * colIndex + gridBorderWidth;
-    const y = gridY + (rowIndex + 1) * tileSpacing + tileBorderWidth + eachTileHeight * rowIndex + gridBorderWidth;
+    const x = gridX + (colIndex + 1) * tileSpacing + tileSize * colIndex + gridBorderWidth;
+    const y = gridY + (rowIndex + 1) * tileSpacing + tileSize * rowIndex + gridBorderWidth;
     return { x, y }
 };
 
 export const tileTypes = {
-    SPACE: 0,
-    NORMAL: 1,
+    SPACE: 'SPACE',
+    NORMAL: 'NORMAL',
 };
 
 export const movementThreshold = window.innerWidth / canvasWidth * (tileSize + tileSpacing + tileBorderWidth * 2) / 2;
 
 export const directions = {
-    LEFT: 0,
-    UP: 1,
-    RIGHT: 2,
-    DOWN: 3,
+    LEFT: 'LEFT',
+    UP: 'UP',
+    RIGHT: 'RIGHT',
+    DOWN: 'DOWN',
 };
 
 export const events = {
     MOVE: 'MOVE',
+    TRY_MOVE: 'TRY_MOVE',
 };
 
 export const browserEvents = {

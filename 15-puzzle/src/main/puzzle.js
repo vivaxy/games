@@ -1,12 +1,23 @@
 import {
     tileSize,
     tileTypes,
-    directions,
     events,
+    movementThreshold,
+    gridSize,
 } from './configs';
 
 import Grid from './puzzle/grid';
 import Tile from './puzzle/tile';
+
+const whenDirection = (direction) => {
+    return (options) => {
+        return Object.keys(options).map((directionKey) => {
+            if (directionKey.toUpperCase() === direction) {
+                return options[directionKey]();
+            }
+        });
+    }
+};
 
 export default class Puzzle {
     constructor({ ctx, row, col, input }) {
@@ -21,8 +32,30 @@ export default class Puzzle {
     }
 
     initializeInput() {
-        this.input.on(events.MOVE, (direction, point) => {
-            this.move(direction, point);
+        this.input.on(events.TRY_MOVE, (direction, point) => {
+            this.tryMove(direction, point);
+            whenDirection(direction)({
+                left: () => {
+                    if (point.deltaX < -movementThreshold) {
+                        this.move(direction, point);
+                    }
+                },
+                up: () => {
+                    if (point.deltaY < -movementThreshold) {
+                        this.move(direction, point);
+                    }
+                },
+                right: () => {
+                    if (point.deltaX > movementThreshold) {
+                        this.move(direction, point);
+                    }
+                },
+                down: () => {
+                    if (point.deltaY > movementThreshold) {
+                        this.move(direction, point);
+                    }
+                },
+            });
         });
     }
 
@@ -45,78 +78,86 @@ export default class Puzzle {
         });
     }
 
-    move(direction, point) {
-        const { row, col } = this.findSpacePosition();
-        if (direction === directions.LEFT) {
-            if (col <= 0) {
-                this.input.resetPoint(point);
-                return;
-            }
-            // move left
-            const tileRow = this.tileList[row];
-            const [tile] = tileRow.splice(col, 1);
-            tileRow.splice(col - 1, 0, tile);
-        } else if (direction === directions.UP) {
-            if (row <= 0) {
-                this.input.resetPoint(point);
-                return;
-            }
-            // move up
-            const tileRow = this.tileList[row];
-            const upTileRow = this.tileList[row - 1];
-            const [tile] = tileRow.splice(col, 1);
-            const [upTile] = upTileRow.splice(col, 1);
-            tileRow.splice(col, 0, upTile);
-            upTileRow.splice(col, 0, tile);
-        } else if (direction === directions.RIGHT) {
-            if (col >= this.col - 1) {
-                this.input.resetPoint(point);
-                return;
-            }
-            // move right
-            const tileRow = this.tileList[row];
-            const [tile] = tileRow.splice(col, 1);
-            tileRow.splice(col + 1, 0, tile);
-        } else if (direction === directions.DOWN) {
-            if (row >= this.row - 1) {
-                this.input.resetPoint(point);
-                return;
-            }
-            // move down
-            const tileRow = this.tileList[row];
-            const downTileRow = this.tileList[row + 1];
-            const [tile] = tileRow.splice(col, 1);
-            const [downTile] = downTileRow.splice(col, 1);
-            tileRow.splice(col, 0, downTile);
-            downTileRow.splice(col, 0, tile);
-        } else {
-            throw new Error('unexpected direction: ' + direction);
-        }
+    tryMove(direction, point) {
+        const tile = this.findSpaceTile();
+        tile.deltaX = point.deltaX;
+        tile.deltaY = point.deltaY;
     }
 
-    findSpacePosition() {
-        const { tileList } = this;
-        return tileList.reduce((result, tileRow, rowIndex) => {
-            const col = tileRow.reduce((colResult, tile, colIndex) => {
-                if (tile.type === tileTypes.SPACE) {
-                    return colIndex;
+    swapTiles({ rowIndex: fromRowIndex, colIndex: fromColIndex }, { rowIndex: toRowIndex, colIndex: toColIndex }) {
+        const fromTileRow = this.tileList[fromRowIndex];
+        const [fromTile] = fromTileRow.splice(fromColIndex, 1);
+        const toTileRow = this.tileList[toRowIndex];
+        const [toTile] = toTileRow.splice(toColIndex, 1);
+        toTileRow.splice(toColIndex, 0, fromTile);
+        fromTileRow.splice(fromColIndex, 0, toTile);
+        fromTile.rowIndex = toRowIndex;
+        fromTile.colIndex = toColIndex;
+        toTile.rowIndex = fromRowIndex;
+        toTile.colIndex = fromColIndex;
+        fromTile.deltaX += (toColIndex - fromColIndex) * tileSize;
+        fromTile.deltaY += (toRowIndex - fromRowIndex) * tileSize;
+        toTile.deltaX += (fromColIndex - toColIndex) * tileSize;
+        toTile.deltaY += (fromRowIndex - toRowIndex) * tileSize;
+    }
+
+    move(direction, point) {
+        const { rowIndex, colIndex } = this.findSpaceTile();
+        whenDirection(direction)({
+            left: () => {
+                if (colIndex <= 0) {
+                    this.input.resetPoint(point);
+                    return;
                 }
-                return colResult === null ? null : colResult;
-            }, null);
-            if (col !== null) {
-                return { row: rowIndex, col };
+                // move left
+                this.swapTiles({ rowIndex, colIndex }, { rowIndex, colIndex: colIndex - 1 });
+            },
+            up: () => {
+                if (rowIndex <= 0) {
+                    this.input.resetPoint(point);
+                    return;
+                }
+                // move up
+                this.swapTiles({ rowIndex, colIndex }, { rowIndex: rowIndex - 1, colIndex });
+            },
+            right: () => {
+                if (colIndex >= this.col - 1) {
+                    this.input.resetPoint(point);
+                    return;
+                }
+                // move right
+                this.swapTiles({ rowIndex, colIndex }, { rowIndex, colIndex: colIndex + 1 });
+            },
+            down: () => {
+                if (rowIndex >= this.row - 1) {
+                    this.input.resetPoint(point);
+                    return;
+                }
+                // move down
+                this.swapTiles({ rowIndex, colIndex }, { rowIndex: rowIndex + 1, colIndex });
             }
-            return result;
-        }, { col: null, row: null });
+        });
+    }
+
+    findSpaceTile() {
+        const { tileList } = this;
+        return tileList.reduce((result, tileRow) => {
+            return result || tileRow.reduce((tileResult, tile) => {
+                if (tile.type === tileTypes.SPACE) {
+                    return tile;
+                }
+                return tileResult;
+            }, null);
+        }, null);
     }
 
     render() {
         const { grid, tileList } = this;
         grid.render();
-        tileList.map((tileRow, rowIndex) => {
-            return tileRow.map((tile, colIndex) => {
-                return tile.render({ rowIndex, colIndex });
-            });
-        });
+        tileList.reduceRight((accRow, tileRow) => {
+            return tileRow.reduceRight((acc, tile) => {
+                return tile.render();
+            }, null);
+        }, null);
     }
 }

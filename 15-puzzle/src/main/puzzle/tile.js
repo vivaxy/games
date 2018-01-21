@@ -6,7 +6,7 @@ import {
 } from '../configs';
 
 export default class Tile {
-    constructor({ ctx, width, height, text, type }) {
+    constructor({ ctx, width, height, text, type, rowIndex, colIndex, deltaX = 0, deltaY = 0 }) {
         this.ctx = ctx;
         this.width = width;
         this.height = height;
@@ -14,19 +14,23 @@ export default class Tile {
         this.strokeStyle = tileBorderColor;
         this.text = text;
         this.type = type;
+        this.rowIndex = rowIndex;
+        this.colIndex = colIndex;
+        this.deltaX = deltaX;
+        this.deltaY = deltaY;
     }
 
-    renderSpaceTile({ rowIndex, colIndex }) {
-        // const { ctx, strokeStyle, borderWidth, width, height } = this;
-        // const { x, y } = getTilePosition({ colIndex, rowIndex });
-        // ctx.fillStyle = '#f00';
-        // ctx.strokeStyle = strokeStyle;
-        // ctx.lineWidth = borderWidth;
-        // ctx.fillRect(x, y, width, height);
+    renderSpaceTile() {
+        const { ctx, strokeStyle, borderWidth, width, height, rowIndex, colIndex, deltaX, deltaY } = this;
+        const { x, y } = getTilePosition({ colIndex, rowIndex });
+        ctx.fillStyle = '#999';
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = borderWidth;
+        ctx.fillRect(x + deltaX, y + deltaY, width, height);
     }
 
-    renderNormalTile({ rowIndex, colIndex }) {
-        const { ctx, strokeStyle, borderWidth, width, height, text } = this;
+    renderNormalTile() {
+        const { ctx, strokeStyle, borderWidth, width, height, text, rowIndex, colIndex } = this;
         const { x, y } = getTilePosition({ colIndex, rowIndex });
         ctx.fillStyle = '#000';
         ctx.strokeStyle = strokeStyle;
@@ -40,11 +44,11 @@ export default class Tile {
         ctx.fillText(text, x + width / 2, y + height / 2);
     }
 
-    render({ rowIndex, colIndex }) {
+    render() {
         const { type } = this;
         if (type === tileTypes.SPACE) {
-            return this.renderSpaceTile({ rowIndex, colIndex });
+            return this.renderSpaceTile();
         }
-        return this.renderNormalTile({ rowIndex, colIndex });
+        return this.renderNormalTile();
     }
 }
