@@ -3,7 +3,9 @@ import {
     tileTypes,
     events,
     movementThreshold,
-    gridSize,
+    tileSpacing,
+    mapCanvasToPoint,
+    mapPointToCanvas,
 } from './configs';
 
 import Grid from './puzzle/grid';
@@ -85,20 +87,33 @@ export default class Puzzle {
     }
 
     swapTiles({ rowIndex: fromRowIndex, colIndex: fromColIndex }, { rowIndex: toRowIndex, colIndex: toColIndex }) {
-        const fromTileRow = this.tileList[fromRowIndex];
-        const [fromTile] = fromTileRow.splice(fromColIndex, 1);
-        const toTileRow = this.tileList[toRowIndex];
-        const [toTile] = toTileRow.splice(toColIndex, 1);
-        toTileRow.splice(toColIndex, 0, fromTile);
-        fromTileRow.splice(fromColIndex, 0, toTile);
+        const fromTile = this.tileList[fromRowIndex][fromColIndex];
+        const toTile = this.tileList[toRowIndex][toColIndex];
+
+        const getSpaceTile = () => {
+            if (fromTile.type === tileTypes.SPACE) {
+                return fromTile;
+            }
+            return toTile;
+        };
+        const spaceTile = getSpaceTile();
+
+        // swap
+        this.tileList[fromRowIndex][fromColIndex] = toTile;
+        this.tileList[toRowIndex][toColIndex] = fromTile;
         fromTile.rowIndex = toRowIndex;
         fromTile.colIndex = toColIndex;
         toTile.rowIndex = fromRowIndex;
         toTile.colIndex = fromColIndex;
-        fromTile.deltaX += (toColIndex - fromColIndex) * tileSize;
-        fromTile.deltaY += (toRowIndex - fromRowIndex) * tileSize;
-        toTile.deltaX += (fromColIndex - toColIndex) * tileSize;
-        toTile.deltaY += (fromRowIndex - toRowIndex) * tileSize;
+
+        const deltaX = spaceTile.deltaX;
+        const deltaY = spaceTile.deltaY;
+        spaceTile.deltaX = (fromColIndex - toColIndex) * (tileSize + tileSpacing) - deltaX;
+        spaceTile.deltaY = (fromRowIndex - toRowIndex) * (tileSize + tileSpacing) - deltaY;
+        this.input.moveStartPoint({
+            x: (toColIndex - fromColIndex) * (tileSize + tileSpacing),
+            y: (toRowIndex - fromRowIndex) * (tileSize + tileSpacing)
+        });
     }
 
     move(direction, point) {
@@ -153,11 +168,20 @@ export default class Puzzle {
 
     render() {
         const { grid, tileList } = this;
+        const renders = tileList.reduce(({ list: accRowList, spaceTile: accRowSpaceTile }, tileRow) => {
+            const { list: rowList, spaceTile: rowSpaceTile } = tileRow.reduce(({ list, spaceTile }, tile) => {
+                if (tile.type !== tileTypes.SPACE) {
+                    return { list: [...list, tile], spaceTile };
+                } else {
+                    return { list, spaceTile: tile };
+                }
+            }, { list: [], spaceTile: null });
+            return { list: [...accRowList, ...rowList], spaceTile: accRowSpaceTile || rowSpaceTile };
+        }, { list: [], spaceTile: null });
         grid.render();
-        tileList.reduceRight((accRow, tileRow) => {
-            return tileRow.reduceRight((acc, tile) => {
-                return tile.render();
-            }, null);
-        }, null);
+        renders.spaceTile.render();
+        renders.list.map((tile) => {
+            tile.render();
+        });
     }
 }

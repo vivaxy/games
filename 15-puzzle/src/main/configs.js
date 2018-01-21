@@ -27,7 +27,15 @@ export const tileTypes = {
     NORMAL: 'NORMAL',
 };
 
-export const movementThreshold = window.innerWidth / canvasWidth * (tileSize + tileSpacing + tileBorderWidth * 2) / 2;
+export const mapCanvasToPoint = (dimension) => {
+    return window.innerWidth / canvasWidth * dimension;
+};
+
+export const mapPointToCanvas = (dimension) => {
+    return canvasWidth / window.innerWidth * dimension;
+};
+
+export const movementThreshold = (tileSize + tileSpacing) / 2;
 
 export const directions = {
     LEFT: 'LEFT',

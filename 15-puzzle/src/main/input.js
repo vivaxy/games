@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 
-import { directions, events, browserEvents } from './configs';
+import { directions, events, browserEvents, mapPointToCanvas } from './configs';
 
 const inputStatusValues = {
     TOUCH_UP: 0,
@@ -9,9 +9,9 @@ const inputStatusValues = {
 
 const getCoords = (e) => {
     if (e.changedTouches) {
-        return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+        return { x: mapPointToCanvas(e.changedTouches[0].clientX), y: mapPointToCanvas(e.changedTouches[0].clientY) };
     }
-    return { x: e.clientX, y: e.clientY };
+    return { x: mapPointToCanvas(e.clientX), y: mapPointToCanvas(e.clientY) };
 };
 
 export default class Input extends EventEmitter {
@@ -59,6 +59,11 @@ export default class Input extends EventEmitter {
         const point = { deltaX: xMovement, deltaY: yMovement, x: this.pointX, y: this.pointY };
         const direction = this.getDirection();
         this.emit(events.TRY_MOVE, direction, point);
+    }
+
+    moveStartPoint(movement) {
+        this.startPointX += movement.x;
+        this.startPointY += movement.y;
     }
 
     resetPoint(point) {
