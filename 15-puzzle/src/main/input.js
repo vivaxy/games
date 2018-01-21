@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 
-import { movementThreshold, directions, events } from './configs';
+import { movementThreshold, directions, events, browserEvents } from './configs';
 
 const inputStatusValues = {
     TOUCH_UP: 0,
@@ -29,10 +29,10 @@ export default class Input extends EventEmitter {
 
     initialize() {
         const { canvas } = this;
-        canvas.addEventListener('touchstart', this.start);
-        canvas.addEventListener('touchmove', this.move);
-        canvas.addEventListener('touchend', this.end);
-        canvas.addEventListener('touchcancel', this.end);
+        canvas.addEventListener(browserEvents.TOUCH_START, this.start, { passive: true });
+        canvas.addEventListener(browserEvents.TOUCH_MOVE, this.move, { passive: true });
+        canvas.addEventListener(browserEvents.TOUCH_END, this.end, { passive: true });
+        canvas.addEventListener(browserEvents.TOUCH_CANCEL, this.end, { passive: true });
     }
 
     tryMove() {
@@ -78,7 +78,6 @@ export default class Input extends EventEmitter {
     };
 
     move = (e) => {
-        e.preventDefault();
         const point = getCoords(e);
         this.pointX = point.x;
         this.pointY = point.y;

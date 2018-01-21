@@ -4,6 +4,8 @@
  */
 
 import '../styles/index.pcss';
+
+import { browserEvents } from './configs';
 import Canvas from './canvas';
 import Puzzle from './puzzle';
 import Input from './input';
@@ -15,9 +17,10 @@ class Game {
         const puzzle = new Puzzle({ ctx: canvas.getCtx(), row, col, input });
         this.canvas = canvas;
         this.puzzle = puzzle;
-        document.body.addEventListener('touchmove', (e) => {
+        // disable scroll. // weixin need this
+        document.body.addEventListener(browserEvents.TOUCH_MOVE, (e) => {
             e.preventDefault();
-        });
+        }, { passive: false });
     }
 
     render() {

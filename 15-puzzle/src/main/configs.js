@@ -29,7 +29,7 @@ export const tileTypes = {
     NORMAL: 1,
 };
 
-export const movementThreshold = window.innerWidth / canvasWidth * (tileSize + tileSpacing);
+export const movementThreshold = window.innerWidth / canvasWidth * (tileSize + tileSpacing + tileBorderWidth * 2) / 2;
 
 export const directions = {
     LEFT: 0,
@@ -40,4 +40,11 @@ export const directions = {
 
 export const events = {
     MOVE: 'MOVE',
+};
+
+export const browserEvents = {
+    TOUCH_START: 'touchstart',
+    TOUCH_MOVE: 'touchmove',
+    TOUCH_END: 'touchend',
+    TOUCH_CANCEL: 'touchcancel',
 };
