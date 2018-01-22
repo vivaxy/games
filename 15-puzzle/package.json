@@ -1,6 +1,6 @@
 {
   "name": "15-puzzle",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "reactScaffoldVersion": "0.1.1",
   "description": "gt front end project scaffold",
   "main": "none",
@@ -46,6 +46,7 @@
     "webpack-visualizer-plugin": "^0.1.10"
   },
   "dependencies": {
+    "bezier-easing": "^2.0.3",
     "eventemitter3": "^3.0.0"
   }
 }

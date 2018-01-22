@@ -60,8 +60,7 @@ export default class Puzzle {
         });
         this.input.on(events.RESET_SPACE_TILE, () => {
             const tile = this.findSpaceTile();
-            tile.deltaX = 0;
-            tile.deltaY = 0;
+            tile.animateToResetPosition();
         });
     }
 
@@ -107,16 +106,8 @@ export default class Puzzle {
     }
 
     swapTiles({ rowIndex: fromRowIndex, colIndex: fromColIndex }, { rowIndex: toRowIndex, colIndex: toColIndex }) {
-        const fromTile = this.tileList[fromRowIndex][fromColIndex];
-        const toTile = this.tileList[toRowIndex][toColIndex];
-
-        const getSpaceTile = () => {
-            if (fromTile.type === tileTypes.SPACE) {
-                return fromTile;
-            }
-            return toTile;
-        };
-        const spaceTile = getSpaceTile();
+        const fromTile = this.tileList[fromRowIndex][fromColIndex]; // space tile
+        const toTile = this.tileList[toRowIndex][toColIndex]; // the other tile
 
         // swap
         this.tileList[fromRowIndex][fromColIndex] = toTile;
@@ -126,10 +117,13 @@ export default class Puzzle {
         toTile.rowIndex = fromRowIndex;
         toTile.colIndex = fromColIndex;
 
-        const deltaX = spaceTile.deltaX;
-        const deltaY = spaceTile.deltaY;
-        spaceTile.deltaX = (fromColIndex - toColIndex) * (tileSize + tileSpacing) - deltaX;
-        spaceTile.deltaY = (fromRowIndex - toRowIndex) * (tileSize + tileSpacing) - deltaY;
+        const deltaX = fromTile.deltaX;
+        const deltaY = fromTile.deltaY;
+        fromTile.deltaX = (fromColIndex - toColIndex) * (tileSize + tileSpacing) + deltaX;
+        fromTile.deltaY = (fromRowIndex - toRowIndex) * (tileSize + tileSpacing) + deltaY;
+        toTile.deltaX = (toColIndex - fromColIndex) * (tileSize + tileSpacing);
+        toTile.deltaY = (toRowIndex - fromRowIndex) * (tileSize + tileSpacing);
+        toTile.animateToResetPosition();
         this.input.moveStartPoint({
             x: (toColIndex - fromColIndex) * (tileSize + tileSpacing),
             y: (toRowIndex - fromRowIndex) * (tileSize + tileSpacing)
