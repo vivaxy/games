@@ -42,6 +42,7 @@ export default class Timer {
 
     reset() {
         this.time = 0;
+        this.startingTime = null;
     }
 
     update() {

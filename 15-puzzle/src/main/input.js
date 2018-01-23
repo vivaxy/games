@@ -2,11 +2,6 @@ import { EventEmitter } from 'eventemitter3';
 
 import { directions, events, browserEvents, mapPointToCanvas } from './configs';
 
-const inputStatusValues = {
-    TOUCH_UP: 0,
-    TOUCH_DOWN: 1,
-};
-
 const getCoords = (e) => {
     if (e.changedTouches) {
         return {
@@ -25,8 +20,6 @@ export default class Input extends EventEmitter {
         super();
         this.canvas = canvas;
 
-        this.inputStatus = inputStatusValues.TOUCH_UP;
-        this.inverse = true;
         this.invalidPoint = { x: null, y: null };
         this.resetPoint(this.invalidPoint);
 
@@ -50,15 +43,15 @@ export default class Input extends EventEmitter {
         const yMovement = Math.abs(this.startPointY - this.pointY);
         if (xMovement > yMovement) {
             if (this.pointX - this.startPointX > 0) {
-                return this.inverse ? directions.RIGHT : directions.LEFT;
+                return directions.RIGHT;
             } else {
-                return this.inverse ? directions.LEFT : directions.RIGHT;
+                return directions.LEFT;
             }
         } else {
             if (this.pointY - this.startPointY > 0) {
-                return this.inverse ? directions.DOWN : directions.UP;
+                return directions.DOWN;
             } else {
-                return this.inverse ? directions.UP : directions.DOWN;
+                return directions.UP;
             }
         }
     }
@@ -89,7 +82,6 @@ export default class Input extends EventEmitter {
     }
 
     start = (e) => {
-        this.inputStatus = inputStatusValues.TOUCH_DOWN;
         const point = getCoords(e);
         this.resetPoint(point);
     };
@@ -101,8 +93,7 @@ export default class Input extends EventEmitter {
         this.tryMove();
     };
 
-    end = (e) => {
-        this.inputStatus = inputStatusValues.TOUCH_UP;
+    end = () => {
         this.resetPoint(this.invalidPoint);
         this.emit(events.RESET_SPACE_TILE);
     };

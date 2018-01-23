@@ -131,10 +131,6 @@ export default class Puzzle {
         }
         tile.deltaX = point.deltaX;
         tile.deltaY = point.deltaY;
-        if (this.puzzleStatus === puzzleStatusCodes.READY) {
-            this.timer.start();
-            this.puzzleStatus = puzzleStatusCodes.STARTED;
-        }
     }
 
     swapTiles({ rowIndex: fromRowIndex, colIndex: fromColIndex }, { rowIndex: toRowIndex, colIndex: toColIndex }) {
@@ -160,6 +156,10 @@ export default class Puzzle {
             x: (toColIndex - fromColIndex) * (tileSize + tileSpacing),
             y: (toRowIndex - fromRowIndex) * (tileSize + tileSpacing)
         });
+        if (this.puzzleStatus === puzzleStatusCodes.READY) {
+            this.timer.start();
+            this.puzzleStatus = puzzleStatusCodes.STARTED;
+        }
         if (this.puzzleStatus === puzzleStatusCodes.STARTED) {
             this.checkWinning();
             this.stepper.update();
