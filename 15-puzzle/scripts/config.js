@@ -6,5 +6,5 @@
 const ip = require('ip');
 
 exports.DEVELOPMENT_IP = ip.address();
-exports.DEVELOPMENT_PORT = Math.floor(Math.random() * 65536);
+exports.DEVELOPMENT_PORT = 3010;
 exports.DIST_PATH = 'dist';

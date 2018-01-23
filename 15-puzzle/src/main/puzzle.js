@@ -1,3 +1,6 @@
+import 'whatwg-fetch';
+import Fingerprint2 from 'fingerprintjs2';
+
 import {
     tileSize,
     tileTypes,
@@ -8,6 +11,8 @@ import {
     buttonTypes,
     directions,
     puzzleStatusCodes,
+    storageKeys,
+    getNow,
 } from './configs';
 
 import Grid from './puzzle/grid';
@@ -15,6 +20,13 @@ import Tile from './puzzle/tile';
 import Buttons from './puzzle/buttons';
 import Timer from './puzzle/timer';
 import Stepper from './puzzle/stepper';
+
+const getHost = () => {
+    if (location.host === 'vivaxy.github.io') {
+        return 'https://coddee.1000-100.com';
+    }
+    return 'http://127.0.0.1:8080';
+};
 
 const whenDirection = (direction) => {
     return (options) => {
@@ -42,6 +54,9 @@ export default class Puzzle {
         this.initializeInput();
         this.buttons.enable([buttonTypes.SCRAMBLE]);
         this.puzzleStatus = puzzleStatusCodes.SCRAMBLING;
+
+        this.scores = {};
+        this.getScores();
     }
 
     initializeInput() {
@@ -268,6 +283,30 @@ export default class Puzzle {
         if (winning) {
             this.puzzleStatus = puzzleStatusCodes.WINNING;
             this.timer.stop();
+            this.saveScore();
         }
     }
+
+    getScores() {
+        new Fingerprint2().get(async(fingerprint) => {
+            this.scores = await fetch(`${getHost()}/api/15-puzzle/get-scores`, {
+                method: 'POST',
+                body: JSON.stringify({ fingerprint }),
+            });
+        });
+    }
+
+    saveScore() {
+        const time = this.timer.getTime();
+        const steps = this.stepper.getStepper();
+        new Fingerprint2().get(async(fingerprint) => {
+            const username = localStorage.getItem(storageKeys.USERNAME);
+            const timestamp = getNow();
+            this.scores = await fetch(`${getHost()}/api/15-puzzle/get-scores`, {
+                method: 'POST',
+                body: JSON.stringify({ username, time, steps, fingerprint, timestamp }),
+            });
+        });
+    }
+
 }

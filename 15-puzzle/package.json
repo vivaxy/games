@@ -47,6 +47,8 @@
   },
   "dependencies": {
     "bezier-easing": "^2.0.3",
-    "eventemitter3": "^3.0.0"
+    "eventemitter3": "^3.0.0",
+    "fingerprintjs2": "^1.5.1",
+    "whatwg-fetch": "^2.0.3"
   }
 }

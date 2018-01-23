@@ -104,3 +104,7 @@ export const puzzleStatusCodes = {
     STARTED: 'STARTED',
     WINNING: 'WINNING',
 };
+
+export const storageKeys = {
+    USERNAME: '@15-puzzle/username',
+};

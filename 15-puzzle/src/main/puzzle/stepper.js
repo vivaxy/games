@@ -29,4 +29,9 @@ export default class Stepper {
     update() {
         this.steps += 1;
     }
+
+    getStepper() {
+        return this.steps;
+    }
+
 }

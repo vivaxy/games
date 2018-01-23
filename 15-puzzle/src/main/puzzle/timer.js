@@ -51,4 +51,8 @@ export default class Timer {
         }
     }
 
+    getTime() {
+        return this.time;
+    }
+
 }
