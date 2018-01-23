@@ -88,6 +88,9 @@ export default class Tile {
             this.deltaX = this.animationStartDeltaX * (1 - this.easing(progress));
             this.deltaY = this.animationStartDeltaY * (1 - this.easing(progress));
             if (progress >= 1) {
+                // 修复动画的最终位置
+                this.deltaX = 0;
+                this.deltaY = 0;
                 this.animationStartTime = null;
                 this.animationStartDeltaX = null;
                 this.animationStartDeltaY = null;
