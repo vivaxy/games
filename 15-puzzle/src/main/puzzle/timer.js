@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-import { getNow } from '../configs';
+import { getNow, timerFontColor, timerFontSize, timerHeight, timerLeft, timerTop, timerWidth } from '../configs';
 
 export default class Timer {
 
@@ -13,17 +13,31 @@ export default class Timer {
         this.startingTime = null;
     }
 
+    formatTime() {
+        const milliseconds = this.time % 1000;
+        const seconds = (this.time - milliseconds) / 1000 % 60;
+        const minutes = ((this.time - milliseconds) / 1000 - seconds) / 60;
+        return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}.${milliseconds}`;
+    }
+
     render() {
         const { ctx } = this;
+        ctx.font = `${timerFontSize}px/${timerHeight}px serif`;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = timerFontColor;
+        ctx.fillText(this.formatTime(this.time), timerLeft, timerTop + timerHeight / 2);
     }
 
     start() {
-        this.time = 0;
-        this.startingTime = getNow();
+        if (!this.startingTime) {
+            this.time = 0;
+            this.startingTime = getNow();
+        }
     }
 
     stop() {
-        this.startingTime = getNow();
+        this.startingTime = null;
     }
 
     reset() {

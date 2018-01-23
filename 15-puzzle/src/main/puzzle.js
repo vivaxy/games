@@ -7,11 +7,14 @@ import {
     size,
     buttonTypes,
     directions,
+    puzzleStatusCodes,
 } from './configs';
 
 import Grid from './puzzle/grid';
 import Tile from './puzzle/tile';
 import Buttons from './puzzle/buttons';
+import Timer from './puzzle/timer';
+import Stepper from './puzzle/stepper';
 
 const whenDirection = (direction) => {
     return (options) => {
@@ -32,15 +35,18 @@ export default class Puzzle {
 
         this.grid = new Grid({ ctx });
         this.buttons = new Buttons({ ctx });
+        this.timer = new Timer({ ctx });
+        this.stepper = new Stepper({ ctx });
+
         this.tileList = this.initializeTileList();
         this.initializeInput();
         this.buttons.enable([buttonTypes.SCRAMBLE]);
-        this.moveActionEnabled = true;
+        this.puzzleStatus = puzzleStatusCodes.SCRAMBLING;
     }
 
     initializeInput() {
         this.input.on(events.TRY_MOVE, (direction, point) => {
-            if (!this.moveActionEnabled) {
+            if ([puzzleStatusCodes.SCRAMBLING, puzzleStatusCodes.WINNING].includes(this.puzzleStatus)) {
                 return;
             }
             this.tryMove(direction, point);
@@ -75,9 +81,11 @@ export default class Puzzle {
             const buttonAction = this.buttons.hitButton(point);
             switch (buttonAction) {
                 case buttonTypes.SCRAMBLE:
-                    this.moveActionEnabled = false;
+                    this.puzzleStatus = puzzleStatusCodes.SCRAMBLING;
+                    this.timer.reset();
+                    this.stepper.reset();
                     this.scramble();
-                    this.moveActionEnabled = true;
+                    this.puzzleStatus = puzzleStatusCodes.READY;
                     this.buttons.enable([buttonTypes.SCRAMBLE]);
                     break;
             }
@@ -123,6 +131,10 @@ export default class Puzzle {
         }
         tile.deltaX = point.deltaX;
         tile.deltaY = point.deltaY;
+        if (this.puzzleStatus === puzzleStatusCodes.READY) {
+            this.timer.start();
+            this.puzzleStatus = puzzleStatusCodes.STARTED;
+        }
     }
 
     swapTiles({ rowIndex: fromRowIndex, colIndex: fromColIndex }, { rowIndex: toRowIndex, colIndex: toColIndex }) {
@@ -148,6 +160,10 @@ export default class Puzzle {
             x: (toColIndex - fromColIndex) * (tileSize + tileSpacing),
             y: (toRowIndex - fromRowIndex) * (tileSize + tileSpacing)
         });
+        if (this.puzzleStatus === puzzleStatusCodes.STARTED) {
+            this.checkWinning();
+            this.stepper.update();
+        }
     }
 
     move(direction, point) {
@@ -201,7 +217,7 @@ export default class Puzzle {
     }
 
     render() {
-        const { grid, tileList, buttons } = this;
+        const { grid, tileList, buttons, timer, stepper } = this;
         const renders = tileList.reduce(({ list: accRowList, spaceTile: accRowSpaceTile }, tileRow) => {
             const { list: rowList, spaceTile: rowSpaceTile } = tileRow.reduce(({ list, spaceTile }, tile) => {
                 if (tile.type !== tileTypes.SPACE) {
@@ -218,6 +234,8 @@ export default class Puzzle {
             tile.render();
         });
         buttons.render();
+        timer.render();
+        stepper.render();
     }
 
     update() {
@@ -226,6 +244,7 @@ export default class Puzzle {
                 tile.update();
             });
         });
+        this.timer.update();
     }
 
     scramble() {
@@ -235,5 +254,20 @@ export default class Puzzle {
         }).map((direction) => {
             return this.move(direction, { x: 0, y: 0 });
         });
+        const tile = this.findSpaceTile();
+        tile.animateToResetPosition();
+    }
+
+    checkWinning() {
+        const { row } = this;
+        const winning = this.tileList.every((tileRow, rowIndex) => {
+            return tileRow.every((tile, colIndex) => {
+                return Number(tile.text) === rowIndex * row + colIndex + 1;
+            });
+        });
+        if (winning) {
+            this.puzzleStatus = puzzleStatusCodes.WINNING;
+            this.timer.stop();
+        }
     }
 }

@@ -9,7 +9,7 @@ const autoprefixer = require('autoprefixer');
 const Visualizer = require('webpack-visualizer-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const config = require('./scripts/config');
+const config = require('./scripts/config.js');
 
 const SOURCE_PATH = 'src';
 const ENTRY_FOLDER_NAME = 'entries';
@@ -117,7 +117,7 @@ entryNameList.forEach(function(entryName) {
         filename: 'html/' + entryName + '.html',
         hash: true,
         inject: 'body',
-        chunks: [COMMON_CHUNK_NAME, entryName]
+        chunks: [COMMON_CHUNK_NAME, entryName],
     }));
 });
 

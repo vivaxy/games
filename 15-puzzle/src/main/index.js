@@ -5,7 +5,7 @@
 
 import '../styles/index.pcss';
 
-import { browserEvents, events } from './configs';
+import { browserEvents, events, puzzleStatusCodes } from './configs';
 import Canvas from './canvas';
 import Puzzle from './puzzle';
 import Input from './input';
@@ -47,6 +47,8 @@ class Game {
 
     start() {
         this.loop();
+        this.puzzle.scramble();
+        this.puzzle.puzzleStatus = puzzleStatusCodes.READY;
     }
 }
 

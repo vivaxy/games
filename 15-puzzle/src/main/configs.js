@@ -38,6 +38,22 @@ export const buttonTypes = {
     SCRAMBLE: 'SCRAMBLE',
 };
 
+// timer
+export const timerTop = 40;
+export const timerLeft = gridX;
+export const timerWidth = gridSize / 2;
+export const timerHeight = 60;
+export const timerFontSize = 60;
+export const timerFontColor = '#1e2e45';
+
+// stepper
+export const stepperTop = 40;
+export const stepperLeft = gridX + gridSize / 2;
+export const stepperWidth = gridSize / 2;
+export const stepperHeight = 60;
+export const stepperFontSize = 60;
+export const stepperFontColor = '#1e2e45';
+
 export const tileTypes = {
     SPACE: 'SPACE',
     NORMAL: 'NORMAL',
@@ -80,4 +96,11 @@ export const browserEvents = {
 
 export const getNow = () => {
     return new Date().getTime();
+};
+
+export const puzzleStatusCodes = {
+    SCRAMBLING: 'SCRAMBLING',
+    READY: 'READY',
+    STARTED: 'STARTED',
+    WINNING: 'WINNING',
 };
