@@ -9,6 +9,30 @@ export default class Canvas {
         this.height = canvasHeight;
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
+        this.styles = {
+            width: window.innerWidth,
+            height: window.innerHeight,
+            top: 0,
+            left: 0,
+        };
+        this.updatePosition();
+    }
+
+    updatePosition() {
+        const { canvas, width, height, styles } = this;
+        if (width / height > window.innerWidth / window.innerHeight) {
+            // canvas is much wider, fit canvas width to window width
+            styles.width = window.innerWidth;
+            styles.height = window.innerWidth * height / width;
+        } else {
+            styles.height = window.innerHeight;
+            styles.width = window.innerHeight * width / height;
+        }
+        styles.top = (window.innerHeight - styles.height) / 2;
+        styles.left = (window.innerWidth - styles.width) / 2;
+        Object.keys(styles).forEach((styleKey) => {
+            canvas.style[styleKey] = styles[styleKey] + 'px';
+        });
     }
 
     getCtx() {

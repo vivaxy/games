@@ -1,4 +1,4 @@
-import { gridBorderColor, gridBorderWidth, gridSize, gridX, gridY } from '../configs';
+import { gridBorderColor, gridBackgroundColor, gridBorderWidth, gridSize, gridX, gridY } from '../configs';
 
 export default class Grid {
     constructor({ ctx }) {
@@ -8,12 +8,17 @@ export default class Grid {
         this.width = this.height = gridSize;
         this.borderWidth = gridBorderWidth;
         this.strokeStyle = gridBorderColor;
+        this.fillStyle = gridBackgroundColor;
     }
 
     render() {
-        const { ctx, strokeStyle, borderWidth, x, y, width, height } = this;
-        ctx.strokeStyle = strokeStyle;
-        ctx.lineWidth = borderWidth;
-        ctx.strokeRect(x, y, width, height);
+        const { ctx, strokeStyle, fillStyle, borderWidth, x, y, width, height } = this;
+        if (borderWidth) {
+            ctx.strokeStyle = strokeStyle;
+            ctx.lineWidth = borderWidth;
+            ctx.strokeRect(x, y, width, height);
+        }
+        ctx.fillStyle = fillStyle;
+        ctx.fillRect(x, y, width, height);
     }
 }

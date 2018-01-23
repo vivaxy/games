@@ -9,9 +9,15 @@ const inputStatusValues = {
 
 const getCoords = (e) => {
     if (e.changedTouches) {
-        return { x: mapPointToCanvas(e.changedTouches[0].clientX), y: mapPointToCanvas(e.changedTouches[0].clientY) };
+        return {
+            x: mapPointToCanvas(e.changedTouches[0].clientX - e.target.offsetLeft),
+            y: mapPointToCanvas(e.changedTouches[0].clientY - e.target.offsetTop)
+        };
     }
-    return { x: mapPointToCanvas(e.clientX), y: mapPointToCanvas(e.clientY) };
+    return {
+        x: mapPointToCanvas(e.clientX - e.target.offsetLeft),
+        y: mapPointToCanvas(e.clientY - e.target.offsetTop)
+    };
 };
 
 export default class Input extends EventEmitter {
@@ -29,10 +35,14 @@ export default class Input extends EventEmitter {
 
     initialize() {
         const { canvas } = this;
-        canvas.addEventListener(browserEvents.TOUCH_START, this.start, { passive: true });
-        canvas.addEventListener(browserEvents.TOUCH_MOVE, this.move, { passive: true });
-        canvas.addEventListener(browserEvents.TOUCH_END, this.end, { passive: true });
-        canvas.addEventListener(browserEvents.TOUCH_CANCEL, this.end, { passive: true });
+        const element = document.body;
+        element.addEventListener(browserEvents.TOUCH_START, this.start, { passive: true });
+        element.addEventListener(browserEvents.TOUCH_MOVE, this.move, { passive: true });
+        element.addEventListener(browserEvents.TOUCH_END, this.end, { passive: true });
+        element.addEventListener(browserEvents.TOUCH_CANCEL, this.end, { passive: true });
+        canvas.addEventListener(browserEvents.CLICK, this.click, { passive: true });
+        window.addEventListener(browserEvents.RESIZE, this.resize, { passive: true });
+        window.addEventListener(browserEvents.ORIENTATION_CHANGE, this.orientationChange, { passive: true });
     }
 
     getDirection() {
@@ -95,5 +105,17 @@ export default class Input extends EventEmitter {
         this.inputStatus = inputStatusValues.TOUCH_UP;
         this.resetPoint(this.invalidPoint);
         this.emit(events.RESET_SPACE_TILE);
+    };
+
+    click = (e) => {
+        this.emit(events.CLICK, getCoords(e));
+    };
+
+    resize = () => {
+        this.emit(events.RESIZE_CANVAS);
+    };
+
+    orientationChange = () => {
+        this.emit(events.RESIZE_CANVAS);
     };
 };

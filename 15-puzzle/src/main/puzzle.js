@@ -5,10 +5,13 @@ import {
     movementThreshold,
     tileSpacing,
     size,
+    buttonTypes,
+    directions,
 } from './configs';
 
 import Grid from './puzzle/grid';
 import Tile from './puzzle/tile';
+import Buttons from './puzzle/buttons';
 
 const whenDirection = (direction) => {
     return (options) => {
@@ -28,12 +31,18 @@ export default class Puzzle {
         this.input = input;
 
         this.grid = new Grid({ ctx });
+        this.buttons = new Buttons({ ctx });
         this.tileList = this.initializeTileList();
         this.initializeInput();
+        this.buttons.enable([buttonTypes.SCRAMBLE]);
+        this.moveActionEnabled = true;
     }
 
     initializeInput() {
         this.input.on(events.TRY_MOVE, (direction, point) => {
+            if (!this.moveActionEnabled) {
+                return;
+            }
             this.tryMove(direction, point);
             whenDirection(direction)({
                 left: () => {
@@ -61,6 +70,17 @@ export default class Puzzle {
         this.input.on(events.RESET_SPACE_TILE, () => {
             const tile = this.findSpaceTile();
             tile.animateToResetPosition();
+        });
+        this.input.on(events.CLICK, (point) => {
+            const buttonAction = this.buttons.hitButton(point);
+            switch (buttonAction) {
+                case buttonTypes.SCRAMBLE:
+                    this.moveActionEnabled = false;
+                    this.scramble();
+                    this.moveActionEnabled = true;
+                    this.buttons.enable([buttonTypes.SCRAMBLE]);
+                    break;
+            }
         });
     }
 
@@ -181,7 +201,7 @@ export default class Puzzle {
     }
 
     render() {
-        const { grid, tileList } = this;
+        const { grid, tileList, buttons } = this;
         const renders = tileList.reduce(({ list: accRowList, spaceTile: accRowSpaceTile }, tileRow) => {
             const { list: rowList, spaceTile: rowSpaceTile } = tileRow.reduce(({ list, spaceTile }, tile) => {
                 if (tile.type !== tileTypes.SPACE) {
@@ -192,10 +212,28 @@ export default class Puzzle {
             }, { list: [], spaceTile: null });
             return { list: [...accRowList, ...rowList], spaceTile: accRowSpaceTile || rowSpaceTile };
         }, { list: [], spaceTile: null });
-        renders.spaceTile.render();
         grid.render();
+        renders.spaceTile.render();
         renders.list.map((tile) => {
             tile.render();
+        });
+        buttons.render();
+    }
+
+    update() {
+        this.tileList.forEach((tileRow) => {
+            tileRow.forEach((tile) => {
+                tile.update();
+            });
+        });
+    }
+
+    scramble() {
+        const directionKeys = Object.keys(directions);
+        Array.from({ length: 1000 }, () => {
+            return directions[directionKeys[Math.floor(Math.random() * directionKeys.length)]];
+        }).map((direction) => {
+            return this.move(direction, { x: 0, y: 0 });
         });
     }
 }

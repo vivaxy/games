@@ -5,7 +5,7 @@
 
 import '../styles/index.pcss';
 
-import { browserEvents } from './configs';
+import { browserEvents, events } from './configs';
 import Canvas from './canvas';
 import Puzzle from './puzzle';
 import Input from './input';
@@ -21,6 +21,9 @@ class Game {
         document.body.addEventListener(browserEvents.TOUCH_MOVE, (e) => {
             e.preventDefault();
         }, { passive: false });
+        input.on(events.RESIZE_CANVAS, () => {
+            canvas.updatePosition();
+        });
     }
 
     render() {
@@ -29,7 +32,13 @@ class Game {
         puzzle.render();
     }
 
+    update() {
+        const { puzzle } = this;
+        puzzle.update();
+    }
+
     loop() {
+        this.update();
         this.render();
         requestAnimationFrame(() => {
             this.loop();
