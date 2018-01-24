@@ -1,4 +1,5 @@
 import Fingerprint2 from 'fingerprintjs2';
+import formatDate from 'date-fns/format';
 
 import {
     tileSize,
@@ -380,8 +381,7 @@ export default class Puzzle {
                     if (key === 'time') {
                         element.innerHTML = formatTime(scoreItem[key]);
                     } else if (key === 'timestamp') {
-                        // todo format timestamp
-                        element.innerHTML = scoreItem[key];
+                        element.innerHTML = formatDate(scoreItem[key], 'YYYY-MM-DD HH:mm:ss');
                     } else {
                         element.innerHTML = scoreItem[key];
                     }
