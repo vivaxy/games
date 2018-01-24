@@ -122,16 +122,16 @@ export default class Puzzle {
 
         scoreContainer.addEventListener(browserEvents.TOUCH_START, (e) => {
             e.stopPropagation();
-        });
+        }, { passive: true });
         scoreContainer.addEventListener(browserEvents.TOUCH_MOVE, (e) => {
             e.stopPropagation();
-        });
+        }, { passive: true });
         scoreContainer.addEventListener(browserEvents.TOUCH_END, (e) => {
             e.stopPropagation();
-        });
+        }, { passive: true });
         scoreContainer.addEventListener(browserEvents.TOUCH_CANCEL, (e) => {
             e.stopPropagation();
-        });
+        }, { passive: true });
         scoreContainer.addEventListener(browserEvents.CLICK, () => {
             scoreContainer.style.display = 'none';
         });
