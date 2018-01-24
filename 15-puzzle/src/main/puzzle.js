@@ -20,6 +20,7 @@ import Tile from './puzzle/tile';
 import Buttons from './puzzle/buttons';
 import Timer, { formatTime } from './puzzle/timer';
 import Stepper from './puzzle/stepper';
+import Copyright from './puzzle/copyright';
 import fetch from '../lib/fetch';
 import getUsername from '../lib/getUsername';
 
@@ -52,6 +53,7 @@ export default class Puzzle {
         this.buttons = new Buttons({ ctx });
         this.timer = new Timer({ ctx });
         this.stepper = new Stepper({ ctx });
+        this.copyright = new Copyright({ ctx });
 
         this.tileList = this.initializeTileList();
         this.initializeInput();
@@ -107,11 +109,14 @@ export default class Puzzle {
                     this.scramble();
                     this.puzzleStatus = puzzleStatusCodes.READY;
                     this.buttons.enable([buttonTypes.SCRAMBLE]);
-                    break;
+                    return;
                 case buttonTypes.SHOW_SCORE:
                     scoreContainer.style.display = 'flex';
                     this.buttons.enable([buttonTypes.SHOW_SCORE]);
-                    break;
+                    return;
+            }
+            if (this.copyright.hit(point)) {
+                location.href = 'https://vivaxyblog.github.io/';
             }
         });
 
@@ -257,7 +262,7 @@ export default class Puzzle {
     }
 
     render() {
-        const { grid, tileList, buttons, timer, stepper } = this;
+        const { grid, tileList, buttons, timer, stepper, copyright } = this;
         const renders = tileList.reduce(({ list: accRowList, spaceTile: accRowSpaceTile }, tileRow) => {
             const { list: rowList, spaceTile: rowSpaceTile } = tileRow.reduce(({ list, spaceTile }, tile) => {
                 if (tile.type !== tileTypes.SPACE) {
@@ -276,6 +281,7 @@ export default class Puzzle {
         buttons.render();
         timer.render();
         stepper.render();
+        copyright.render();
     }
 
     update() {

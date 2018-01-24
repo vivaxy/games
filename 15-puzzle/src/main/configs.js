@@ -55,6 +55,14 @@ export const stepperHeight = 60;
 export const stepperFontSize = 60;
 export const stepperFontColor = '#1e2e45';
 
+// copyright
+export const copyrightTop = gridY + gridSize + 60;
+export const copyrightLeft = gridX;
+export const copyrightWidth = gridSize;
+export const copyrightHeight = 30;
+export const copyrightFontSize = 30;
+export const copyrightFontColor = '#1e2e45';
+
 export const tileTypes = {
     SPACE: 'SPACE',
     NORMAL: 'NORMAL',
