@@ -1,4 +1,3 @@
-import 'whatwg-fetch';
 import Fingerprint2 from 'fingerprintjs2';
 
 import {
@@ -21,6 +20,7 @@ import Tile from './puzzle/tile';
 import Buttons from './puzzle/buttons';
 import Timer, { formatTime } from './puzzle/timer';
 import Stepper from './puzzle/stepper';
+import fetch from '../lib/fetch';
 
 const getHost = () => {
     if (location.host === 'vivaxy.github.io') {
@@ -320,11 +320,10 @@ export default class Puzzle {
 
     getScores() {
         new Fingerprint2().get(async(fingerprint) => {
-            const resp = await fetch(`${getHost()}/api/15-puzzle/get-scores`, {
-                method: 'POST',
-                body: JSON.stringify({ fingerprint }),
+            this.scores = await fetch({
+                path: '/api/15-puzzle/get-scores',
+                data: { fingerprint },
             });
-            this.scores = await resp.json();
             this.updateScoreBoard();
         });
     }
@@ -335,11 +334,10 @@ export default class Puzzle {
         new Fingerprint2().get(async(fingerprint) => {
             const username = localStorage.getItem(storageKeys.USERNAME);
             const timestamp = getNow();
-            const resp = await fetch(`${getHost()}/api/15-puzzle/get-scores`, {
-                method: 'POST',
-                body: JSON.stringify({ username, time, steps, fingerprint, timestamp }),
+            this.scores = await fetch({
+                path: '/api/15-puzzle/get-scores',
+                data: { username, time, steps, fingerprint, timestamp },
             });
-            this.scores = await resp.json();
             this.updateScoreBoard();
         });
     }
