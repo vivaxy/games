@@ -289,7 +289,7 @@ export default class Puzzle {
 
     scramble() {
         const directionKeys = Object.keys(directions);
-        Array.from({ length: 1 }, () => {
+        Array.from({ length: 1000 }, () => {
             return directions[directionKeys[Math.floor(Math.random() * directionKeys.length)]];
         }).map((direction) => {
             return this.move(direction, { x: 0, y: 0 });
