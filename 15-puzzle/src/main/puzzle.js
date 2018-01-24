@@ -335,7 +335,7 @@ export default class Puzzle {
             const username = localStorage.getItem(storageKeys.USERNAME);
             const timestamp = getNow();
             this.scores = await fetch({
-                path: '/api/15-puzzle/get-scores',
+                path: '/api/15-puzzle/add-score',
                 data: { username, time, steps, fingerprint, timestamp },
             });
             this.updateScoreBoard();
