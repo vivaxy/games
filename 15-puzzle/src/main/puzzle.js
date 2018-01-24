@@ -10,7 +10,6 @@ import {
     buttonTypes,
     directions,
     puzzleStatusCodes,
-    storageKeys,
     getNow,
     browserEvents,
 } from './configs';
@@ -21,13 +20,7 @@ import Buttons from './puzzle/buttons';
 import Timer, { formatTime } from './puzzle/timer';
 import Stepper from './puzzle/stepper';
 import fetch from '../lib/fetch';
-
-const getHost = () => {
-    if (location.host === 'vivaxy.github.io') {
-        return 'https://coddee.1000-100.com';
-    }
-    return 'http://127.0.0.1:8080';
-};
+import getUsername from '../lib/getUsername';
 
 const scoreNames = {
     userTopStepsList: 'My Steps',
@@ -332,7 +325,7 @@ export default class Puzzle {
         const time = this.timer.getTime();
         const steps = this.stepper.getStepper();
         new Fingerprint2().get(async(fingerprint) => {
-            const username = localStorage.getItem(storageKeys.USERNAME);
+            const username = getUsername({ fingerprint });
             const timestamp = getNow();
             this.scores = await fetch({
                 path: '/api/15-puzzle/add-score',
