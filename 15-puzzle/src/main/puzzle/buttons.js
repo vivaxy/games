@@ -19,7 +19,8 @@ export default class Buttons {
     constructor({ ctx }) {
         this.ctx = ctx;
         this.buttons = [
-            { text: 'Scramble', disabled: true, type: buttonTypes.SCRAMBLE }
+            { text: 'Scramble', disabled: true, type: buttonTypes.SCRAMBLE },
+            { text: 'Scores', disabled: false, type: buttonTypes.SHOW_SCORE },
         ];
     }
 

@@ -36,6 +36,7 @@ export const buttonDisabledBackgroundColor = '#e7e2ea';
 export const buttonTextColor = '#fff';
 export const buttonTypes = {
     SCRAMBLE: 'SCRAMBLE',
+    SHOW_SCORE: 'SHOW_SCORE',
 };
 
 // timer

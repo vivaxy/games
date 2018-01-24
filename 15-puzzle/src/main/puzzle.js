@@ -13,12 +13,13 @@ import {
     puzzleStatusCodes,
     storageKeys,
     getNow,
+    browserEvents,
 } from './configs';
 
 import Grid from './puzzle/grid';
 import Tile from './puzzle/tile';
 import Buttons from './puzzle/buttons';
-import Timer from './puzzle/timer';
+import Timer, { formatTime } from './puzzle/timer';
 import Stepper from './puzzle/stepper';
 
 const getHost = () => {
@@ -27,6 +28,14 @@ const getHost = () => {
     }
     return 'http://127.0.0.1:8080';
 };
+
+const scoreNames = {
+    userTopStepsList: 'My Steps',
+    userTopTimeList: 'My Time',
+    globalTopStepsList: 'World Steps',
+    globalTopTimeList: 'World Time',
+};
+const scoreKeys = ['username', 'steps', 'time', 'timestamp'];
 
 const whenDirection = (direction) => {
     return (options) => {
@@ -60,6 +69,8 @@ export default class Puzzle {
     }
 
     initializeInput() {
+        const scoreContainer = document.querySelector('.js-score-container');
+
         this.input.on(events.TRY_MOVE, (direction, point) => {
             if ([puzzleStatusCodes.SCRAMBLING, puzzleStatusCodes.WINNING].includes(this.puzzleStatus)) {
                 return;
@@ -103,7 +114,27 @@ export default class Puzzle {
                     this.puzzleStatus = puzzleStatusCodes.READY;
                     this.buttons.enable([buttonTypes.SCRAMBLE]);
                     break;
+                case buttonTypes.SHOW_SCORE:
+                    scoreContainer.style.display = 'flex';
+                    this.buttons.enable([buttonTypes.SHOW_SCORE]);
+                    break;
             }
+        });
+
+        scoreContainer.addEventListener(browserEvents.TOUCH_START, (e) => {
+            e.stopPropagation();
+        });
+        scoreContainer.addEventListener(browserEvents.TOUCH_MOVE, (e) => {
+            e.stopPropagation();
+        });
+        scoreContainer.addEventListener(browserEvents.TOUCH_END, (e) => {
+            e.stopPropagation();
+        });
+        scoreContainer.addEventListener(browserEvents.TOUCH_CANCEL, (e) => {
+            e.stopPropagation();
+        });
+        scoreContainer.addEventListener(browserEvents.CLICK, () => {
+            scoreContainer.style.display = 'none';
         });
     }
 
@@ -289,10 +320,12 @@ export default class Puzzle {
 
     getScores() {
         new Fingerprint2().get(async(fingerprint) => {
-            this.scores = await fetch(`${getHost()}/api/15-puzzle/get-scores`, {
+            const resp = await fetch(`${getHost()}/api/15-puzzle/get-scores`, {
                 method: 'POST',
                 body: JSON.stringify({ fingerprint }),
             });
+            this.scores = await resp.json();
+            this.updateScoreBoard();
         });
     }
 
@@ -302,11 +335,98 @@ export default class Puzzle {
         new Fingerprint2().get(async(fingerprint) => {
             const username = localStorage.getItem(storageKeys.USERNAME);
             const timestamp = getNow();
-            this.scores = await fetch(`${getHost()}/api/15-puzzle/get-scores`, {
+            const resp = await fetch(`${getHost()}/api/15-puzzle/get-scores`, {
                 method: 'POST',
                 body: JSON.stringify({ username, time, steps, fingerprint, timestamp }),
             });
+            this.scores = await resp.json();
+            this.updateScoreBoard();
         });
+    }
+
+    updateScoreBoard() {
+        const scoreContainer = document.querySelector('.js-score-container');
+        const scoreTab = document.createElement('div');
+        scoreTab.setAttribute('class', 'score-tab');
+        const scoreList = document.createElement('div');
+        scoreList.setAttribute('class', 'score-list');
+        Object.keys(scoreNames).forEach((scoreKey) => {
+            const tab = document.createElement('div');
+            tab.innerHTML = scoreNames[scoreKey];
+            tab.setAttribute('class', 'score-tab-item');
+            scoreTab.appendChild(tab);
+
+            const ul = document.createElement('ul');
+            const scores = this.scores[scoreKey];
+
+            const titleLi = document.createElement('li');
+
+            const index = document.createElement('div');
+            index.setAttribute('class', 'index');
+            index.innerHTML = '';
+            titleLi.appendChild(index);
+
+            scoreKeys.forEach((key) => {
+                const element = document.createElement('div');
+                element.setAttribute('class', key);
+                element.innerHTML = key;
+                titleLi.appendChild(element);
+            });
+            ul.appendChild(titleLi);
+
+            scores.forEach((scoreItem, scoreIndex) => {
+                const li = document.createElement('li');
+
+                const index = document.createElement('div');
+                index.setAttribute('class', 'index');
+                index.innerHTML = scoreIndex + 1;
+                li.appendChild(index);
+
+                scoreKeys.forEach((key) => {
+                    const element = document.createElement('div');
+                    element.setAttribute('class', key);
+                    if (key === 'time') {
+                        element.innerHTML = formatTime(scoreItem[key]);
+                    } else if (key === 'timestamp') {
+                        // todo format timestamp
+                        element.innerHTML = scoreItem[key];
+                    } else {
+                        element.innerHTML = scoreItem[key];
+                    }
+                    li.appendChild(element);
+                });
+                ul.appendChild(li);
+            });
+            scoreList.appendChild(ul);
+        });
+        scoreContainer.appendChild(scoreTab);
+        scoreContainer.appendChild(scoreList);
+
+        const scoreTabs = Array.from(scoreTab.children);
+        const scoreLists = Array.from(scoreList.children);
+        scoreTabs.forEach((tab, index) => {
+            if (index === 0) {
+                tab.setAttribute('data-active', '');
+                scoreLists.forEach((listItem) => {
+                    listItem.style.display = 'none';
+                });
+                scoreLists[index].style.display = 'block';
+            }
+            tab.addEventListener(browserEvents.CLICK, (e) => {
+                e.stopPropagation();
+                if (!tab.hasAttribute('data-active')) {
+                    scoreTabs.forEach((tabItem) => {
+                        tabItem.removeAttribute('data-active');
+                    });
+                    tab.setAttribute('data-active', '');
+                    scoreLists.forEach((listItem) => {
+                        listItem.style.display = 'none';
+                    });
+                    scoreLists[index].style.display = 'block';
+                }
+            });
+        });
+
     }
 
 }
