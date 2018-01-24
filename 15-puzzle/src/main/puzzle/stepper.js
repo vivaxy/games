@@ -30,7 +30,7 @@ export default class Stepper {
         this.steps += 1;
     }
 
-    getStepper() {
+    getSteps() {
         return this.steps;
     }
 

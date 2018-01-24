@@ -200,8 +200,8 @@ export default class Puzzle {
             this.puzzleStatus = puzzleStatusCodes.STARTED;
         }
         if (this.puzzleStatus === puzzleStatusCodes.STARTED) {
-            this.checkWinning();
             this.stepper.update();
+            this.checkWinning();
         }
     }
 
@@ -288,7 +288,7 @@ export default class Puzzle {
 
     scramble() {
         const directionKeys = Object.keys(directions);
-        Array.from({ length: 1000 }, () => {
+        Array.from({ length: 1 }, () => {
             return directions[directionKeys[Math.floor(Math.random() * directionKeys.length)]];
         }).map((direction) => {
             return this.move(direction, { x: 0, y: 0 });
@@ -323,7 +323,7 @@ export default class Puzzle {
 
     saveScore() {
         const time = this.timer.getTime();
-        const steps = this.stepper.getStepper();
+        const steps = this.stepper.getSteps();
         new Fingerprint2().get(async(fingerprint) => {
             const username = getUsername({ fingerprint });
             const timestamp = getNow();
