@@ -346,6 +346,7 @@ export default class Puzzle {
 
     updateScoreBoard() {
         const scoreContainer = document.querySelector('.js-score-container');
+        scoreContainer.innerHTML = '';
         const scoreTab = document.createElement('div');
         scoreTab.setAttribute('class', 'score-tab');
         const scoreList = document.createElement('div');
