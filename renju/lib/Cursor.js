@@ -6,7 +6,7 @@
 import events from './events.js';
 import * as eventTypes from '../configs/eventTypes.js';
 import * as layerTypes from '../configs/layerTypes.js';
-import { mapIndexToCoords, mapCoordsToIndex } from './utils.js';
+import { mapIndexToCoords } from './utils.js';
 
 const offset = 4;
 const length = 8;

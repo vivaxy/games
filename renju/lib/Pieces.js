@@ -9,6 +9,10 @@ import * as pieceTypes from '../configs/pieceTypes.js';
 import * as layerTypes from '../configs/layerTypes.js';
 import { mapIndexToCoords } from './utils.js';
 
+const offset = 12;
+const length = 6;
+const lineWidth = 2;
+
 export default class Pieces {
     constructor({ gridSize, boardSize, initialType, colCount, rowCount } = {}) {
         this.boardSize = boardSize;
@@ -113,7 +117,7 @@ export default class Pieces {
 
     render({ ctx }) {
         const { width: radius } = this.size;
-        return this.pieces.map(({ colIndex, rowIndex, type }) => {
+        this.pieces.map(({ colIndex, rowIndex, type }, index) => {
             if (type === pieceTypes.BLACK) {
                 ctx.fillStyle = '#000000';
             } else {
@@ -134,10 +138,43 @@ export default class Pieces {
             } else {
                 ctx.strokeStyle = '#000000';
             }
-            ctx.lineWidth = 2;
+            ctx.lineWidth = lineWidth;
             ctx.beginPath();
             ctx.arc(x, y, radius, 0, 2 * Math.PI);
             ctx.stroke();
+            if (index === this.pieces.length - 1) {
+                // last piece, add cursor
+                ctx.lineWidth = lineWidth;
+                ctx.strokeStyle = '#000000';
+                [
+                    [
+                        [x + offset, y + offset + length],
+                        [x + offset + length, y + offset + length],
+                        [x + offset + length, y + offset],
+                    ],
+                    [
+                        [x + offset + length, y - offset],
+                        [x + offset + length, y - offset - length],
+                        [x + offset, y - offset - length],
+                    ],
+                    [
+                        [x - offset, y - offset - length],
+                        [x - offset - length, y - offset - length],
+                        [x - offset - length, y - offset],
+                    ],
+                    [
+                        [x - offset - length, y + offset],
+                        [x - offset - length, y + offset + length],
+                        [x - offset, y + offset + length],
+                    ],
+                ].map(([moveTo, lineTo1, lineTo2]) => {
+                    ctx.beginPath();
+                    ctx.moveTo(...moveTo);
+                    ctx.lineTo(...lineTo1);
+                    ctx.lineTo(...lineTo2);
+                    ctx.stroke();
+                });
+            }
         });
     }
 }
