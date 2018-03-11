@@ -107,12 +107,15 @@ export default class Game {
                         rowIndex,
                         type: this.pieces.getPieceType(),
                     });
-                    events.emit(eventTypes.CURSOR.PLACE_CURSOR, { colIndex: null, rowIndex: null });
                     if (this.pieces.checkWin()) {
                         events.emit(eventTypes.GAME.SWITCH_STATUS, { status: statusTypes.OVER });
                     } else {
                         events.emit(eventTypes.GAME.SWITCH_STATUS, { status: this.status === statusTypes.WAITING_MY_ACTION ? statusTypes.WAITING_OP_ACTION : statusTypes.WAITING_MY_ACTION });
                     }
+                    setTimeout(() => {
+                        // remove cursor on mobile
+                        events.emit(eventTypes.CURSOR.PLACE_CURSOR, { colIndex: null, rowIndex: null });
+                    }, 0);
                 }
             }
         });

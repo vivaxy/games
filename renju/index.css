@@ -18,8 +18,13 @@ canvas {
 
 .title {
     font-weight: 900;
+    font-size: 16px;
 }
 
 * {
     -webkit-tap-highlight-color: transparent;
+}
+
+.copyright {
+    font-size: 12px;
 }
