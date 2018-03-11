@@ -145,17 +145,17 @@ export default class Game {
     }
 
     updateGameStatus() {
-        let text = 'Undefined status';
+        let text = 'Status: ';
         switch (this.status) {
             case statusTypes.READY:
-                text = 'Ready!';
+                text += 'Ready!';
                 break;
             case statusTypes.WAITING_MY_ACTION:
             case statusTypes.WAITING_OP_ACTION:
-                text = this.pieces.getPieceType() === pieceTypes.WHITE ? 'White turn' : 'Black turn';
+                text += this.pieces.getPieceType() === pieceTypes.WHITE ? 'White turn' : 'Black turn';
                 break;
             case statusTypes.OVER:
-                text = this.pieces.getPieceType() === pieceTypes.WHITE ? 'White win!' : 'Black win!';
+                text += this.pieces.getPieceType() === pieceTypes.WHITE ? 'White win!' : 'Black win!';
                 break;
         }
         this.statusContainer.innerHTML = text;

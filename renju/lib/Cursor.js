@@ -42,28 +42,34 @@ export default class Cursor {
         });
         ctx.lineWidth = lineWidth;
         ctx.strokeStyle = '#000000';
-        ctx.beginPath();
-        ctx.moveTo(x + offset, y + offset + length);
-        ctx.lineTo(x + offset, y + offset);
-        ctx.lineTo(x + offset + length, y + offset);
-        ctx.stroke();
 
-        ctx.beginPath();
-        ctx.moveTo(x + offset + length, y - offset);
-        ctx.lineTo(x + offset, y - offset);
-        ctx.lineTo(x + offset, y - offset - length);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(x - offset, y - offset - length);
-        ctx.lineTo(x - offset, y - offset);
-        ctx.lineTo(x - offset - length, y - offset);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(x - offset - length, y + offset);
-        ctx.lineTo(x - offset, y + offset);
-        ctx.lineTo(x - offset, y + offset + length);
-        ctx.stroke();
+        [
+            [
+                [x + offset, y + offset + length],
+                [x + offset, y + offset],
+                [x + offset + length, y + offset],
+            ],
+            [
+                [x + offset + length, y - offset],
+                [x + offset, y - offset],
+                [x + offset, y - offset - length],
+            ],
+            [
+                [x - offset, y - offset - length],
+                [x - offset, y - offset],
+                [x - offset - length, y - offset],
+            ],
+            [
+                [x - offset - length, y + offset],
+                [x - offset, y + offset],
+                [x - offset, y + offset + length],
+            ],
+        ].map(([moveTo, lineTo1, lineTo2]) => {
+            ctx.beginPath();
+            ctx.moveTo(...moveTo);
+            ctx.lineTo(...lineTo1);
+            ctx.lineTo(...lineTo2);
+            ctx.stroke();
+        });
     }
 }
