@@ -5,7 +5,7 @@
 
 import events from './events.js';
 import Board from './Board.js';
-import Canvas from './Canvas';
+import Canvas from './Canvas.js';
 import * as eventTypes from '../configs/eventTypes.js';
 import * as statusTypes from '../configs/statusTypes.js';
 

@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-import Game from './lib/game.js';
+import Game from './lib/Game.js';
 
 const canvasElement = document.querySelector('.js-canvas');
 new Game({ canvasElement });
