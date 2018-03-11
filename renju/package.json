@@ -1,0 +1,22 @@
+{
+  "name": "renju",
+  "version": "1.0.0",
+  "description": "renju",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "author": "vivaxy",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.40",
+    "@babel/preset-env": "^7.0.0-beta.40",
+    "@babel/register": "^7.0.0-beta.40",
+    "ava": "^0.25.0"
+  },
+  "ava": {
+    "require": [
+      "@babel/register"
+    ]
+  }
+}
