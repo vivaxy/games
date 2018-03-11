@@ -88,11 +88,13 @@ export default class Game {
         });
 
         events.on(eventTypes.INPUT.HOVER, ({ x, y }) => {
-            const { colIndex, rowIndex } = mapCoordsToIndex({ x, y, gridSize, boardSize });
-            if (this.pieces.pieceExists({ colIndex, rowIndex })) {
-                events.emit(eventTypes.CURSOR.PLACE_CURSOR, { colIndex: null, rowIndex: null });
-            } else {
-                events.emit(eventTypes.CURSOR.PLACE_CURSOR, { colIndex, rowIndex });
+            if ([statusTypes.READY, statusTypes.WAITING_MY_ACTION, statusTypes.WAITING_OP_ACTION].includes(this.status)) {
+                const { colIndex, rowIndex } = mapCoordsToIndex({ x, y, gridSize, boardSize });
+                if (this.pieces.pieceExists({ colIndex, rowIndex })) {
+                    events.emit(eventTypes.CURSOR.PLACE_CURSOR, { colIndex: null, rowIndex: null });
+                } else {
+                    events.emit(eventTypes.CURSOR.PLACE_CURSOR, { colIndex, rowIndex });
+                }
             }
         });
         events.on(eventTypes.INPUT.HOVER_OUT, () => {
