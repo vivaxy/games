@@ -107,6 +107,7 @@ export default class Game {
                         rowIndex,
                         type: this.pieces.getPieceType(),
                     });
+                    events.emit(eventTypes.CURSOR.PLACE_CURSOR, { colIndex: null, rowIndex: null });
                     if (this.pieces.checkWin()) {
                         events.emit(eventTypes.GAME.SWITCH_STATUS, { status: statusTypes.OVER });
                     } else {

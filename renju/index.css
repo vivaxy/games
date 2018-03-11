@@ -20,3 +20,6 @@ canvas {
     font-weight: 900;
 }
 
+* {
+    -webkit-tap-highlight-color: transparent;
+}
