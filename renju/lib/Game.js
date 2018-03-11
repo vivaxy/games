@@ -11,6 +11,7 @@ import Input from './Input.js';
 import Pieces from './Pieces.js';
 import Cursor from './Cursor.js';
 import * as eventTypes from '../configs/eventTypes.js';
+import * as layerTypes from '../configs/layerTypes.js';
 import * as statusTypes from '../configs/statusTypes.js';
 
 const boardSize = { width: 600, height: 600 };
@@ -39,19 +40,23 @@ export default class Game {
 
 
         this.layers = [
-            this.background.getLayerRender(),
-            this.board.getBorderLayerRender(),
-            this.board.getGridLayerRender(),
-            this.pieces.getLayerRender(),
-            this.cursor.getLayerRender(),
+            layerTypes.CANVAS,
+            layerTypes.BACKGROUND,
+            layerTypes.BOARD,
+            layerTypes.PIECES,
+            layerTypes.CURSOR,
         ];
+
+        this.status = statusTypes.UNSET;
 
         this.tick();
     }
 
     tick() {
         requestAnimationFrame(() => {
-            this.canvas.render({ layers: this.layers });
+            this.layers.map((layerType) => {
+                events.emit(eventTypes.GAME.RENDER, { layerType, ctx: this.canvas, pieces: this.pieces.getPieces() })
+            });
             this.tick();
             events.emit(eventTypes.GAME.TICK, {
                 dt: Date.now(),

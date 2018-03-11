@@ -3,15 +3,8 @@
  * @author vivaxy
  */
 
-export const GAME = {
-    UNSET: 100,
-    LOADED: 101,
-    STARTED: 102,
-    OVER: 103,
-};
-
-export const BOARD = {
-    UNSET: 200,
-    WAITING_MY_ACTION: 201,
-    WAITING_OP_ACTION: 202,
-};
+export const UNSET = 100;
+export const WAITING = 101;
+export const WAITING_MY_ACTION = 102;
+export const WAITING_OP_ACTION = 103;
+export const END = 104;

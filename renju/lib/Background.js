@@ -3,14 +3,20 @@
  * @author vivaxy
  */
 
+import events from './events.js';
+import * as eventTypes from '../configs/eventTypes.js';
+import * as layerTypes from '../configs/layerTypes.js';
+
 export default class Background {
     constructor({ size } = {}) {
         this.size = size;
+        events.on(eventTypes.GAME.RENDER, ({ layerType, ctx }) => {
+            if (layerType === layerTypes.BACKGROUND) {
+                this.render({ ctx });
+            }
+        });
     }
 
-    getLayerRender() {
-        return (ctx) => {
-
-        };
+    render({ ctx }) {
     }
 }

@@ -3,7 +3,10 @@
  * @author vivaxy
  */
 
+import events from './events.js';
 import UnitConverter from './UnitConverter.js';
+import * as eventTypes from '../configs/eventTypes.js';
+import * as layerTypes from '../configs/layerTypes.js';
 
 export default class Canvas {
     /**
@@ -31,6 +34,11 @@ export default class Canvas {
             cartesian: this.size,
         });
         this.initializeStyle();
+        events.on(eventTypes.GAME.RENDER, ({ layerType }) => {
+            if (layerType === layerTypes.CANVAS) {
+                this._clear();
+            }
+        });
     }
 
     initializeStyle() {
@@ -44,13 +52,6 @@ export default class Canvas {
     _clear() {
         const { width, height } = this.unitConverter.getCartesianSize();
         this.clearRect(-width / 2, height / 2, width, height);
-    }
-
-    render({ layers }) {
-        this._clear();
-        return layers.map((layerRender) => {
-            return layerRender(this);
-        });
     }
 
     // canvas APIs
