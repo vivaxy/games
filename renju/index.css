@@ -8,9 +8,15 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 canvas {
     display: block;
     box-sizing: border-box;
 }
+
+.title {
+    font-weight: 900;
+}
+

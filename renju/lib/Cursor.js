@@ -6,11 +6,11 @@
 import events from './events.js';
 import * as eventTypes from '../configs/eventTypes.js';
 import * as layerTypes from '../configs/layerTypes.js';
-import { mapIndexToCoords } from './utils.js';
+import { mapIndexToCoords, mapCoordsToIndex } from './utils.js';
 
-const offset = 6;
-const length = 10;
-const lineWidth = 3;
+const offset = 4;
+const length = 8;
+const lineWidth = 2;
 
 export default class Cursor {
     constructor({ gridSize, boardSize } = {}) {
@@ -18,35 +18,20 @@ export default class Cursor {
         this.boardSize = boardSize;
         this.colIndex = null;
         this.rowIndex = null;
-        events.on(eventTypes.INPUT.HOVER, ({ x, y }) => {
-            this.snapIntoGrid({ x, y });
+        events.on(eventTypes.CURSOR.PLACE_CURSOR, ({ colIndex, rowIndex }) => {
+            this.colIndex = colIndex;
+            this.rowIndex = rowIndex;
         });
-        events.on(eventTypes.INPUT.HOVER_OUT, () => {
-            this.colIndex = null;
-            this.rowIndex = null;
-        });
-        events.on(eventTypes.GAME.RENDER, ({ layerType, ctx, pieces }) => {
+        events.on(eventTypes.GAME.RENDER, ({ layerType, ctx }) => {
             if (layerType === layerTypes.CURSOR) {
-                this.render({ ctx, pieces });
+                this.render({ ctx });
             }
         });
     }
 
-    snapIntoGrid({ x, y }) {
-        const colIndex = Math.floor((x + (this.boardSize.width / 2)) / this.gridSize.width);
-        const rowIndex = Math.floor((-y + (this.boardSize.height / 2)) / this.gridSize.height);
-        this.colIndex = colIndex;
-        this.rowIndex = rowIndex;
-    }
-
-    render({ ctx, pieces }) {
+    render({ ctx }) {
         const { colIndex, rowIndex } = this;
         if (rowIndex === null || colIndex === null) {
-            return;
-        }
-        if (pieces.some(({ colIndex: _col, rowIndex: _row }) => {
-                return colIndex === _col && rowIndex === _row;
-            })) {
             return;
         }
         const { x, y } = mapIndexToCoords({

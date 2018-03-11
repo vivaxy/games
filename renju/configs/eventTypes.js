@@ -4,18 +4,9 @@
  */
 
 export const GAME = {
-    UNSET: 100,
-    LOAD: 101,
-    START: 102,
-    RENDER: 103,
-    TICK: 104,
-};
-
-export const BOARD = {
-    UNSET: 200,
-    LOAD: 201,
-    MY_ACTION: 202,
-    OP_ACTION: 203,
+    TICK: 100,
+    RENDER: 101,
+    SWITCH_STATUS: 102,
 };
 
 export const INPUT = {
@@ -23,4 +14,9 @@ export const INPUT = {
     HOVER: 301,
     HOVER_OUT: 302,
     CLICK: 304,
+    RESTART: 305,
+};
+
+export const CURSOR = {
+    PLACE_CURSOR: 200,
 };

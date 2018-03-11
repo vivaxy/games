@@ -19,7 +19,7 @@ export default class Board {
                 this.renderBorder({ ctx });
                 this.renderGrid({ ctx });
             }
-        })
+        });
     }
 
     renderBorder({ ctx }) {

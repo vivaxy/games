@@ -3,8 +3,7 @@
  * @author vivaxy
  */
 
-export const UNSET = 100;
-export const WAITING = 101;
-export const WAITING_MY_ACTION = 102;
-export const WAITING_OP_ACTION = 103;
-export const END = 104;
+export const READY = 100;
+export const WAITING_MY_ACTION = 200;
+export const WAITING_OP_ACTION = 201;
+export const OVER = 300;
