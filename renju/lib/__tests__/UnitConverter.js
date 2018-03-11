@@ -17,6 +17,7 @@ test('default coords mapping, from cartesian to canvas', (t) => {
     t.deepEqual(unitConverter.cartesianToCanvasCoords({ x: -50, y: 50 }), { x: 0, y: 0 });
     t.deepEqual(unitConverter.cartesianToCanvasCoords({ x: -50, y: -50 }), { x: 0, y: 100 });
     t.deepEqual(unitConverter.cartesianToCanvasCoords({ x: 50, y: -50 }), { x: 100, y: 100 });
+    t.deepEqual(unitConverter.cartesianToCanvasLength({ width: 100, height: 100 }), { width: 100, height: 100 });
 });
 
 test('coords mapping with ratio, from cartesian to canvas', (t) => {
@@ -29,6 +30,7 @@ test('coords mapping with ratio, from cartesian to canvas', (t) => {
     t.deepEqual(unitConverter.cartesianToCanvasCoords({ x: -50, y: 50 }), { x: 0, y: 0 });
     t.deepEqual(unitConverter.cartesianToCanvasCoords({ x: -50, y: -50 }), { x: 0, y: 200 });
     t.deepEqual(unitConverter.cartesianToCanvasCoords({ x: 50, y: -50 }), { x: 200, y: 200 });
+    t.deepEqual(unitConverter.cartesianToCanvasLength({ width: 100, height: 100 }), { width: 200, height: 200 });
 });
 
 test('coords mapping with ratio, from cartesian to canvas', (t) => {
@@ -41,6 +43,7 @@ test('coords mapping with ratio, from cartesian to canvas', (t) => {
     t.deepEqual(unitConverter.cartesianToCanvasCoords({ x: -50, y: 100 }), { x: 0, y: 0 });
     t.deepEqual(unitConverter.cartesianToCanvasCoords({ x: -50, y: -100 }), { x: 0, y: 100 });
     t.deepEqual(unitConverter.cartesianToCanvasCoords({ x: 50, y: -100 }), { x: 100, y: 100 });
+    t.deepEqual(unitConverter.cartesianToCanvasLength({ width: 100, height: 200 }), { width: 100, height: 100 });
 });
 
 test('default angle mapping, from cartesian to canvas', (t) => {
@@ -62,6 +65,7 @@ test('coords mapping with ratio, from canvas to cartesian', (t) => {
     t.deepEqual(unitConverter.canvasToCartesianCoords({ x: 100, y: 100 }), { x: 100, y: -100 });
     t.deepEqual(unitConverter.canvasToCartesianCoords({ x: 0, y: 100 }), { x: -100, y: -100 });
     t.deepEqual(unitConverter.canvasToCartesianCoords({ x: 50, y: 50 }), { x: 0, y: 0 });
+    t.deepEqual(unitConverter.canvasToCartesianLength({ width: 100, height: 100 }), { width: 200, height: 200 });
 });
 
 test('default angle mapping, from canvas to cartesian', (t) => {

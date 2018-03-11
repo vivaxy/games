@@ -4,12 +4,14 @@
  */
 
 export const GAME = {
-    LOADED: 100,
-    STARTED: 101,
-    OVER: 102,
+    UNSET: 100,
+    LOADED: 101,
+    STARTED: 102,
+    OVER: 103,
 };
 
 export const BOARD = {
-    WAITING_MY_ACTION: 200,
-    WAITING_OP_ACTION: 201,
+    UNSET: 200,
+    WAITING_MY_ACTION: 201,
+    WAITING_OP_ACTION: 202,
 };
