@@ -1,0 +1,20 @@
+{
+  "name": "renju",
+  "version": "1.0.0",
+  "description": "renju",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "author": "vivaxy",
+  "license": "MIT",
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "esm": "^3.0.1"
+  },
+  "ava": {
+    "require": [
+      "esm"
+    ]
+  }
+}
