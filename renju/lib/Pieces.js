@@ -21,6 +21,7 @@ export default class Pieces {
         this.rowCount = rowCount;
         const size = Math.min(this.gridSize.width, this.gridSize.height) / 2 - 4;
         this.size = { width: size, height: size };
+        this.initialType = initialType;
         this.type = initialType;
         /**
          *
@@ -105,6 +106,7 @@ export default class Pieces {
                 this.board[rowIndex][colIndex] = {};
             });
         });
+        this.type = this.initialType;
     }
 
     switchPieceType() {

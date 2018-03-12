@@ -56,10 +56,9 @@ export default class Game {
         events.on(eventTypes.GAME.SWITCH_STATUS, ({ status }) => {
             switch (status) {
                 case statusTypes.READY:
-                    if (this.status === statusTypes.OVER) {
-                        this.pieces.reset();
-                        this.status = statusTypes.READY;
-                    }
+                    // restart anyway
+                    this.pieces.reset();
+                    this.status = statusTypes.READY;
                     break;
                 case statusTypes.WAITING_MY_ACTION:
                     if (this.status === statusTypes.READY) {
@@ -123,7 +122,13 @@ export default class Game {
         });
 
         events.on(eventTypes.INPUT.RESTART, () => {
-            this.restart();
+            if ([statusTypes.WAITING_MY_ACTION, statusTypes.WAITING_OP_ACTION].includes(this.status)) {
+                if (confirm('Game not settled, are you sure to restart?')) {
+                    this.restart();
+                }
+            } else {
+                this.restart();
+            }
         });
 
         this.tick();
