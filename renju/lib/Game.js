@@ -10,6 +10,7 @@ import Background from './Background.js';
 import Input from './Input.js';
 import Pieces from './Pieces.js';
 import Cursor from './Cursor.js';
+import Buttons from './Buttons.js';
 import * as eventTypes from '../configs/eventTypes.js';
 import * as layerTypes from '../configs/layerTypes.js';
 import * as statusTypes from '../configs/statusTypes.js';
@@ -22,7 +23,7 @@ const boardStyleSize = { width: style, height: style };
 
 export default class Game {
 
-    constructor({ canvasElement, rowCount = 15, colCount = 15, restartButton, statusContainer }) {
+    constructor({ canvasElement, rowCount = 15, colCount = 15, restartButton, statusContainer, buttonsContainer }) {
         this.statusContainer = statusContainer;
 
         this.canvas = new Canvas({
@@ -41,7 +42,7 @@ export default class Game {
         this.board = new Board({ size: boardSize, colCount, rowCount, gridSize });
         this.pieces = new Pieces({ boardSize, gridSize, initialType: pieceTypes.WHITE, colCount, rowCount });
         this.cursor = new Cursor({ gridSize, boardSize });
-
+        this.buttons = new Buttons({ style: { width: style - (style / colCount), height: 30 }, container: buttonsContainer });
 
         this.layers = [
             layerTypes.CANVAS,
