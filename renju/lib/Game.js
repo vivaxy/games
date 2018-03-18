@@ -23,7 +23,7 @@ const boardStyleSize = { width: style, height: style };
 
 export default class Game {
 
-    constructor({ canvasElement, rowCount = 15, colCount = 15, restartButton, statusContainer, buttonsContainer }) {
+    constructor({ canvasElement, rowCount = 15, colCount = 15, statusContainer, buttonsContainer }) {
         this.statusContainer = statusContainer;
 
         this.canvas = new Canvas({
@@ -31,8 +31,11 @@ export default class Game {
             size: boardSize,
             style: boardStyleSize,
         });
-        this.input = new Input({ canvasElement, boardStyleSize, boardSize, restartButton });
-
+        this.buttons = new Buttons({
+            style: { width: style - (style / colCount), height: 30 },
+            container: buttonsContainer
+        });
+        this.input = new Input({ canvasElement, boardStyleSize, boardSize, buttons: this.buttons });
 
         const gridSize = {
             width: boardSize.width / colCount,
@@ -42,7 +45,6 @@ export default class Game {
         this.board = new Board({ size: boardSize, colCount, rowCount, gridSize });
         this.pieces = new Pieces({ boardSize, gridSize, initialType: pieceTypes.WHITE, colCount, rowCount });
         this.cursor = new Cursor({ gridSize, boardSize });
-        this.buttons = new Buttons({ style: { width: style - (style / colCount), height: 30 }, container: buttonsContainer });
 
         this.layers = [
             layerTypes.CANVAS,
@@ -123,8 +125,11 @@ export default class Game {
             }
         });
 
-        events.on(eventTypes.INPUT.RESTART, () => {
+        events.on(eventTypes.INPUT.BUTTON_RESTART, () => {
             this.restart();
+        });
+        events.on(eventTypes.INPUT.BUTTON_UNDO, () => {
+            this.undo();
         });
 
         this.tick();
@@ -149,6 +154,12 @@ export default class Game {
     restart() {
         events.emit(eventTypes.GAME.SWITCH_STATUS, { status: statusTypes.READY });
         this.start();
+    }
+
+    undo() {
+        if (this.status !== statusTypes.OVER) {
+            this.pieces.undo();
+        }
     }
 
     updateGameStatus() {

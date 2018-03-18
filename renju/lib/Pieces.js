@@ -96,6 +96,12 @@ export default class Pieces {
         this.board[piece.rowIndex][piece.colIndex] = piece;
     }
 
+    undo() {
+        const { colIndex, rowIndex } = this.pieces.pop();
+        this.board[rowIndex][colIndex] = {};
+        this.switchPieceType();
+    }
+
     reset() {
         while (this.pieces.length) {
             this.pieces.pop();

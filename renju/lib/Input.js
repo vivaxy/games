@@ -9,10 +9,8 @@ import UnitConverter from './UnitConverter.js';
 import { getCoords } from './utils.js';
 
 export default class Input {
-    constructor({ canvasElement, boardStyleSize, boardSize, restartButton }) {
+    constructor({ canvasElement, boardStyleSize, boardSize }) {
         this.canvasElement = canvasElement;
-        this.restartButton = restartButton;
-        this.boardStyleSize = boardStyleSize;
         this.boardSize = boardSize;
         this.unitConverter = new UnitConverter({
             canvas: boardStyleSize,
@@ -30,9 +28,6 @@ export default class Input {
         });
         this.canvasElement.addEventListener('click', (e) => {
             events.emit(eventTypes.INPUT.CLICK, this.unitConverter.canvasToCartesianCoords(getCoords(e)));
-        });
-        this.restartButton.addEventListener('click', () => {
-            events.emit(eventTypes.INPUT.RESTART);
         });
     }
 }
