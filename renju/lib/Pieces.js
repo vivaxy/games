@@ -21,6 +21,7 @@ export default class Pieces {
         this.rowCount = rowCount;
         const size = Math.min(this.gridSize.width, this.gridSize.height) / 2 - 4;
         this.size = { width: size, height: size };
+        this.initialType = initialType;
         this.type = initialType;
         /**
          *
@@ -29,8 +30,8 @@ export default class Pieces {
          *  @param type
          */
         this.pieces = [];
-        this.board = Array.from({ length: rowCount }, (row, rowIndex) => {
-            return Array.from({ length: colCount }, (col, colIndex) => {
+        this.board = Array.from({ length: rowCount }, () => {
+            return Array.from({ length: colCount }, () => {
                 return {};
             });
         });
@@ -106,6 +107,10 @@ export default class Pieces {
         return true;
     }
 
+    canUndo() {
+        return this.pieces.length !== 0;
+    }
+
     reset() {
         while (this.pieces.length) {
             this.pieces.pop();
@@ -115,6 +120,7 @@ export default class Pieces {
                 this.board[rowIndex][colIndex] = {};
             });
         });
+        this.type = this.initialType;
     }
 
     switchPieceType() {

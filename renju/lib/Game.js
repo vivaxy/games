@@ -59,10 +59,10 @@ export default class Game {
         events.on(eventTypes.GAME.SWITCH_STATUS, ({ status }) => {
             switch (status) {
                 case statusTypes.READY:
-                    if (this.status === statusTypes.OVER) {
-                        this.pieces.reset();
-                        this.status = statusTypes.READY;
-                    }
+                    // restart anyway
+                    this.pieces.reset();
+                    this.status = statusTypes.READY;
+                    this.buttons.setDisabled(Buttons.buttonTypes.UNDO, false);
                     break;
                 case statusTypes.WAITING_MY_ACTION:
                     if (this.status === statusTypes.READY) {
@@ -113,8 +113,10 @@ export default class Game {
                         type: this.pieces.getPieceType(),
                     });
                     if (this.pieces.checkWin()) {
+                        this.buttons.setDisabled(Buttons.buttonTypes.UNDO, true);
                         events.emit(eventTypes.GAME.SWITCH_STATUS, { status: statusTypes.OVER });
                     } else {
+                        this.buttons.setDisabled(Buttons.buttonTypes.UNDO, false);
                         events.emit(eventTypes.GAME.SWITCH_STATUS, { status: this.status === statusTypes.WAITING_MY_ACTION ? statusTypes.WAITING_OP_ACTION : statusTypes.WAITING_MY_ACTION });
                     }
                     setTimeout(() => {
@@ -126,12 +128,20 @@ export default class Game {
         });
 
         events.on(eventTypes.INPUT.BUTTON_RESTART, () => {
-            this.restart();
+            if ([statusTypes.WAITING_MY_ACTION, statusTypes.WAITING_OP_ACTION].includes(this.status)) {
+                if (confirm('Game not settled, are you sure to restart?')) {
+                    this.restart();
+                }
+            } else {
+                this.restart();
+            }
         });
         events.on(eventTypes.INPUT.BUTTON_UNDO, () => {
             this.undo();
+            this.buttons.setDisabled(Buttons.buttonTypes.UNDO, !this.pieces.canUndo());
         });
 
+        this.buttons.setDisabled(Buttons.buttonTypes.RESTART, false);
         this.tick();
     }
 
@@ -159,6 +169,7 @@ export default class Game {
     undo() {
         if (this.status !== statusTypes.OVER) {
             this.pieces.undo();
+            this.updateGameStatus();
         }
     }
 
