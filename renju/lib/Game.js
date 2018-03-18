@@ -10,6 +10,7 @@ import Background from './Background.js';
 import Input from './Input.js';
 import Pieces from './Pieces.js';
 import Cursor from './Cursor.js';
+import Buttons from './Buttons.js';
 import * as eventTypes from '../configs/eventTypes.js';
 import * as layerTypes from '../configs/layerTypes.js';
 import * as statusTypes from '../configs/statusTypes.js';
@@ -22,7 +23,7 @@ const boardStyleSize = { width: style, height: style };
 
 export default class Game {
 
-    constructor({ canvasElement, rowCount = 15, colCount = 15, restartButton, statusContainer }) {
+    constructor({ canvasElement, rowCount = 15, colCount = 15, statusContainer, buttonsContainer }) {
         this.statusContainer = statusContainer;
 
         this.canvas = new Canvas({
@@ -30,8 +31,11 @@ export default class Game {
             size: boardSize,
             style: boardStyleSize,
         });
-        this.input = new Input({ canvasElement, boardStyleSize, boardSize, restartButton });
-
+        this.buttons = new Buttons({
+            style: { width: style - (style / colCount), height: 30 },
+            container: buttonsContainer
+        });
+        this.input = new Input({ canvasElement, boardStyleSize, boardSize, buttons: this.buttons });
 
         const gridSize = {
             width: boardSize.width / colCount,
@@ -41,7 +45,6 @@ export default class Game {
         this.board = new Board({ size: boardSize, colCount, rowCount, gridSize });
         this.pieces = new Pieces({ boardSize, gridSize, initialType: pieceTypes.WHITE, colCount, rowCount });
         this.cursor = new Cursor({ gridSize, boardSize });
-
 
         this.layers = [
             layerTypes.CANVAS,
@@ -59,6 +62,7 @@ export default class Game {
                     // restart anyway
                     this.pieces.reset();
                     this.status = statusTypes.READY;
+                    this.buttons.setDisabled(Buttons.buttonTypes.UNDO, false);
                     break;
                 case statusTypes.WAITING_MY_ACTION:
                     if (this.status === statusTypes.READY) {
@@ -109,8 +113,10 @@ export default class Game {
                         type: this.pieces.getPieceType(),
                     });
                     if (this.pieces.checkWin()) {
+                        this.buttons.setDisabled(Buttons.buttonTypes.UNDO, true);
                         events.emit(eventTypes.GAME.SWITCH_STATUS, { status: statusTypes.OVER });
                     } else {
+                        this.buttons.setDisabled(Buttons.buttonTypes.UNDO, false);
                         events.emit(eventTypes.GAME.SWITCH_STATUS, { status: this.status === statusTypes.WAITING_MY_ACTION ? statusTypes.WAITING_OP_ACTION : statusTypes.WAITING_MY_ACTION });
                     }
                     setTimeout(() => {
@@ -121,7 +127,7 @@ export default class Game {
             }
         });
 
-        events.on(eventTypes.INPUT.RESTART, () => {
+        events.on(eventTypes.INPUT.BUTTON_RESTART, () => {
             if ([statusTypes.WAITING_MY_ACTION, statusTypes.WAITING_OP_ACTION].includes(this.status)) {
                 if (confirm('Game not settled, are you sure to restart?')) {
                     this.restart();
@@ -130,7 +136,12 @@ export default class Game {
                 this.restart();
             }
         });
+        events.on(eventTypes.INPUT.BUTTON_UNDO, () => {
+            this.undo();
+            this.buttons.setDisabled(Buttons.buttonTypes.UNDO, !this.pieces.canUndo());
+        });
 
+        this.buttons.setDisabled(Buttons.buttonTypes.RESTART, false);
         this.tick();
     }
 
@@ -153,6 +164,13 @@ export default class Game {
     restart() {
         events.emit(eventTypes.GAME.SWITCH_STATUS, { status: statusTypes.READY });
         this.start();
+    }
+
+    undo() {
+        if (this.status !== statusTypes.OVER) {
+            this.pieces.undo();
+            this.updateGameStatus();
+        }
     }
 
     updateGameStatus() {

@@ -30,8 +30,8 @@ export default class Pieces {
          *  @param type
          */
         this.pieces = [];
-        this.board = Array.from({ length: rowCount }, (row, rowIndex) => {
-            return Array.from({ length: colCount }, (col, colIndex) => {
+        this.board = Array.from({ length: rowCount }, () => {
+            return Array.from({ length: colCount }, () => {
                 return {};
             });
         });
@@ -95,6 +95,20 @@ export default class Pieces {
     addPiece(piece) {
         this.pieces.push(piece);
         this.board[piece.rowIndex][piece.colIndex] = piece;
+    }
+
+    undo() {
+        if (!this.pieces.length) {
+            return false;
+        }
+        const { colIndex, rowIndex } = this.pieces.pop();
+        this.board[rowIndex][colIndex] = {};
+        this.switchPieceType();
+        return true;
+    }
+
+    canUndo() {
+        return this.pieces.length !== 0;
     }
 
     reset() {

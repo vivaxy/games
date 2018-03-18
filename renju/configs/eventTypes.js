@@ -14,7 +14,8 @@ export const INPUT = {
     HOVER: 301,
     HOVER_OUT: 302,
     CLICK: 304,
-    RESTART: 305,
+    BUTTON_RESTART: 305,
+    BUTTON_UNDO: 306,
 };
 
 export const CURSOR = {

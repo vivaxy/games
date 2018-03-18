@@ -1,5 +1,6 @@
 html {
     height: 100%;
+    color: #333;
 }
 
 body {
@@ -27,4 +28,27 @@ canvas {
 
 .copyright {
     font-size: 12px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttons .button {
+    display: block;
+    width: 100px;
+    height: 24px;
+    border: 1px solid #333;
+    background: #fff;
+    border-radius: 12px;
+}
+
+.buttons .button[disabled] {
+    border-color: #eee;
+}
+
+.status {
+    font-size: 14px;
 }

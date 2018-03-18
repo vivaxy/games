@@ -7,6 +7,6 @@
 import Game from './lib/Game.js';
 
 const canvasElement = document.querySelector('.js-canvas');
-const restartButton = document.querySelector('.js-restart');
 const statusContainer = document.querySelector('.js-status');
-new Game({ canvasElement, restartButton, statusContainer }).start();
+const buttonsContainer = document.querySelector('.js-buttons');
+new Game({ canvasElement, statusContainer, buttonsContainer }).start();
