@@ -97,9 +97,13 @@ export default class Pieces {
     }
 
     undo() {
+        if (!this.pieces.length) {
+            return false;
+        }
         const { colIndex, rowIndex } = this.pieces.pop();
         this.board[rowIndex][colIndex] = {};
         this.switchPieceType();
+        return true;
     }
 
     reset() {
