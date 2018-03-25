@@ -7,5 +7,5 @@ import events from './events.js';
 import * as eventTypes from '../configs/eventTypes.js';
 
 events.on(eventTypes.GAME.SWITCH_STATUS, (eventData) => {
-    console.log(eventData);
+  console.log(eventData);
 });
