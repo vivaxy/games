@@ -1,0 +1,12 @@
+/**
+ * @since 20180417 16:52
+ * @author vivaxy
+ */
+
+body {
+    margin: 0;
+}
+
+canvas {
+    display: block;
+}
