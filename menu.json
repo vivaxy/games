@@ -1,66 +1,70 @@
 [
-    {
-        "name": "15 Puzzle",
-        "link": "15-puzzle/dist/html/index.html"
-    },
-    {
-        "name": "Calculator The Game Solver",
-        "link": "calculator-the-game-solver/answers.json"
-    },
-    {
-        "name": "Arkanoid",
-        "link": "arkanoid/dist/html/index.html"
-    },
-    {
-        "name": "Eliminate",
-        "link": "eliminate/release/index.html"
-    },
-    {
-        "name": "Klotski",
-        "link": "klotski/release/index.html"
-    },
-    {
-        "name": "Flappy Bird",
-        "link": "flappy-bird/dist/html/index.html"
-    },
-    {
-        "name": "Renju",
-        "link": "renju/index.html"
-    },
-    {
-        "name": "minefield",
-        "link": "minefield/index.html"
-    },
-    {
-        "name": "WhacAMole",
-        "link": "whac-a-mole/index.html"
-    },
-    {
-        "name": "snake",
-        "link": "snake/index.html"
-    },
-    {
-        "name": "balls",
-        "link": "balls/index.html"
-    },
-    {
-        "name": "scratch",
-        "link": "scratch/index.html"
-    },
-    {
-        "name": "tomcat",
-        "link": "tomcat/index.html"
-    },
-    {
-        "name": "jiugongge",
-        "link": "jiugongge/index.html"
-    },
-    {
-        "name": "goldrain",
-        "link": "goldrain/index.html"
-    },
-    {
-        "name": "catapult",
-        "link": "catapult/index.html"
-    }
+  {
+    "name": "Game of Life",
+    "link": "game-of-life/index.html"
+  },
+  {
+    "name": "15 Puzzle",
+    "link": "15-puzzle/dist/html/index.html"
+  },
+  {
+    "name": "Calculator The Game Solver",
+    "link": "calculator-the-game-solver/answers.json"
+  },
+  {
+    "name": "Arkanoid",
+    "link": "arkanoid/dist/html/index.html"
+  },
+  {
+    "name": "Eliminate",
+    "link": "eliminate/release/index.html"
+  },
+  {
+    "name": "Klotski",
+    "link": "klotski/release/index.html"
+  },
+  {
+    "name": "Flappy Bird",
+    "link": "flappy-bird/dist/html/index.html"
+  },
+  {
+    "name": "Renju",
+    "link": "renju/index.html"
+  },
+  {
+    "name": "minefield",
+    "link": "minefield/index.html"
+  },
+  {
+    "name": "WhacAMole",
+    "link": "whac-a-mole/index.html"
+  },
+  {
+    "name": "snake",
+    "link": "snake/index.html"
+  },
+  {
+    "name": "balls",
+    "link": "balls/index.html"
+  },
+  {
+    "name": "scratch",
+    "link": "scratch/index.html"
+  },
+  {
+    "name": "tomcat",
+    "link": "tomcat/index.html"
+  },
+  {
+    "name": "jiugongge",
+    "link": "jiugongge/index.html"
+  },
+  {
+    "name": "goldrain",
+    "link": "goldrain/index.html"
+  },
+  {
+    "name": "catapult",
+    "link": "catapult/index.html"
+  }
 ]

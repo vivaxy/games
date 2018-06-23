@@ -8,7 +8,32 @@
   <title>Game of Life</title>
 </head>
 <body>
-
+<canvas class="js-canvas"></canvas>
+<div class="operation-container">
+  <div class="operation-item">
+    <label>Game</label>
+    <button class="js-game-status" disabled></button>
+  </div>
+  <div class="operation-item">
+    <label>Speed</label>
+    <button class="js-speed-down">-</button>
+    <!--<span class="js-speed-value"></span>-->
+    <button class="js-speed-up">+</button>
+    <!--<span>fps</span>-->
+  </div>
+  <div class="operation-item">
+    <label>Dimension</label>
+    <button class="js-dimension-down">-</button>
+    <!--<span class="js-dimension-value"></span>-->
+    <button class="js-dimension-up">+</button>
+    <!--<span>upp</span>-->
+  </div>
+  <div class="operation-item">
+    <label>Pattern</label>
+    <select class="js-pattern-select">
+    </select>
+  </div>
+</div>
 <script type="module" src="index.js"></script>
 <script type="text/javascript" charset="utf-8" src="/ba.js"></script>
 </body>

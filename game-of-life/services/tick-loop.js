@@ -1,0 +1,24 @@
+/**
+ * @since 2018-06-23 09:20:03
+ * @author vivaxy
+ */
+
+import * as eventTypes from '../enums/event-types.js';
+
+function init(events) {
+
+  let tickId = 0;
+  let prevTime = Date.now();
+
+  loop();
+
+  function loop() {
+    const now = Date.now();
+    events.emit(eventTypes.TICK, { now, deltaTime: now - prevTime, tickId });
+    tickId++;
+    prevTime = now;
+    requestAnimationFrame(loop);
+  }
+}
+
+export default { init };
