@@ -13,6 +13,10 @@ import speedControl from './services/speed-control.js';
 import dimensionControl from './services/dimension-control.js';
 import patterns from './services/patterns.js';
 
+import * as eventTypes from './enums/event-types.js';
+import glider from './services/patterns/glider.js';
+import dot from './services/patterns/dot.js';
+
 const events = new EventEmitter();
 
 gameCore.init(events);
@@ -22,3 +26,8 @@ gameStatus.init(events);
 speedControl.init(events);
 dimensionControl.init(events);
 patterns.init(events);
+
+// init game with a glider and started
+events.emit(eventTypes.APPLY_PATTERN, { pattern: glider });
+events.emit(eventTypes.ON_CANVAS_CLICK, { x: 0, y: 0 });
+events.emit(eventTypes.APPLY_PATTERN, { pattern: dot });

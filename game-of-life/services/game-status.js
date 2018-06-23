@@ -11,9 +11,10 @@ function init(events) {
 
   statusEl.addEventListener('click', onToggleStatus);
 
-  let playing = false;
+  let playing = true;
   statusEl.disabled = false;
   setElText();
+  events.emit(eventTypes.APPLY_GAME_STATUS, { playing });
 
   function onToggleStatus() {
     playing = !playing;
