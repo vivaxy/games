@@ -7,7 +7,7 @@ import * as eventTypes from '../enums/event-types.js';
 
 function init(events) {
 
-  let dimension = 50; // pixel per unit
+  let dimension = 50; // 50 pixel per life unit
   const updateRatio = 2;
 
   const dimensionUpEl = document.querySelector('.js-dimension-up');

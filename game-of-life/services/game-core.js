@@ -20,10 +20,10 @@ function init(events) {
 
   events.on(eventTypes.TICK, onTick);
   events.on(eventTypes.APPLY_DIMENSION, onDimensionChange);
-  events.on(eventTypes.APPLY_SPEED, onSpeed);
-  events.on(eventTypes.APPLY_GAME_STATUS, onGameStatus);
+  events.on(eventTypes.APPLY_SPEED, onSpeedChange);
+  events.on(eventTypes.APPLY_GAME_STATUS, onGameStatusChange);
+  events.on(eventTypes.APPLY_PATTERN, onPatternChange);
   events.on(eventTypes.ON_CANVAS_CLICK, onCanvasClick);
-  events.on(eventTypes.APPLY_PATTERN, onNewPattern);
 
   function onTick(eventId, eventData) {
     if (playing) {
@@ -105,11 +105,11 @@ function init(events) {
     events.emit(eventTypes.APPLY_CANVAS_DRAW, { matrix, dimension });
   }
 
-  function onSpeed(eventId, eventData) {
+  function onSpeedChange(eventId, eventData) {
     speed = eventData.speed;
   }
 
-  function onGameStatus(eventId, eventData) {
+  function onGameStatusChange(eventId, eventData) {
     playing = eventData.playing;
   }
 
@@ -167,7 +167,7 @@ function init(events) {
     return liveNeighbors;
   }
 
-  function onNewPattern(eventId, eventData) {
+  function onPatternChange(eventId, eventData) {
     pattern = eventData.pattern;
   }
 
