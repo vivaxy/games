@@ -26,8 +26,8 @@ function onLeftClick() {
   const y = randomRange(0, canvasEl.height);
   const r = randomRange(50, 100);
   const c = `rgb(${randomColor()}, ${randomColor()}, ${randomColor()})`;
-  const vx = randomRange(0.1, 0.2);
-  const vy = randomRange(0.1, 0.2);
+  const vx = randomRange(-0.2, 0.2);
+  const vy = randomRange(-0.2, 0.2);
   balls.push(new Ball({ x, y, r, c, vx, vy }));
 }
 
