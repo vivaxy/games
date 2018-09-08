@@ -18,9 +18,9 @@ export default class Eliminate {
       '#3498db',
       '#2ecc71',
       '#9b59b6',
-      //'#34495e', //black
+      //'#34495e', // black
       '#f1c40f',
-      //'#e67e22', //orange
+      //'#e67e22', // orange
       '#e74c3c',
     ];
     this.gridRow = row;
@@ -29,22 +29,27 @@ export default class Eliminate {
     this.gridSize = 100;
     this.animationTime = 100;
     this.blocks = [];
-    this.directions = [{
-      row: -1,
-      col: 0,
-    }, {
-      row: 1,
-      col: 0,
-    }, {
-      row: 0,
-      col: -1,
-    }, {
-      row: 0,
-      col: 1,
-    }];
+    this.directions = [
+      {
+        row: -1,
+        col: 0,
+      },
+      {
+        row: 1,
+        col: 0,
+      },
+      {
+        row: 0,
+        col: -1,
+      },
+      {
+        row: 0,
+        col: 1,
+      },
+    ];
     this.same = [];
     this.canvas = document.querySelector('canvas');
-    this.backgroundColor = 'rgb(200,200,200)';
+    this.backgroundColor = 'rgb(240,240,240)';
     this.output = new Output(this.canvas, this.gridSize, this.blockSize, this.gridCol, this.gridRow, this.backgroundColor, this.animationTime);
     this.input = new Input(this.canvas, this.gridSize, this.gridRow, this.gridCol, document.querySelector('.save'), document.querySelector('.generate'));
     this.score = new Score(document.querySelector('.now'), document.querySelector('.best'), document.querySelector('.remaining'), this.gridRow, this.gridCol);
@@ -63,7 +68,7 @@ export default class Eliminate {
     this.alert.on('restart', this.reset.bind(this));
     this.reset();
 
-    //hack
+    // hack
     this.input.on('save', this.saveGrid.bind(this));
     this.input.on('generate', this.generateGrid.bind(this));
   }
@@ -94,7 +99,6 @@ export default class Eliminate {
     this.output.drawBackground();
     for (var i = 0; i < this.blocks.length; i++) {
       for (var j = 0; j < this.blocks[i].length; j++) {
-        //console.log(this.blocks[i][j]);
         this.output.drawBlock(this.blocks[i][j]);
       }
     }
@@ -107,7 +111,6 @@ export default class Eliminate {
     var block = self.blocks[row][col];
     if (!block.color) return;
     var sameBlocks = self.sameBlocks(block);
-    //console.log(sameBlocks);
     if (sameBlocks.length > 1) {
       self.input.stopListen();
       self.score.addScore(sameBlocks.length);
@@ -120,11 +123,9 @@ export default class Eliminate {
         self.redraw();
         var moveDownList = self.getMoveDownList();
         self.output.moveDown(moveDownList, function () {
-          //console.log(self.blocks);
           self.pullDown(moveDownList);
           self.redraw();
           var moveLeftList = self.getMoveLeftList();
-          //console.log(moveLeftList);
           self.output.moveLeft(moveLeftList, function () {
             self.pullLeft(moveLeftList);
             self.redraw();
@@ -149,7 +150,7 @@ export default class Eliminate {
       var c = col + this.directions[i].col;
       if (this.inside(r, c)) {
         var sideBlock = this.blocks[r][c];
-        if (block.color && sideBlock && block.color == sideBlock.color && !this.inSameList(sideBlock)) {
+        if (block.color && sideBlock && block.color === sideBlock.color && !this.inSameList(sideBlock)) {
           this.same.push(sideBlock);
           this.sameBlocks(sideBlock);
         }
@@ -183,15 +184,15 @@ export default class Eliminate {
 
   getMoveDownList() {
     var moveDownList = [];
-    for (var i = 0; i < this.gridCol; i++) {// for each col
+    for (var i = 0; i < this.gridCol; i++) { // for each col
       var blankBlocks = [];
       for (var j = 0; j < this.gridRow; j++) {
         if (this.blocks[j][i].color === null) blankBlocks.push(j);
       }
-      for (var k = 0; k < this.gridRow; k++) {// k行
+      for (var k = 0; k < this.gridRow; k++) { // k行
         var blanks = 0;
         for (var l = 0; l < blankBlocks.length; l++) {
-          if (blankBlocks[l] > k) blanks++;// k行下面有空格
+          if (blankBlocks[l] > k) blanks++; // k 行下面有空格
         }
         if (blanks > 0 && this.blocks[k][i].color !== null && !this.topAllBlankBlocks(k, i)) {
           var move = {

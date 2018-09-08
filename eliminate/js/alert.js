@@ -8,7 +8,7 @@ export default class Alert {
   constructor(container, touch) {
     this.events = {};
     this.alertContainer = container;
-    this.alertContainer.addEventListener(touch, this.message.bind(this), false);
+    this.alertContainer.addEventListener(touch, this.message.bind(this), { passive: true });
   }
 
   on(event, callback) {
@@ -19,7 +19,7 @@ export default class Alert {
   }
 
   fire(event, data) {
-    var callbacks = this.events[event];
+    const callbacks = this.events[event];
     if (callbacks) {
       callbacks.forEach(function (callback) {
         callback(data);

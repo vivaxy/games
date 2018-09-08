@@ -15,9 +15,9 @@ export default class Input {
     this.isMobile = this.ifMobile();
     this.touch = this.isMobile ? 'touchstart' : 'click';
     this.listening = true;
-    this.element.addEventListener(this.touch, this.message.bind(this), false);
-    this.saveElement.addEventListener(this.touch, this.save.bind(this), false);
-    this.generateElement.addEventListener(this.touch, this.generate.bind(this), false);
+    this.element.addEventListener(this.touch, this.message.bind(this), { passive: true });
+    this.saveElement.addEventListener(this.touch, this.save.bind(this), { passive: true });
+    this.generateElement.addEventListener(this.touch, this.generate.bind(this), { passive: true });
   }
 
   ifMobile() {
