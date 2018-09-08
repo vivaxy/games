@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "test": "ava"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-rc.2",
+    "@babel/preset-env": "^7.0.0-rc.2",
+    "@babel/register": "^7.0.0-rc.2",
+    "ava": "^0.25.0"
+  },
+  "ava": {
+    "require": [
+      "@babel/register"
+    ]
+  }
+}
