@@ -2,43 +2,49 @@
  * @since 14/12/6 下午9:55
  * @author vivaxy
  */
-var Alert = function (container, touch) {
+
+export default class Alert {
+
+  constructor(container, touch) {
     this.events = {};
     this.alertContainer = container;
     this.alertContainer.addEventListener(touch, this.message.bind(this), false);
-};
+  }
 
-Alert.prototype.on = function (event, callback) {
+  on(event, callback) {
     if (!this.events[event]) {
-        this.events[event] = [];
+      this.events[event] = [];
     }
     this.events[event].push(callback);
-};
-Alert.prototype.fire = function (event, data) {
+  }
+
+  fire(event, data) {
     var callbacks = this.events[event];
     if (callbacks) {
-        callbacks.forEach(function (callback) {
-            callback(data);
-        });
+      callbacks.forEach(function (callback) {
+        callback(data);
+      });
     }
-};
+  }
 
-Alert.prototype.off = function (event) {
+  off(event) {
     this.events[event] = null;
-};
+  }
 
-Alert.prototype.show = function () {
+  show() {
     this.alertContainer.classList.remove('hide');
-};
+  }
 
-Alert.prototype.hide = function () {
+  hide() {
     this.alertContainer.classList.add('hide');
-};
+  }
 
-Alert.prototype.message = function (e) {
+  message(e) {
     e.stopPropagation();
     if (e.target.classList.contains('restart')) {
-        this.fire('restart');
-        this.hide();
+      this.fire('restart');
+      this.hide();
     }
-};
+  }
+
+}

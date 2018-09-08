@@ -1,1 +1,1 @@
-# [play here](http://vivaxy.github.io/eliminate/release)
+# [Play here](http://vivaxy.github.io/eliminate/index.html)

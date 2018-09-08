@@ -2,7 +2,8 @@
  * @since 14/12/3 上午10:08
  * @author vivaxy
  */
-var Score = function (now, best, remaining, row, col) {
+export default class Score {
+  constructor(now, best, remaining, row, col) {
 
     this.nowContainer = now;
     this.bestContainer = best;
@@ -19,40 +20,47 @@ var Score = function (now, best, remaining, row, col) {
     this.bestScore = this.getBestScore();
 
     this.setScore();
+  }
 
-};
-Score.prototype.initLocalStorage = function () {
+  initLocalStorage() {
     window.fakeStorage = {
-        _data: {},
-        setItem: function (id, val) {
-            return this._data[id] = String(val);
-        },
-        getItem: function (id) {
-            return this._data.hasOwnProperty(id) ? this._data[id] : undefined;
-        }
+      _data: {},
+      setItem: function (id, val) {
+        return this._data[id] = String(val);
+      },
+      getItem: function (id) {
+        return this._data.hasOwnProperty(id) ? this._data[id] : undefined;
+      },
     };
-};
-Score.prototype.getBestScore = function () {
+  }
+
+  getBestScore() {
     return this.storage.getItem(this.key) || 0;
-};
-Score.prototype.setHighScore = function () {
+  }
+
+  setHighScore() {
     var score = Math.max(this.bestScore, this.score);
     this.bestScore = score;
     this.storage.setItem(this.key, score);
-};
-Score.prototype.addScore = function (num) {
+  }
+
+  addScore(num) {
     this.score += num * num;
     this.remaining -= num;
     this.setScore();
-};
-Score.prototype.setScore = function () {
+  }
+
+  setScore() {
     this.setHighScore();
     this.nowContainer.innerHTML = this.score;
     this.bestContainer.innerHTML = this.bestScore;
     this.remainingContainer.innerHTML = this.remaining;
-};
-Score.prototype.reset = function () {
+  }
+
+  reset() {
     this.score = 0;
     this.remaining = this.totalBlocks;
     this.setScore();
-};
+  }
+}
+

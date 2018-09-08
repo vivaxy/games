@@ -1,9 +1,0 @@
-{
-  "latedef": true,
-  "newcap": true,
-  "boss": true,
-  "camelcase" : true,
-  "indent": 2,
-  "quotmark": "single",
-  "trailing": true
-}
