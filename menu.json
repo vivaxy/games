@@ -13,7 +13,7 @@
   },
   {
     "name": "Arkanoid",
-    "link": "arkanoid/dist/html/index.html"
+    "link": "arkanoid/index.html"
   },
   {
     "name": "Eliminate",
