@@ -21,11 +21,11 @@
   },
   {
     "name": "Klotski",
-    "link": "klotski/release/index.html"
+    "link": "klotski/index.html"
   },
   {
     "name": "Flappy Bird",
-    "link": "flappy-bird/dist/html/index.html"
+    "link": "flappy-bird/index.html"
   },
   {
     "name": "Renju",
