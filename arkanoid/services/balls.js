@@ -3,22 +3,38 @@
  * @author vivaxy
  */
 
-import * as E from '../enums/event-types.js';
+import * as ET from '../enums/event-types.js';
+import * as RS from '../enums/render-sequence.js';
 import Ball from '../class/ball.js';
 
 let balls = [];
 
-function init({ e, ctx }) {
-  balls.push(new Ball({}));
+function init(ee, canvas) {
+  balls.push(new Ball(0, 0, 10, 'rgba(255, 255, 100, 1)', 0.1, 0.1));
 
-  e.on(E.TICK, handleTick);
+  ee.on(ET.TICK, handleTick);
 
   function handleTick(et, { delta }) {
+    move(delta);
+    ee.emit(ET.APPLY_RENDER, { render, sequence: RS.BALLS });
+  }
+
+  function render(ctx) {
     balls.forEach((ball) => {
-      ball.move({ delta });
-      ball.render({ ctx });
+      ball.render(ctx);
     });
   }
+
+  function move(delta) {
+    balls.forEach((ball) => {
+      ball.move(delta, canvas);
+    });
+  }
+
 }
 
-export default { init };
+function getBalls() {
+  return balls;
+}
+
+export default { init, getBalls };

@@ -4,3 +4,4 @@
  */
 
 export const TICK = 'TICK';
+export const APPLY_RENDER = 'APPLY_RENDER';

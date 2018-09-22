@@ -3,14 +3,14 @@
  * @author vivaxy
  */
 
-import * as E from '../enums/event-types.js';
+import * as ET from '../enums/event-types.js';
 
-function init({ e }) {
+function init(e) {
   let prevTime = Date.now();
 
   function loop() {
     const now = Date.now();
-    e.emit(E.TICK, { now, delta: now - prevTime });
+    e.emit(ET.TICK, { now, delta: now - prevTime });
     prevTime = now;
     requestAnimationFrame(loop);
   }

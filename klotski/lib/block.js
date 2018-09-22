@@ -40,7 +40,6 @@ export default class Block {
    * @param direction
    */
   move(direction) {
-
     for (let i = 0; i < this.shape.length; i++) {
       let cell = this.shape[i];
       this.moveCell(cell, direction);

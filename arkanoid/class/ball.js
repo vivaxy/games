@@ -4,7 +4,7 @@
  */
 
 export default class Ball {
-  constructor({ x, y, r, c, vx, vy }) {
+  constructor(x, y, r, c, vx, vy) {
     this.x = x;
     this.y = y;
     this.r = r;
@@ -13,15 +13,16 @@ export default class Ball {
     this.vy = vy;
   }
 
-  render({ ctx }) {
-    this.fillStyle = this.c;
+  render(ctx) {
+    ctx.fillStyle = this.c;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
     ctx.fill();
   }
 
-  move({ delta }) {
+  move(delta) {
     this.x += this.vx * delta;
     this.y += this.vy * delta;
   }
+
 }
