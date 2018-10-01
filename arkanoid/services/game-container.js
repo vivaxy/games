@@ -5,19 +5,19 @@
 
 import * as ET from '../enums/event-types.js';
 import * as RS from '../enums/render-sequence.js';
-import Background from '../class/background.js';
+import GameContainer from '../class/game-container.js';
 
-let background;
+let gameContainer;
 
 function init(ee, canvas) {
-  background = new Background(0, 0, canvas.width, canvas.height, 'rgba(0,0,0,0.2)');
+  gameContainer = new GameContainer(0, 0, canvas.width, canvas.height, 'rgba(0,0,0,0.2)');
 
   ee.on(ET.TICK, function() {
     ee.emit(ET.APPLY_RENDER, { render, sequence: RS.BACKGROUND });
   });
 
   function render(ctx) {
-    background.render(ctx);
+    gameContainer.render(ctx);
   }
 }
 

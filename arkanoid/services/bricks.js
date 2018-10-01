@@ -9,8 +9,20 @@ import Brick from '../class/brick.js';
 
 let bricks = [];
 
-function init(ee) {
-  bricks.push(new Brick(100, 100, 50, 10, 'rgba(100, 255, 255, 1)'));
+function init(ee, canvas) {
+
+  const brickWidth = 50;
+  const brickHeight = 10;
+  const brickSpacing = canvas.width;
+  const brickStarting = 6;
+  const rowCount = 10;
+  const colCount = 7;
+
+  for (let i = 0; i < rowCount; i++) {
+    for (let j = 0; j < colCount; j++) {
+      bricks.push(new Brick(brickStarting + j * (brickWidth + brickSpacing), brickStarting + i * (brickHeight + brickSpacing), brickWidth, brickHeight, 'rgba(100, 255, 255, 1)'));
+    }
+  }
 
   ee.on(ET.TICK, function() {
     ee.emit(ET.APPLY_RENDER, { render, sequence: RS.BRICKS });

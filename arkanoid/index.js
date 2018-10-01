@@ -8,7 +8,7 @@ import tickLoopService from './services/tick-loop.js';
 import canvasService from './services/canvas.js';
 import renderService from './services/render.js';
 
-import backgroundService from './services/background.js';
+import gameContainerService from './services/game-container.js';
 import bricksService from './services/bricks.js';
 import ballsService from './services/balls.js';
 
@@ -18,7 +18,7 @@ const ee = new EventEmitter();
 
 canvasService.init(ee);
 
-backgroundService.init(ee, canvasService.getCanvas());
+gameContainerService.init(ee, canvasService.getCanvas());
 bricksService.init(ee, canvasService.getCanvas());
 ballsService.init(ee, canvasService.getCanvas());
 
