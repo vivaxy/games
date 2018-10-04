@@ -5,22 +5,23 @@
 
 import * as ET from '../enums/event-types.js';
 import * as RS from '../enums/render-sequence.js';
+import * as sizes from '../enums/sizes.js';
 import Brick from '../class/brick.js';
 
 let bricks = [];
 
-function init(ee, canvas) {
+function init(ee) {
 
-  const brickWidth = 50;
-  const brickHeight = 10;
-  const brickSpacing = canvas.width;
-  const brickStarting = 6;
   const rowCount = 10;
   const colCount = 7;
 
   for (let i = 0; i < rowCount; i++) {
     for (let j = 0; j < colCount; j++) {
-      bricks.push(new Brick(brickStarting + j * (brickWidth + brickSpacing), brickStarting + i * (brickHeight + brickSpacing), brickWidth, brickHeight, 'rgba(100, 255, 255, 1)'));
+      const brick = new Brick(
+        sizes.BRICK_HORIZONTAL_BORDER + j * (sizes.BRICK_WIDTH + sizes.BRICK_HORIZONTAL_SPACING),
+        sizes.BRICK_VERTICAL_BORDER + i * (sizes.BRICK_HEIGHT + sizes.BRICK_VERTICAL_SPACING),
+        sizes.BRICK_WIDTH, sizes.BRICK_HEIGHT, 'rgba(100, 255, 255, 1)');
+      bricks.push(brick);
     }
   }
 

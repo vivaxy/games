@@ -7,7 +7,7 @@ import * as ET from '../enums/event-types.js';
 
 let renders = [];
 
-function init(ee, ctx) {
+function init(ee, canvas) {
   ee.on(ET.APPLY_RENDER, save);
 
   ee.on(ET.TICK, render);
@@ -22,7 +22,7 @@ function init(ee, ctx) {
     });
     while (renders.length) {
       const render = renders.shift();
-      render.render(ctx);
+      render.render(canvas);
     }
   }
 }

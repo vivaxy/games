@@ -18,11 +18,11 @@ const ee = new EventEmitter();
 
 canvasService.init(ee);
 
-gameContainerService.init(ee, canvasService.getCanvas());
-bricksService.init(ee, canvasService.getCanvas());
-ballsService.init(ee, canvasService.getCanvas());
+gameContainerService.init(ee);
+bricksService.init(ee);
+ballsService.init(ee);
 
-renderService.init(ee, canvasService.getCtx());
+renderService.init(ee, canvasService.getCanvas());
 collisionService.init(ee, ballsService.getBalls(), canvasService.getCanvas(), bricksService.getBricks());
 
 tickLoopService.init(ee);

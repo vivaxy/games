@@ -3,41 +3,28 @@
  * @author vivaxy
  */
 
+import Canvas from '../../_framework/class/canvas.js';
 import * as ET from '../enums/event-types.js';
 import * as RS from '../enums/render-sequence.js';
 
 let canvas;
-let w;
-let h;
-let ctx;
 
 function init(ee) {
-  canvas = document.querySelector('.js-canvas');
-  resize();
-  ctx = canvas.getContext('2d');
+  const el = document.querySelector('.js-canvas');
+  canvas = new Canvas({ el });
+  canvas.fillWindow();
 
   ee.on(ET.TICK, function() {
     ee.emit(ET.APPLY_RENDER, { render, sequence: RS.CANVAS });
   });
 
   function render() {
-    ctx.clearRect(0, 0, w, h);
+    canvas.clearAll();
   }
-}
-
-function resize() {
-  w = window.innerWidth;
-  h = window.innerHeight;
-  canvas.width = w;
-  canvas.height = h;
-}
-
-function getCtx() {
-  return ctx;
 }
 
 function getCanvas() {
   return canvas;
 }
 
-export default { init, getCtx, getCanvas };
+export default { init, getCanvas };
