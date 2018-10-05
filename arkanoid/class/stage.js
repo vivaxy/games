@@ -5,7 +5,7 @@
  * Fix size
  */
 
-export default class GameContainer {
+export default class Stage {
   constructor(x, y, w, h, c) {
     this.x = x;
     this.y = y;

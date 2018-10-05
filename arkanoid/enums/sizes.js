@@ -3,8 +3,10 @@
  * @author vivaxy
  */
 
-export const GAME_CONTAINER_WIDTH = 900;
-export const GAME_CONTAINER_HEIGHT = 1600;
+export const CANVAS_WIDTH = 900;
+export const CANVAS_HEIGHT = 1600;
+export const STAGE_WIDTH = 900;
+export const STAGE_HEIGHT = 1600;
 
 export const BRICK_WIDTH = 100;
 export const BRICK_HEIGHT = 50;

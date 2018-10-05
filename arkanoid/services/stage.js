@@ -6,19 +6,19 @@
 import * as ET from '../enums/event-types.js';
 import * as RS from '../enums/render-sequence.js';
 import * as sizes from '../enums/sizes.js';
-import GameContainer from '../class/game-container.js';
+import Stage from '../class/stage.js';
 
-let gameContainer;
+let stage;
 
 function init(ee) {
-  gameContainer = new GameContainer(0, 0, sizes.GAME_CONTAINER_WIDTH, sizes.GAME_CONTAINER_HEIGHT, 'rgba(0,0,0,0.2)');
+  stage = new Stage(0, 0, sizes.STAGE_WIDTH, sizes.STAGE_HEIGHT, 'rgba(0,0,0,0.2)');
 
   ee.on(ET.TICK, function() {
     ee.emit(ET.APPLY_RENDER, { render, sequence: RS.BACKGROUND });
   });
 
   function render(ctx) {
-    gameContainer.render(ctx);
+    stage.render(ctx);
   }
 }
 
