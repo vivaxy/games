@@ -50,6 +50,7 @@ function ballAndCanvas(ball) {
  *
  * @param ball
  * @param brick
+ * @param bricks
  */
 function ballAndBrick(ball, brick, bricks) {
   // 1
@@ -80,7 +81,7 @@ function ballAndBrick(ball, brick, bricks) {
     return;
   }
   // 5
-  if (ball.x >= brick.x + brick.w && ball.x <= brick.x + brick.w && ball.y >= brick.y && ball.y <= brick.y + brick.h) {
+  if (ball.x >= brick.x + brick.w && ball.x <= brick.x + brick.w + ball.r && ball.y >= brick.y && ball.y <= brick.y + brick.h) {
     whenHitVerticalWall(ball);
     removeBrick(bricks, brick);
     return;
@@ -134,7 +135,7 @@ function getDistance(p1, p2) {
 }
 
 function whenHitAngle(ball, point) {
-  ball.a = Math.PI - ball.a + 2 * Math.atan2(point.y - ball.y, point.x - ball.x);
+  ball.a = Math.PI - ball.a + 2 * Math.atan2(ball.y - point.y, point.x - ball.x);
   ball.normalizeAngle();
 }
 
