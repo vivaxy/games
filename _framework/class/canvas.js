@@ -59,6 +59,9 @@ export default class Canvas {
       'clearHitRegions',
       'closePath',
       'getLineDash',
+      'resetTransform',
+      'restore',
+      'save',
     ].forEach((fn) => {
       this[fn] = () => {
         return this.ctx[fn]();
@@ -66,7 +69,14 @@ export default class Canvas {
     });
 
     // p1
-    ['addHitRegion', 'measureText'].forEach((fn) => {
+    [
+      'addHitRegion',
+      'measureText',
+      'removeHitRegion',
+      'scrollPathIntoView',
+      'setLineDash',
+      'stroke',
+    ].forEach((fn) => {
       this[fn] = (p1) => {
         return this.ctx[fn](p1);
       };
@@ -89,9 +99,18 @@ export default class Canvas {
     [
       'lineTo',
       'moveTo',
+      'scale',
+      'translate',
     ].forEach((fn) => {
       this[fn] = (l1, l2) => {
         return this.ctx[fn](l1, l2);
+      };
+    });
+
+    // p1, p2, p3, p4, l1, l2
+    ['setTransform', 'transform'].forEach((fn) => {
+      this[fn] = (p1, p2, p3, p4, l1, l2) => {
+        return this.ctx[fn](p1, p2, p3, p4, l1, l2);
       };
     });
 
@@ -102,6 +121,9 @@ export default class Canvas {
       'createLinearGradient',
       'fillRect',
       'getImageData',
+      'quadraticCurveTo',
+      'rect',
+      'strokeRect',
     ].forEach((fn) => {
       this[fn] = (l1, l2, l3, l4) => {
         return this.ctx[fn](l1, l2, l3, l4);
@@ -122,6 +144,13 @@ export default class Canvas {
       };
     });
 
+    // a1
+    ['rotate'].forEach((fn) => {
+      this[fn] = (a1) => {
+        return this.ctx[fn](a1);
+      };
+    });
+
     // l1, l2, l3, a1, a2, b1
     ['arc'].forEach((fn) => {
       this[fn] = (l1, l2, l3, a1, a2, b1) => {
@@ -137,14 +166,14 @@ export default class Canvas {
     });
 
     // p1, l1, l2, l3
-    ['fillText'].forEach((fn) => {
+    ['fillText', 'strokeText'].forEach((fn) => {
       this[fn] = (p1, l1, l2, l3) => {
         return this.ctx[fn](p1, l1, l2, l3);
       };
     });
 
     // p1, l1, l2, l3, l4, l5, l6, l7, l8
-    ['drawImage'].forEach((fn) => {
+    ['drawImage', 'putImageData'].forEach((fn) => {
       this[fn] = (p1, l1, l2, l3, l4, l5, l6, l7, l8) => {
         return this.ctx[fn](p1, l1, l2, l3, l4, l5, l6, l7, l8);
       };
