@@ -11,7 +11,7 @@ import Stage from '../class/stage.js';
 let stage;
 
 function init(ee) {
-  stage = new Stage(0, 0, sizes.STAGE_WIDTH, sizes.STAGE_HEIGHT, 'rgba(0,0,0,0.2)');
+  stage = new Stage(0, 0, sizes.STAGE_WIDTH, sizes.STAGE_HEIGHT, 'rgba(250,250,250,1)');
 
   ee.on(ET.TICK, function() {
     ee.emit(ET.APPLY_RENDER, { render, sequence: RS.BACKGROUND });

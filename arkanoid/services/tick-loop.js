@@ -6,7 +6,12 @@
 import * as ET from '../enums/event-types.js';
 
 function init(e) {
-  let prevTime = Date.now();
+
+  let prevTime;
+  setTimeout(() => {
+    prevTime = Date.now();
+    loop();
+  }, 1000);
 
   function loop() {
     const now = Date.now();
@@ -14,8 +19,6 @@ function init(e) {
     prevTime = now;
     requestAnimationFrame(loop);
   }
-
-  loop();
 }
 
 export default { init };

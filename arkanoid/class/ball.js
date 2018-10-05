@@ -4,13 +4,13 @@
  */
 
 export default class Ball {
-  constructor(x, y, r, c, vx, vy) {
+  constructor(x, y, r, c, v, a) {
     this.x = x;
     this.y = y;
     this.r = r;
     this.c = c;
-    this.vx = vx;
-    this.vy = vy;
+    this.v = v;
+    this.a = a;
   }
 
   render(ctx) {
@@ -21,8 +21,17 @@ export default class Ball {
   }
 
   move(delta) {
-    this.x += this.vx * delta;
-    this.y += this.vy * delta;
+    this.x += this.v * Math.cos(this.a) * delta;
+    this.y -= this.v * Math.sin(this.a) * delta;
+  }
+
+  normalizeAngle() {
+    if (this.a > Math.PI) {
+      this.a -= Math.PI * 2;
+    }
+    if (this.a < -Math.PI) {
+      this.a += Math.PI * 2;
+    }
   }
 
 }

@@ -12,15 +12,12 @@ let bricks = [];
 
 function init(ee) {
 
-  const rowCount = 10;
-  const colCount = 7;
-
-  for (let i = 0; i < rowCount; i++) {
-    for (let j = 0; j < colCount; j++) {
+  for (let i = 0; i < sizes.BRICK_ROW_COUNT; i++) {
+    for (let j = 0; j < sizes.BRICK_COLUMN_COUNT; j++) {
       const brick = new Brick(
         sizes.BRICK_HORIZONTAL_BORDER + j * (sizes.BRICK_WIDTH + sizes.BRICK_HORIZONTAL_SPACING),
         sizes.BRICK_VERTICAL_BORDER + i * (sizes.BRICK_HEIGHT + sizes.BRICK_VERTICAL_SPACING),
-        sizes.BRICK_WIDTH, sizes.BRICK_HEIGHT, 'rgba(100, 255, 255, 1)');
+        sizes.BRICK_WIDTH, sizes.BRICK_HEIGHT, 'rgba(150, 200, 200, 1)');
       bricks.push(brick);
     }
   }

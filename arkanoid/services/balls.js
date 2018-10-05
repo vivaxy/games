@@ -5,12 +5,13 @@
 
 import * as ET from '../enums/event-types.js';
 import * as RS from '../enums/render-sequence.js';
+import * as sizes from '../enums/sizes.js';
 import Ball from '../class/ball.js';
 
 let balls = [];
 
 function init(ee, canvas) {
-  balls.push(new Ball(0, 0, 10, 'rgba(255, 255, 100, 1)', 0.1, 0.1));
+  balls.push(new Ball(0, 0, sizes.BALL_RADIUS, 'rgba(200, 200, 150, 1)', 0.5, -Math.PI / 4));
 
   ee.on(ET.TICK, handleTick);
 

@@ -8,7 +8,7 @@ import tickLoopService from './services/tick-loop.js';
 import canvasService from './services/canvas.js';
 import renderService from './services/render.js';
 
-import stageSerivce from './services/stage.js';
+import stageService from './services/stage.js';
 import bricksService from './services/bricks.js';
 import ballsService from './services/balls.js';
 
@@ -18,11 +18,11 @@ const ee = new EventEmitter();
 
 canvasService.init(ee);
 
-stageSerivce.init(ee);
+stageService.init(ee);
 bricksService.init(ee);
 ballsService.init(ee);
 
 renderService.init(ee, canvasService.getCtx());
-collisionService.init(ee, ballsService.getBalls(), canvasService.getCtx(), bricksService.getBricks());
+collisionService.init(ee, ballsService.getBalls(), bricksService.getBricks());
 
 tickLoopService.init(ee);
