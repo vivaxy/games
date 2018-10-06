@@ -5,17 +5,14 @@
 
 import * as ET from '../enums/event-types.js';
 
-function init(e) {
+function init(ee) {
 
-  let prevTime;
-  setTimeout(() => {
-    prevTime = Date.now();
-    loop();
-  }, 1000);
+  let prevTime = Date.now();
+  loop();
 
   function loop() {
     const now = Date.now();
-    e.emit(ET.TICK, { now, delta: now - prevTime });
+    ee.emit(ET.TICK, { now, delta: now - prevTime });
     prevTime = now;
     requestAnimationFrame(loop);
   }

@@ -9,15 +9,28 @@ import * as sizes from '../enums/sizes.js';
 import Ball from '../class/ball.js';
 
 let balls = [];
+let gameStarted = false;
 
 function init(ee, canvas) {
-  balls.push(new Ball(0, 0, sizes.BALL_RADIUS, 'rgba(200, 200, 150, 1)', 0.5, -Math.PI / 4));
+  balls.push(new Ball(0, 0, sizes.BALL_RADIUS, 'rgba(200, 200, 150, 1)', 1, -Math.PI / 4));
 
   ee.on(ET.TICK, handleTick);
+  ee.on(ET.START_GAME, handleStartGame);
+  ee.on(ET.GAME_OVER, handleGameOver);
 
   function handleTick(et, { delta }) {
-    move(delta);
+    if (gameStarted) {
+      move(delta);
+    }
     ee.emit(ET.APPLY_RENDER, { render, sequence: RS.BALLS });
+  }
+
+  function handleStartGame() {
+    gameStarted = true;
+  }
+
+  function handleGameOver() {
+    gameStarted = false;
   }
 
   function render(ctx) {

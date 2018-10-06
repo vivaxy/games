@@ -10,7 +10,7 @@ function init(ee, balls, bricks) {
 
   ee.on(ET.TICK, function() {
     balls.forEach((ball) => {
-      ballAndCanvas(ball);
+      ballAndCanvas(ee, ball);
       bricks.forEach((brick) => {
         ballAndBrick(ball, brick, bricks);
       });
@@ -19,20 +19,24 @@ function init(ee, balls, bricks) {
 
 }
 
-function ballAndCanvas(ball) {
+function ballAndCanvas(ee, ball) {
   if (ball.x > sizes.CANVAS_WIDTH - ball.r) {
     whenHitVerticalWall(ball);
     ball.x = sizes.CANVAS_WIDTH - ball.r;
+    return;
   }
 
   if (ball.x < ball.r) {
     whenHitVerticalWall(ball);
     ball.x = ball.r;
+    return;
   }
 
-  if (ball.y > sizes.CANVAS_HEIGHT - ball.r) {
-    whenHitHorizontalWall(ball);
-    ball.y = sizes.CANVAS_HEIGHT - ball.r;
+  if (ball.y > sizes.CANVAS_HEIGHT + ball.r) {
+    // whenHitHorizontalWall(ball);
+    // ball.y = sizes.CANVAS_HEIGHT - ball.r;
+    ee.emit(ET.GAME_OVER);
+    return;
   }
 
   if (ball.y < ball.r) {

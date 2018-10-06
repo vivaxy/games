@@ -18,3 +18,8 @@ export const BRICK_COLUMN_COUNT = 8;
 export const BRICK_ROW_COUNT = 20;
 
 export const BALL_RADIUS = 20;
+
+export const PLATE_X = 370;
+export const PLATE_Y = 1500;
+export const PLATE_WIDTH = 160;
+export const PLATE_HEIGHT = 20;
