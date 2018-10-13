@@ -5,6 +5,7 @@
 
 import * as ET from '../enums/event-types.js';
 import * as sizes from '../enums/sizes.js';
+import { getBallDistance } from '../../balls/class/Ball.js';
 
 function init(ee, balls, bricks, plate) {
 
@@ -53,7 +54,7 @@ function ballAndCanvas(ee, ball) {
  * | ----- |
  * 6---7---8
  *
- * @param arc
+ * @param ball
  *  - x
  *  - y
  *  - r
@@ -61,66 +62,137 @@ function ballAndCanvas(ee, ball) {
  * @param rect
  *  - x
  *  - y
- * @return a: new angle
+ * @return
+ *  - a: new angle
+ *  - x
+ *  - y
  */
-function arcHitRect(arc, rect) {
+function ballHitRect(ball, rect) {
   // 1
-  if (arc.x <= rect.x && arc.y <= rect.y && getDistance(arc, rect) <= arc.r) {
-    return whenHitAngle(arc, { x: rect.x, y: rect.y });
+  if (ball.x <= rect.x && ball.y <= rect.y && getDistance(ball, rect) <= ball.r) {
+    return { a: whenHitAngle(ball, { x: rect.x, y: rect.y }), x: ball.x, y: ball.y };
   }
   // 2
-  if (arc.x >= rect.x && arc.x <= rect.x + rect.w && arc.y >= rect.y - arc.r && arc.y <= rect.y) {
-    return whenHitHorizontalWall(arc);
+  if (ball.x >= rect.x && ball.x <= rect.x + rect.w && ball.y >= rect.y - ball.r && ball.y <= rect.y) {
+    return { a: whenHitHorizontalWall(ball), x: ball.x, y: rect.y - ball.r };
   }
   // 3
-  if (arc.x >= rect.x + rect.w && arc.y <= rect.y && getDistance(arc, {
+  if (ball.x >= rect.x + rect.w && ball.y <= rect.y && getDistance(ball, {
     x: rect.x + rect.w,
     y: rect.y,
-  }) <= arc.r) {
-    return whenHitAngle(arc, { x: rect.x + rect.w, y: rect.y });
+  }) <= ball.r) {
+    return { a: whenHitAngle(ball, { x: rect.x + rect.w, y: rect.y }), x: ball.x, y: ball.y };
   }
   // 4
-  if (arc.x >= rect.x - arc.r && arc.x <= rect.x && arc.y >= rect.y && arc.y <= rect.y + rect.h) {
-    return whenHitVerticalWall(arc);
+  if (ball.x >= rect.x - ball.r && ball.x <= rect.x && ball.y >= rect.y && ball.y <= rect.y + rect.h) {
+    return { a: whenHitVerticalWall(ball), x: rect.x - ball.r, y: ball.y };
   }
   // 5
-  if (arc.x >= rect.x + rect.w && arc.x <= rect.x + rect.w + arc.r && arc.y >= rect.y && arc.y <= rect.y + rect.h) {
-    return whenHitVerticalWall(arc);
+  if (ball.x >= rect.x + rect.w && ball.x <= rect.x + rect.w + ball.r && ball.y >= rect.y && ball.y <= rect.y + rect.h) {
+    return { a: whenHitVerticalWall(ball), x: rect.x + rect.w + ball.r, y: ball.y };
   }
   // 6
-  if (arc.x <= rect.x && arc.y >= rect.y + rect.h && getDistance(arc, {
+  if (ball.x <= rect.x && ball.y >= rect.y + rect.h && getDistance(ball, {
     x: rect.x,
     y: rect.y + rect.h,
-  }) <= arc.r) {
-    return whenHitAngle(arc, { x: rect.x, y: rect.y + rect.h });
+  }) <= ball.r) {
+    return { a: whenHitAngle(ball, { x: rect.x, y: rect.y + rect.h }), x: ball.x, y: ball.y };
   }
   // 7
-  if (arc.x >= rect.x && arc.x <= rect.x + rect.w && arc.y >= rect.y + rect.h && arc.y <= rect.y + rect.h + arc.r) {
-    return whenHitHorizontalWall(arc);
+  if (ball.x >= rect.x && ball.x <= rect.x + rect.w && ball.y >= rect.y + rect.h && ball.y <= rect.y + rect.h + ball.r) {
+    return { a: whenHitHorizontalWall(ball), x: ball.x, y: rect.y + rect.h + ball.r };
   }
   // 8
-  if (arc.x >= rect.x + rect.w && arc.y >= rect.y + rect.h && getDistance(arc, {
+  if (ball.x >= rect.x + rect.w && ball.y >= rect.y + rect.h && getDistance(ball, {
     x: rect.x + rect.w,
     y: rect.y + rect.h,
-  }) <= arc.r) {
-    return whenHitAngle(arc, { x: rect.x + rect.w, y: rect.y + rect.h });
+  }) <= ball.r) {
+    return { a: whenHitAngle(ball, { x: rect.x + rect.w, y: rect.y + rect.h }), x: ball.x, y: ball.y };
   }
   // 9
-  if (arc.x >= rect.x && arc.x <= rect.x + rect.w && arc.y >= rect.y && arc.y < rect.y + rect.h) {
+  if (ball.x >= rect.x && ball.x <= rect.x + rect.w && ball.y >= rect.y && ball.y < rect.y + rect.h) {
     if (rect.w > rect.h) {
-      return whenHitHorizontalWall(arc);
+      /**
+       * -------------
+       * |\1   3   2/|
+       * |-----------|
+       * |/4   6   5\|
+       * -------------
+       */
+      if (ball.y < rect.y + rect.h / 2) {
+        // 1, 2, 3
+        if (ball.x - rect.x < ball.y - rect.y) {
+          // 1
+          return { a: whenHitVerticalWall(ball), x: rect.x - ball.r, y: ball.y };
+        }
+        if (rect.x + rect.w - ball.x < ball.y - rect.y) {
+          // 2
+          return { a: whenHitVerticalWall(ball), x: rect.x + rect.w + ball.r, y: ball.y };
+        }
+        // 3
+        return { a: whenHitHorizontalWall(ball), x: ball.x, y: rect.y - ball.r };
+      }
+      // 4, 5, 6
+      if (ball.x - rect.x < rect.y + rect.h - ball.y) {
+        // 4
+        return { a: whenHitVerticalWall(ball), x: rect.x - ball.r, y: ball.y };
+      }
+      if (rect.x + rect.w - ball.x < rect.y + rect.h - ball.y) {
+        // 5
+        return { a: whenHitVerticalWall(ball), x: rect.x + rect.w + ball.r, y: ball.y };
+      }
+      // 6
+      return { a: whenHitHorizontalWall(ball), x: ball.x, y: rect.y + rect.h + ball.r };
     }
-    return whenHitVerticalWall(arc);
+    /**
+     * ---------
+     * |\ 1|4 /|
+     * | \ | / |
+     * |  \|/  |
+     * |   |   |
+     * | 3 | 6 |
+     * |   |   |
+     * |  /|\  |
+     * | / | \ |
+     * |/ 2|5 \|
+     * ---------
+     */
+    if (ball.x < rect.x + rect.w / 2) {
+      // 1, 2, 3
+      if (ball.x - rect.x > ball.y - rect.y) {
+        // 1
+        return { a: whenHitHorizontalWall(ball), x: ball.x, y: rect.y - ball.r };
+      }
+      if (ball.x - rect.x > rect.y + rect.h - ball.y) {
+        // 2
+        return { a: whenHitHorizontalWall(ball), x: ball.x, y: rect.y + rect.h + ball.r };
+      }
+      // 3
+      return { a: whenHitVerticalWall(ball), x: rect.x - ball.r, y: ball.y };
+    }
+    // 4, 5, 6
+    if (rect.x + rect.w - ball.x > ball.y - rect.y) {
+      // 4
+      return { a: whenHitHorizontalWall(ball), x: ball.x, y: rect.y - ball.r };
+    }
+    if (rect.x + rect.w - ball.x > rect.y + rect.h - ball.y) {
+      // 5
+      return { a: whenHitHorizontalWall(ball), x: ball.x, y: rect.y + rect.h + ball.r };
+    }
+    // 6
+    return { a: whenHitVerticalWall(ball), x: rect.x + rect.w + ball.r, y: ball.y };
   }
-  return arc.a;
+  return { a: ball.a, x: ball.x, y: ball.y };
 }
 
 function ballAndBrick(ball, brick, bricks) {
-  const newA = arcHitRect(ball, brick);
-  if (newA !== ball.a) {
+  const { a, x, y } = ballHitRect(ball, brick);
+  if (a !== ball.a) {
     // hit
     removeBrick(bricks, brick);
-    ball.a = newA;
+    ball.a = a;
+    ball.x = x;
+    ball.y = y;
   }
 }
 
@@ -159,10 +231,12 @@ function removeBrick(bricks, brick) {
 }
 
 function ballAndPlate(ee, ball, plate) {
-  const newA = arcHitRect(ball, plate);
-  if (newA !== ball.a) {
+  const { a, x, y } = ballHitRect(ball, plate);
+  if (a !== ball.a) {
     // hit
-    ball.a = newA;
+    ball.a = a;
+    ball.x = x;
+    ball.y = y;
   }
 }
 
