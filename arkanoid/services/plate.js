@@ -9,36 +9,17 @@ import Plate from '../class/plate.js';
 import * as RS from '../enums/render-sequence.js';
 
 let plate = null;
-let moveSpeed = sizes.PLATE_WIDTH / 10;
-let moveDirection = 0;
+const speed = sizes.PLATE_WIDTH / 300;
 
 function init(ee) {
 
   handleGameReset();
 
   ee.on(ET.TICK, renderPlate);
-  ee.on(ET.GAME_START, handleGameStart);
-  ee.on(ET.GAME_OVER, handleGameOver);
   ee.on(ET.GAME_RESET, handleGameReset);
 
   function renderPlate() {
     ee.emit(ET.APPLY_RENDER, { render, sequence: RS.PLATE });
-  }
-
-  function movePlate() {
-    tryMovePlate();
-  }
-
-  function handleGameStart() {
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-    ee.on(ET.TICK, movePlate);
-  }
-
-  function handleGameOver() {
-    window.removeEventListener('keydown', handleKeyDown);
-    window.removeEventListener('keyup', handleKeyUp);
-    ee.off(ET.TICK, movePlate);
   }
 
   function handleGameReset() {
@@ -49,47 +30,24 @@ function init(ee) {
     plate.render(ctx);
   }
 
-  function handleKeyDown(e) {
-    switch (e.key) {
-      case 'ArrowLeft': // <-
-      case 'a': // a
-      case ',': // ,
-        handleActionKey(-1);
-        break;
-      case 'ArrowRight': // ->
-      case 'd': // d
-      case '.': // .
-        handleActionKey(1);
-        break;
-      default:
-        moveDirection = 0;
-    }
-  }
-
-  function handleActionKey(direction) {
-    moveDirection = direction;
-  }
-
-  function handleKeyUp() {
-    // arrowKeys and a do not firing keypress ans keyup event???
-    moveDirection = 0;
-  }
-
-  function tryMovePlate() {
-    if (moveDirection !== 0) {
-      plate.x += moveSpeed * moveDirection;
-      if (plate.x < 0) {
-        plate.x = 0;
-      }
-      if (plate.x > sizes.CANVAS_WIDTH - sizes.PLATE_WIDTH) {
-        plate.x = sizes.CANVAS_WIDTH - sizes.PLATE_WIDTH;
-      }
-    }
-  }
 }
 
 function getPlate() {
   return plate;
 }
 
-export default { init, getPlate };
+function getSpeed() {
+  return speed;
+}
+
+function movePlateX(xDiff) {
+  plate.x += xDiff;
+  if (plate.x < 0) {
+    plate.x = 0;
+  }
+  if (plate.x > sizes.CANVAS_WIDTH - sizes.PLATE_WIDTH) {
+    plate.x = sizes.CANVAS_WIDTH - sizes.PLATE_WIDTH;
+  }
+}
+
+export default { init, getPlate, getSpeed, movePlateX };
