@@ -14,7 +14,8 @@ import ballsService from './services/balls.js';
 import plateService from './services/plate.js';
 
 import collisionService from './services/collision.js';
-import * as ET from './enums/event-types.js';
+
+import gameService from './services/game.js';
 
 const ee = new EventEmitter();
 
@@ -25,10 +26,9 @@ bricksService.init(ee);
 ballsService.init(ee);
 plateService.init(ee);
 
-collisionService.init(ee, ballsService.getBalls(), bricksService.getBricks(), plateService.getPlate());
-renderService.init(ee, canvasService.getCtx());
+collisionService.init(ee);
+renderService.init(ee);
 
 tickLoopService.init(ee);
-setTimeout(() => {
-  ee.emit(ET.START_GAME);
-}, 1000);
+
+gameService.init(ee);

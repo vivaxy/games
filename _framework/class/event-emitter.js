@@ -12,7 +12,7 @@ export default class EventEmitter {
    *
    * @param event
    * @param callback
-   * @param refer
+   * @param [refer]
    * @returns {EventEmitter}
    */
   on(event, callback, refer) {

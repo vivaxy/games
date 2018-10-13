@@ -12,19 +12,27 @@ let bricks = [];
 
 function init(ee) {
 
-  for (let i = 0; i < sizes.BRICK_ROW_COUNT; i++) {
-    for (let j = 0; j < sizes.BRICK_COLUMN_COUNT; j++) {
-      const brick = new Brick(
-        sizes.BRICK_HORIZONTAL_BORDER + j * (sizes.BRICK_WIDTH + sizes.BRICK_HORIZONTAL_SPACING),
-        sizes.BRICK_VERTICAL_BORDER + i * (sizes.BRICK_HEIGHT + sizes.BRICK_VERTICAL_SPACING),
-        sizes.BRICK_WIDTH, sizes.BRICK_HEIGHT, 'rgba(150, 200, 200, 1)');
-      bricks.push(brick);
-    }
+  handleGameReset();
+
+  ee.on(ET.TICK, handleTick);
+  ee.on(ET.GAME_RESET, handleGameReset);
+
+  function handleTick() {
+    ee.emit(ET.APPLY_RENDER, { render, sequence: RS.BRICKS });
   }
 
-  ee.on(ET.TICK, function() {
-    ee.emit(ET.APPLY_RENDER, { render, sequence: RS.BRICKS });
-  });
+  function handleGameReset() {
+    bricks = [];
+    for (let i = 0; i < sizes.BRICK_ROW_COUNT; i++) {
+      for (let j = 0; j < sizes.BRICK_COLUMN_COUNT; j++) {
+        const brick = new Brick(
+          sizes.BRICK_HORIZONTAL_BORDER + j * (sizes.BRICK_WIDTH + sizes.BRICK_HORIZONTAL_SPACING),
+          sizes.BRICK_VERTICAL_BORDER + i * (sizes.BRICK_HEIGHT + sizes.BRICK_VERTICAL_SPACING),
+          sizes.BRICK_WIDTH, sizes.BRICK_HEIGHT, 'rgba(150, 200, 200, 1)');
+        bricks.push(brick);
+      }
+    }
+  }
 
   function render(ctx) {
     bricks.forEach((brick) => {

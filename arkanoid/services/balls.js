@@ -9,35 +9,41 @@ import * as sizes from '../enums/sizes.js';
 import Ball from '../class/ball.js';
 
 let balls = [];
-let gameStarted = false;
 
 function init(ee, canvas) {
-  balls.push(new Ball(
-    sizes.PLATE_X + sizes.PLATE_WIDTH / 2 - sizes.BALL_RADIUS,
-    sizes.PLATE_Y - sizes.BALL_RADIUS,
-    sizes.BALL_RADIUS,
-    'rgba(200, 200, 150, 1)',
-    0.5,
-    -Math.PI / 4,
-  ));
 
-  ee.on(ET.TICK, handleTick);
-  ee.on(ET.START_GAME, handleStartGame);
+  ee.on(ET.TICK, renderBall);
+  ee.on(ET.GAME_START, handleStartGame);
   ee.on(ET.GAME_OVER, handleGameOver);
+  ee.on(ET.GAME_RESET, handleGameReset);
 
-  function handleTick(et, { delta }) {
-    if (gameStarted) {
-      move(delta);
-    }
+  handleGameReset();
+
+  function renderBall() {
     ee.emit(ET.APPLY_RENDER, { render, sequence: RS.BALLS });
   }
 
+  function moveBall(et, { delta }) {
+    move(delta);
+  }
+
   function handleStartGame() {
-    gameStarted = true;
+    ee.on(ET.TICK, moveBall);
   }
 
   function handleGameOver() {
-    gameStarted = false;
+    ee.off(ET.TICK, moveBall);
+  }
+
+  function handleGameReset() {
+    balls = [new Ball(
+      sizes.PLATE_X + sizes.PLATE_WIDTH / 2,
+      sizes.PLATE_Y - sizes.BALL_RADIUS,
+      sizes.BALL_RADIUS,
+      'rgba(200, 200, 150, 1)',
+      0.5,
+      -Math.PI / 4,
+    )];
   }
 
   function render(ctx) {

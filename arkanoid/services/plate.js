@@ -13,15 +13,37 @@ let moveSpeed = sizes.PLATE_WIDTH / 10;
 let moveDirection = 0;
 
 function init(ee) {
-  plate = new Plate(sizes.PLATE_X, sizes.PLATE_Y, sizes.PLATE_WIDTH, sizes.PLATE_HEIGHT, 'rgb(200,150,200)');
 
-  window.addEventListener('keydown', handleKeyDown);
-  window.addEventListener('keyup', handleKeyUp);
+  handleGameReset();
 
-  ee.on(ET.TICK, () => {
-    tryMovePlate();
+  ee.on(ET.TICK, renderPlate);
+  ee.on(ET.GAME_START, handleGameStart);
+  ee.on(ET.GAME_OVER, handleGameOver);
+  ee.on(ET.GAME_RESET, handleGameReset);
+
+  function renderPlate() {
     ee.emit(ET.APPLY_RENDER, { render, sequence: RS.PLATE });
-  });
+  }
+
+  function movePlate() {
+    tryMovePlate();
+  }
+
+  function handleGameStart() {
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    ee.on(ET.TICK, movePlate);
+  }
+
+  function handleGameOver() {
+    window.removeEventListener('keydown', handleKeyDown);
+    window.removeEventListener('keyup', handleKeyUp);
+    ee.off(ET.TICK, movePlate);
+  }
+
+  function handleGameReset() {
+    plate = new Plate(sizes.PLATE_X, sizes.PLATE_Y, sizes.PLATE_WIDTH, sizes.PLATE_HEIGHT, 'rgb(200,150,200)');
+  }
 
   function render(ctx) {
     plate.render(ctx);
@@ -32,16 +54,20 @@ function init(ee) {
       case 'ArrowLeft': // <-
       case 'a': // a
       case ',': // ,
-        moveDirection = -1;
+        handleActionKey(-1);
         break;
       case 'ArrowRight': // ->
       case 'd': // d
       case '.': // .
-        moveDirection = 1;
+        handleActionKey(1);
         break;
       default:
         moveDirection = 0;
     }
+  }
+
+  function handleActionKey(direction) {
+    moveDirection = direction;
   }
 
   function handleKeyUp() {

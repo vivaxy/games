@@ -5,11 +5,19 @@
 
 import * as ET from '../enums/event-types.js';
 import * as sizes from '../enums/sizes.js';
-import { getBallDistance } from '../../balls/class/Ball.js';
+import ballsService from './balls.js';
+import bricksService from './bricks.js';
+import plateService from './plate.js';
 
-function init(ee, balls, bricks, plate) {
+function init(ee) {
 
-  ee.on(ET.TICK, function() {
+  ee.on(ET.GAME_START, handleGameStart);
+  ee.on(ET.GAME_OVER, handleGameOver);
+
+  function handleTick() {
+    const balls = ballsService.getBalls();
+    const bricks = bricksService.getBricks();
+    const plate = plateService.getPlate();
     balls.forEach((ball) => {
       ballAndCanvas(ee, ball);
       bricks.forEach((brick) => {
@@ -17,7 +25,15 @@ function init(ee, balls, bricks, plate) {
       });
       ballAndPlate(ee, ball, plate);
     });
-  });
+  }
+
+  function handleGameStart() {
+    ee.on(ET.TICK, handleTick);
+  }
+
+  function handleGameOver() {
+    ee.off(ET.TICK, handleTick);
+  }
 
 }
 

@@ -4,10 +4,11 @@
  */
 
 import * as ET from '../enums/event-types.js';
+import canvasService from './canvas.js';
 
 let renders = [];
 
-function init(ee, canvas) {
+function init(ee) {
   ee.on(ET.APPLY_RENDER, save);
 
   ee.on(ET.TICK, render);
@@ -17,12 +18,13 @@ function init(ee, canvas) {
   }
 
   function render() {
+    const ctx = canvasService.getCtx();
     renders.sort(({ sequence: prev }, { sequence: next }) => {
       return prev - next;
     });
     while (renders.length) {
       const render = renders.shift();
-      render.render(canvas);
+      render.render(ctx);
     }
   }
 }

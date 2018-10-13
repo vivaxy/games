@@ -6,4 +6,5 @@
 export const TICK = 'TICK';
 export const APPLY_RENDER = 'APPLY_RENDER';
 export const GAME_OVER = 'GAME_OVER';
-export const START_GAME = 'START_GAME';
+export const GAME_START = 'GAME_START';
+export const GAME_RESET = 'GAME_RESET';
