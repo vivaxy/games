@@ -15,7 +15,7 @@ export const BRICK_VERTICAL_SPACING = 10;
 export const BRICK_VERTICAL_BORDER = 100;
 export const BRICK_HORIZONTAL_BORDER = 55;
 export const BRICK_COLUMN_COUNT = 8;
-export const BRICK_ROW_COUNT = 10;
+export const BRICK_ROW_COUNT = 20;
 
 export const BALL_RADIUS = 20;
 

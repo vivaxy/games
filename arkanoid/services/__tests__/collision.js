@@ -53,7 +53,7 @@ function loop() {
   ball.y = y;
   ball.a = a;
   if (!caching[`${x},${y}`]) {
-    collision.ballAndBrick(ball, brick, [brick]);
+    collision.ballAndBrick(ball, brick);
     caching[`${x},${y}`] = { a, b: ball.a };
   }
   ctx.clearRect(0, 0, canvas.width, canvas.height);

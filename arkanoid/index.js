@@ -12,8 +12,10 @@ import stageService from './services/stage.js';
 import bricksService from './services/bricks.js';
 import ballsService from './services/balls.js';
 import plateService from './services/plate.js';
-import movePlateDesktopService from './services/move-plate-desktop.js';
-import movePlateMobileService from './services/move-plate-mobile.js';
+import plateControlDesktopService from './services/plate-control/desktop.js';
+import plateControlMobileService from './services/plate-control/mobile.js';
+
+import ballSplitEffectService from './services/effects/ball-split.js';
 
 import collisionService from './services/collision.js';
 
@@ -27,8 +29,9 @@ stageService.init(ee);
 bricksService.init(ee);
 ballsService.init(ee);
 plateService.init(ee);
-movePlateDesktopService.init(ee);
-movePlateMobileService.init(ee);
+plateControlDesktopService.init(ee);
+plateControlMobileService.init(ee);
+ballSplitEffectService.init(ee);
 
 collisionService.init(ee);
 renderService.init(ee);

@@ -3,8 +3,8 @@
  * @author vivaxy
  */
 
-import * as ET from '../enums/event-types.js';
-import plateService from './plate.js';
+import * as ET from '../../enums/event-types.js';
+import plateService from '../plate.js';
 
 const KEY_DOWN = 'keydown';
 const KEY_UP = 'keyup';

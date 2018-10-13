@@ -40,7 +40,7 @@ function init(ee, canvas) {
       sizes.PLATE_X + sizes.PLATE_WIDTH / 2,
       sizes.PLATE_Y - sizes.BALL_RADIUS,
       sizes.BALL_RADIUS,
-      'rgba(200, 200, 150, 1)',
+      'rgba(150, 200, 200, 1)',
       0.5,
       -Math.PI / 4,
     )];
@@ -64,4 +64,15 @@ function getBalls() {
   return balls;
 }
 
-export default { init, getBalls };
+function removeBall(ball) {
+  const index = balls.indexOf(ball);
+  if (index !== -1) {
+    balls.splice(index, 1);
+  }
+}
+
+function addBall(ball) {
+  balls.push(ball);
+}
+
+export default { init, getBalls, addBall, removeBall };

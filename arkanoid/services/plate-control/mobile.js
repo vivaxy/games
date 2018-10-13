@@ -3,10 +3,10 @@
  * @author vivaxy
  */
 
-import * as ET from '../enums/event-types.js';
-import plateService from './plate.js';
-import canvasService from './canvas.js';
-import * as sizes from '../enums/sizes.js';
+import * as ET from '../../enums/event-types.js';
+import plateService from '../plate.js';
+import canvasService from '../canvas.js';
+import * as sizes from '../../enums/sizes.js';
 
 const TOUCH_START = 'touchstart';
 const TOUCH_MOVE = 'touchmove';

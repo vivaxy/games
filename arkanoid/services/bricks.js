@@ -6,6 +6,7 @@
 import * as ET from '../enums/event-types.js';
 import * as RS from '../enums/render-sequence.js';
 import * as sizes from '../enums/sizes.js';
+import * as effectTypes from '../enums/effect-types.js';
 import Brick from '../class/brick.js';
 
 let bricks = [];
@@ -28,7 +29,11 @@ function init(ee) {
         const brick = new Brick(
           sizes.BRICK_HORIZONTAL_BORDER + j * (sizes.BRICK_WIDTH + sizes.BRICK_HORIZONTAL_SPACING),
           sizes.BRICK_VERTICAL_BORDER + i * (sizes.BRICK_HEIGHT + sizes.BRICK_VERTICAL_SPACING),
-          sizes.BRICK_WIDTH, sizes.BRICK_HEIGHT, 'rgba(150, 200, 200, 1)');
+          sizes.BRICK_WIDTH,
+          sizes.BRICK_HEIGHT,
+          2,
+          [effectTypes.BALL_SPLIT],
+        );
         bricks.push(brick);
       }
     }

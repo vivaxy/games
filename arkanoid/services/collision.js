@@ -21,7 +21,7 @@ function init(ee) {
     balls.forEach((ball) => {
       ballAndCanvas(ee, ball);
       bricks.forEach((brick) => {
-        ballAndBrick(ball, brick, bricks);
+        ballAndBrick(ball, brick, bricks, ee);
       });
       ballAndPlate(ee, ball, plate);
     });
@@ -53,7 +53,10 @@ function ballAndCanvas(ee, ball) {
   if (ball.y > sizes.CANVAS_HEIGHT + ball.r) {
     // whenHitHorizontalWall(ball);
     // ball.y = sizes.CANVAS_HEIGHT - ball.r;
-    ee.emit(ET.GAME_OVER);
+    ballsService.removeBall(ball);
+    if (ballsService.getBalls().length === 0) {
+      ee.emit(ET.GAME_OVER);
+    }
     return;
   }
 
@@ -201,11 +204,17 @@ function ballHitRect(ball, rect) {
   return { a: ball.a, x: ball.x, y: ball.y };
 }
 
-function ballAndBrick(ball, brick, bricks) {
+function ballAndBrick(ball, brick, bricks, ee) {
   const { a, x, y } = ballHitRect(ball, brick);
   if (a !== ball.a) {
     // hit
-    removeBrick(bricks, brick);
+    brick.thickness--;
+    if (bricks && brick.thickness === 0) {
+      removeBrick(bricks, brick);
+    }
+    if (ee) {
+      ee.emit(ET.HIT_A_BRICK, { brick, ball });
+    }
     ball.a = a;
     ball.x = x;
     ball.y = y;
