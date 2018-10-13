@@ -5,6 +5,7 @@
 
 import * as ET from '../enums/event-types.js';
 import plateService from './plate.js';
+import canvasService from './canvas.js';
 import * as sizes from '../enums/sizes.js';
 
 const TOUCH_START = 'touchstart';
@@ -19,16 +20,18 @@ function init(ee) {
   ee.on(ET.GAME_OVER, handleGameOver);
 
   function handleGameStart() {
-    window.addEventListener(TOUCH_START, handleTouchStart);
-    window.addEventListener(TOUCH_MOVE, handleTouchMove);
-    window.addEventListener(TOUCH_END, handleTouchEnd);
+    const canvas = canvasService.getCanvas();
+    canvas.addEventListener(TOUCH_START, handleTouchStart);
+    canvas.addEventListener(TOUCH_MOVE, handleTouchMove);
+    canvas.addEventListener(TOUCH_END, handleTouchEnd);
     ee.on(ET.TICK, movePlate);
   }
 
   function handleGameOver() {
-    window.removeEventListener(TOUCH_START, handleTouchStart);
-    window.removeEventListener(TOUCH_MOVE, handleTouchMove);
-    window.removeEventListener(TOUCH_END, handleTouchEnd);
+    const canvas = canvasService.getCanvas();
+    canvas.removeEventListener(TOUCH_START, handleTouchStart);
+    canvas.removeEventListener(TOUCH_MOVE, handleTouchMove);
+    canvas.removeEventListener(TOUCH_END, handleTouchEnd);
     ee.off(ET.TICK, movePlate);
   }
 
@@ -58,14 +61,17 @@ function init(ee) {
 
   function getTargetX(e) {
     const x = getX(e);
-    return x * window.devicePixelRatio - sizes.PLATE_WIDTH / 2;
+    const canvas = canvasService.getCanvas();
+    // make user finger at the plate right most
+    return x * sizes.CANVAS_WIDTH / canvas.offsetWidth - sizes.PLATE_WIDTH;
   }
 
   function getX(e) {
     if (e.changedTouches) {
-      return e.changedTouches[0].clientX;
+      const touch = e.changedTouches[0];
+      return touch.clientX - touch.target.offsetLeft;
     }
-    return e.clientX;
+    return e.clientX - e.target.offsetLeft;
   }
 
 }
