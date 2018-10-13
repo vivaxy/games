@@ -9,7 +9,7 @@ import Plate from '../class/plate.js';
 import * as RS from '../enums/render-sequence.js';
 
 let plate = null;
-const speed = sizes.PLATE_WIDTH / 300;
+const speed = sizes.PLATE_WIDTH / 100;
 
 function init(ee) {
 
