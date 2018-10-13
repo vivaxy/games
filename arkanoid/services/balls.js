@@ -42,7 +42,7 @@ function init(ee, canvas) {
       sizes.BALL_RADIUS,
       'rgba(150, 200, 200, 1)',
       0.5,
-      -Math.PI / 4,
+      -0.4117,
     )];
   }
 
