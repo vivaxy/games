@@ -14,7 +14,8 @@ function init(events) {
 
   function loop() {
     const now = Date.now();
-    events.emit(eventTypes.TICK, { now, deltaTime: now - prevTime, tickId });
+    const deltaTime = now - prevTime;
+    events.emit(eventTypes.TICK, { now, deltaTime, tickId });
     tickId++;
     prevTime = now;
     requestAnimationFrame(loop);

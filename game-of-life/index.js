@@ -15,7 +15,7 @@ import patterns from './services/patterns.js';
 
 import * as eventTypes from './enums/event-types.js';
 import glider from './services/patterns/glider.js';
-import dot from './services/patterns/dot.js';
+import block from './services/patterns/block.js';
 
 const events = new EventEmitter();
 
@@ -30,4 +30,4 @@ patterns.init(events);
 // init game with a glider and started
 events.emit(eventTypes.APPLY_PATTERN, { pattern: glider });
 events.emit(eventTypes.ON_CANVAS_CLICK, { x: 0, y: 0 });
-events.emit(eventTypes.APPLY_PATTERN, { pattern: dot });
+events.emit(eventTypes.APPLY_PATTERN, { pattern: block });

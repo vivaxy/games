@@ -16,6 +16,7 @@ function init(events) {
 
   dimensionUpEl.addEventListener('click', onDimensionUpElClick);
   dimensionDownEl.addEventListener('click', onDimensionDownElClick);
+  window.addEventListener('resize', onWindowResize);
 
   updateDimensionValue();
 
@@ -37,6 +38,10 @@ function init(events) {
     if (dimensionValueEl) {
       dimensionValueEl.innerHTML = String(dimension);
     }
+  }
+
+  function onWindowResize() {
+    events.emit(eventTypes.APPLY_DIMENSION, { prevDimension: dimension, dimension });
   }
 
   events.emit(eventTypes.APPLY_DIMENSION, { prevDimension: null, dimension });

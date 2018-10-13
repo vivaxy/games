@@ -30,16 +30,19 @@ function init(events) {
       if (eventData.now - prevDrawTime > 1 / speed) {
         // draw
         prevDrawTime = eventData.now;
-        evolve();
+        const time = evolve();
         events.emit(eventTypes.APPLY_CANVAS_DRAW, { matrix, dimension });
+        if (time > 1000) {
+          alert('Dimension too small!');
+        }
       }
     }
   }
 
   function onDimensionChange(eventId, eventData) {
     dimension = eventData.dimension;
-    const newRowCount = Math.ceil(window.innerHeight * dpr / dimension);
-    const newColCount = Math.ceil(window.innerWidth * dpr / dimension);
+    const newRowCount = Math.ceil(window.innerHeight * dpr / dimension) + 2;
+    const newColCount = Math.ceil(window.innerWidth * dpr / dimension) + 2;
 
     if (!matrix) {
       rowCount = newRowCount;
@@ -120,6 +123,7 @@ function init(events) {
   }
 
   function evolve() {
+    const startTime = Date.now();
     /**
      * core evolve algorithm
      *  1. live cell
@@ -146,6 +150,8 @@ function init(events) {
         return live;
       });
     });
+
+    return Date.now() - startTime;
   }
 
   function getLiveNeighbors({ rowIndex, colIndex }) {

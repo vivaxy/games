@@ -61,6 +61,7 @@ function init(events) {
   });
 
   selectEl.addEventListener('change', onPatternSelect);
+  events.on(eventTypes.APPLY_PATTERN, onPatternChange);
 
   function onPatternSelect(e) {
     const pattern = patterns[e.target.value];
@@ -69,7 +70,22 @@ function init(events) {
     }
   }
 
-  events.emit(eventTypes.APPLY_PATTERN, { pattern: dot });
+  function onPatternChange(eventId, eventData) {
+    const patternName = findPatterNameByPattern(eventData.pattern);
+
+    if (patternName && patternName !== selectEl.value) {
+      selectEl.value = patternName;
+    }
+  }
+
+  function findPatterNameByPattern(pattern) {
+    for (let name in patterns) {
+      if (patterns[name] === pattern) {
+        return name;
+      }
+    }
+    return null;
+  }
 }
 
 export default { init };
