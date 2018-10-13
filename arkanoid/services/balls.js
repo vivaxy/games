@@ -12,7 +12,14 @@ let balls = [];
 let gameStarted = false;
 
 function init(ee, canvas) {
-  balls.push(new Ball(0, 0, sizes.BALL_RADIUS, 'rgba(200, 200, 150, 1)', 1, -Math.PI / 4));
+  balls.push(new Ball(
+    sizes.PLATE_X + sizes.PLATE_WIDTH / 2 - sizes.BALL_RADIUS,
+    sizes.PLATE_Y - sizes.BALL_RADIUS,
+    sizes.BALL_RADIUS,
+    'rgba(200, 200, 150, 1)',
+    0.5,
+    -Math.PI / 4,
+  ));
 
   ee.on(ET.TICK, handleTick);
   ee.on(ET.START_GAME, handleStartGame);

@@ -25,8 +25,8 @@ bricksService.init(ee);
 ballsService.init(ee);
 plateService.init(ee);
 
+collisionService.init(ee, ballsService.getBalls(), bricksService.getBricks(), plateService.getPlate());
 renderService.init(ee, canvasService.getCtx());
-collisionService.init(ee, ballsService.getBalls(), bricksService.getBricks());
 
 tickLoopService.init(ee);
 setTimeout(() => {

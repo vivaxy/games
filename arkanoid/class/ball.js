@@ -25,13 +25,4 @@ export default class Ball {
     this.y -= this.v * Math.sin(this.a) * delta;
   }
 
-  normalizeAngle() {
-    if (this.a > Math.PI) {
-      this.a -= Math.PI * 2;
-    }
-    if (this.a < -Math.PI) {
-      this.a += Math.PI * 2;
-    }
-  }
-
 }

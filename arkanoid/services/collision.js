@@ -6,7 +6,7 @@
 import * as ET from '../enums/event-types.js';
 import * as sizes from '../enums/sizes.js';
 
-function init(ee, balls, bricks) {
+function init(ee, balls, bricks, plate) {
 
   ee.on(ET.TICK, function() {
     balls.forEach((ball) => {
@@ -14,6 +14,7 @@ function init(ee, balls, bricks) {
       bricks.forEach((brick) => {
         ballAndBrick(ball, brick, bricks);
       });
+      ballAndPlate(ee, ball, plate);
     });
   });
 
@@ -21,13 +22,13 @@ function init(ee, balls, bricks) {
 
 function ballAndCanvas(ee, ball) {
   if (ball.x > sizes.CANVAS_WIDTH - ball.r) {
-    whenHitVerticalWall(ball);
+    ball.a = whenHitVerticalWall(ball);
     ball.x = sizes.CANVAS_WIDTH - ball.r;
     return;
   }
 
   if (ball.x < ball.r) {
-    whenHitVerticalWall(ball);
+    ball.a = whenHitVerticalWall(ball);
     ball.x = ball.r;
     return;
   }
@@ -40,7 +41,7 @@ function ballAndCanvas(ee, ball) {
   }
 
   if (ball.y < ball.r) {
-    whenHitHorizontalWall(ball);
+    ball.a = whenHitHorizontalWall(ball);
     ball.y = ball.r;
   }
 }
@@ -52,77 +53,74 @@ function ballAndCanvas(ee, ball) {
  * | ----- |
  * 6---7---8
  *
- * @param ball
- * @param brick
- * @param bricks
+ * @param arc
+ *  - x
+ *  - y
+ *  - r
+ *  - a
+ * @param rect
+ *  - x
+ *  - y
+ * @return a: new angle
  */
-function ballAndBrick(ball, brick, bricks) {
+function arcHitRect(arc, rect) {
   // 1
-  if (ball.x <= brick.x && ball.y <= brick.y && getDistance(ball, brick) <= ball.r) {
-    whenHitAngle(ball, { x: brick.x, y: brick.y });
-    removeBrick(bricks, brick);
-    return;
+  if (arc.x <= rect.x && arc.y <= rect.y && getDistance(arc, rect) <= arc.r) {
+    return whenHitAngle(arc, { x: rect.x, y: rect.y });
   }
   // 2
-  if (ball.x >= brick.x && ball.x <= brick.x + brick.w && ball.y >= brick.y - ball.r && ball.y <= brick.y) {
-    whenHitHorizontalWall(ball);
-    removeBrick(bricks, brick);
-    return;
+  if (arc.x >= rect.x && arc.x <= rect.x + rect.w && arc.y >= rect.y - arc.r && arc.y <= rect.y) {
+    return whenHitHorizontalWall(arc);
   }
   // 3
-  if (ball.x >= brick.x + brick.w && ball.y <= brick.y && getDistance(ball, {
-    x: brick.x + brick.w,
-    y: brick.y,
-  }) <= ball.r) {
-    whenHitAngle(ball, { x: brick.x + brick.w, y: brick.y });
-    removeBrick(bricks, brick);
-    return;
+  if (arc.x >= rect.x + rect.w && arc.y <= rect.y && getDistance(arc, {
+    x: rect.x + rect.w,
+    y: rect.y,
+  }) <= arc.r) {
+    return whenHitAngle(arc, { x: rect.x + rect.w, y: rect.y });
   }
   // 4
-  if (ball.x >= brick.x - ball.r && ball.x <= brick.x && ball.y >= brick.y && ball.y <= brick.y + brick.h) {
-    whenHitVerticalWall(ball);
-    removeBrick(bricks, brick);
-    return;
+  if (arc.x >= rect.x - arc.r && arc.x <= rect.x && arc.y >= rect.y && arc.y <= rect.y + rect.h) {
+    return whenHitVerticalWall(arc);
   }
   // 5
-  if (ball.x >= brick.x + brick.w && ball.x <= brick.x + brick.w + ball.r && ball.y >= brick.y && ball.y <= brick.y + brick.h) {
-    whenHitVerticalWall(ball);
-    removeBrick(bricks, brick);
-    return;
+  if (arc.x >= rect.x + rect.w && arc.x <= rect.x + rect.w + arc.r && arc.y >= rect.y && arc.y <= rect.y + rect.h) {
+    return whenHitVerticalWall(arc);
   }
   // 6
-  if (ball.x <= brick.x && ball.y >= brick.y + brick.h && getDistance(ball, {
-    x: brick.x,
-    y: brick.y + brick.h,
-  }) <= ball.r) {
-    whenHitAngle(ball, { x: brick.x, y: brick.y + brick.h });
-    removeBrick(bricks, brick);
-    return;
+  if (arc.x <= rect.x && arc.y >= rect.y + rect.h && getDistance(arc, {
+    x: rect.x,
+    y: rect.y + rect.h,
+  }) <= arc.r) {
+    return whenHitAngle(arc, { x: rect.x, y: rect.y + rect.h });
   }
   // 7
-  if (ball.x >= brick.x && ball.x <= brick.x + brick.w && ball.y >= brick.y + brick.h && ball.y <= brick.y + brick.h + ball.r) {
-    whenHitHorizontalWall(ball);
-    removeBrick(bricks, brick);
-    return;
+  if (arc.x >= rect.x && arc.x <= rect.x + rect.w && arc.y >= rect.y + rect.h && arc.y <= rect.y + rect.h + arc.r) {
+    return whenHitHorizontalWall(arc);
   }
   // 8
-  if (ball.x >= brick.x + brick.w && ball.y >= brick.y + brick.h && getDistance(ball, {
-    x: brick.x + brick.w,
-    y: brick.y + brick.h,
-  }) <= ball.r) {
-    whenHitAngle(ball, { x: brick.x + brick.w, y: brick.y + brick.h });
-    removeBrick(bricks, brick);
-    return;
+  if (arc.x >= rect.x + rect.w && arc.y >= rect.y + rect.h && getDistance(arc, {
+    x: rect.x + rect.w,
+    y: rect.y + rect.h,
+  }) <= arc.r) {
+    return whenHitAngle(arc, { x: rect.x + rect.w, y: rect.y + rect.h });
   }
   // 9
-  if (ball.x >= brick.x && ball.x <= brick.x + brick.w && ball.y >= brick.y && ball.y < brick.y + brick.h) {
-    if (brick.w > brick.h) {
-      whenHitHorizontalWall(ball);
-      removeBrick(bricks, brick);
-      return;
+  if (arc.x >= rect.x && arc.x <= rect.x + rect.w && arc.y >= rect.y && arc.y < rect.y + rect.h) {
+    if (rect.w > rect.h) {
+      return whenHitHorizontalWall(arc);
     }
-    whenHitVerticalWall(ball);
+    return whenHitVerticalWall(arc);
+  }
+  return arc.a;
+}
+
+function ballAndBrick(ball, brick, bricks) {
+  const newA = arcHitRect(ball, brick);
+  if (newA !== ball.a) {
+    // hit
     removeBrick(bricks, brick);
+    ball.a = newA;
   }
 }
 
@@ -131,23 +129,41 @@ function getDistance(p1, p2) {
 }
 
 function whenHitAngle(ball, point) {
-  ball.a = Math.PI - ball.a + 2 * Math.atan2(ball.y - point.y, point.x - ball.x);
-  ball.normalizeAngle();
+  const a = Math.PI - ball.a + 2 * Math.atan2(ball.y - point.y, point.x - ball.x);
+  return normalizeAngle(a);
 }
 
 function whenHitVerticalWall(ball) {
-  ball.a = Math.PI - ball.a;
-  ball.normalizeAngle();
+  const a = Math.PI - ball.a;
+  return normalizeAngle(a);
 }
 
 function whenHitHorizontalWall(ball) {
-  ball.a = -ball.a;
-  ball.normalizeAngle();
+  const a = -ball.a;
+  return normalizeAngle(a);
+}
+
+function normalizeAngle(a) {
+  if (a > Math.PI) {
+    return a - Math.PI * 2;
+  }
+  if (a < -Math.PI) {
+    return a + Math.PI * 2;
+  }
+  return a;
 }
 
 function removeBrick(bricks, brick) {
   const index = bricks.indexOf(brick);
   bricks.splice(index, 1);
+}
+
+function ballAndPlate(ee, ball, plate) {
+  const newA = arcHitRect(ball, plate);
+  if (newA !== ball.a) {
+    // hit
+    ball.a = newA;
+  }
 }
 
 export default { init, ballAndBrick };
