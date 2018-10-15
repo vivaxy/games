@@ -17,7 +17,7 @@ const defaultStatus = {
   status: statusTypes.READY,
   pieceType: pieceTypes.WHITE,
   pieces: [],
-  boardSize: { rowCount: 15, colCount: 15 }
+  boardSize: { rowCount: 15, colCount: 15 },
 };
 
 const getPreloadStatus = () => {

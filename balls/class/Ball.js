@@ -33,7 +33,7 @@ export function apartBalls(ball1, ball2, distance = getBallDistance(ball1, ball2
   ball2.y += Math.sin(angle) * distance2;
 }
 
-const damping = 0.8;
+const damping = 0.9;
 
 export default class Ball {
   constructor({ x, y, r, c, vx, vy }) {

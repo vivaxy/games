@@ -10,6 +10,9 @@ const formatter = (v) => {
   if (Number.isNaN(r)) {
     return 3;
   }
+  if (r <= 0) {
+    return 3;
+  }
   return r;
 };
 

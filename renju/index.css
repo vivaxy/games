@@ -1,54 +1,54 @@
 html {
-    height: 100%;
-    color: #333;
+  height: 100%;
+  color: #333;
 }
 
 body {
-    margin: 0;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  margin: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 canvas {
-    display: block;
-    box-sizing: border-box;
+  display: block;
+  box-sizing: border-box;
 }
 
 .title {
-    font-weight: 900;
-    font-size: 16px;
+  font-weight: 900;
+  font-size: 16px;
 }
 
 * {
-    -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .copyright {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .buttons .button {
-    display: block;
-    width: 100px;
-    height: 24px;
-    border: 1px solid #333;
-    background: #fff;
-    border-radius: 12px;
+  display: block;
+  width: 100px;
+  height: 24px;
+  border: 1px solid #333;
+  background: #fff;
+  border-radius: 12px;
 }
 
 .buttons .button[disabled] {
-    border-color: #eee;
+  border-color: #eee;
 }
 
 .status {
-    font-size: 14px;
+  font-size: 14px;
 }
