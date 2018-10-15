@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+}
+
+.row {
+  display: flex;
+}
+
+.block {
+  background: #333;
+  box-sizing: border-box;
+  border: 1px solid #000;
+}
+
+.block.on {
+  background: #ff3;
+}
