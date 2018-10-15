@@ -1,5 +1,9 @@
 [
   {
+    "name": "Lights out",
+    "link": "lights-out/index.html"
+  },
+  {
     "name": "Game of Life",
     "link": "game-of-life/index.html"
   },
