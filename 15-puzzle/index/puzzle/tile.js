@@ -1,4 +1,4 @@
-import createBezierEasing from './bezier-easing.js';
+import createBezierEasing from '../../../_framework/utils/bezier-easing.js';
 
 import {
   tileBorderWidth,

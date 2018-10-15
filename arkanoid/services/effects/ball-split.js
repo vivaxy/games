@@ -9,9 +9,9 @@ import ballsService from '../../services/balls.js';
 import Ball from '../../class/ball.js';
 
 function init(ee) {
-  ee.on(ET.HIT_A_BRICK, handleBrickDestroy);
+  ee.on(ET.HIT_A_BRICK, handleHitABrick);
 
-  function handleBrickDestroy(et, ed) {
+  function handleHitABrick(et, ed) {
     if (ed.brick && ed.brick.effects && ed.brick.effects.includes(effectTypes.BALL_SPLIT) && ed.brick.thickness === 0) {
       const COUNT = 1;
       for (let i = 0; i < COUNT; i++) {

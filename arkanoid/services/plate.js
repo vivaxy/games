@@ -45,8 +45,8 @@ function movePlateX(xDiff) {
   if (plate.x < 0) {
     plate.x = 0;
   }
-  if (plate.x > sizes.CANVAS_WIDTH - sizes.PLATE_WIDTH) {
-    plate.x = sizes.CANVAS_WIDTH - sizes.PLATE_WIDTH;
+  if (plate.x > sizes.CANVAS_WIDTH - plate.w) {
+    plate.x = sizes.CANVAS_WIDTH - plate.w;
   }
 }
 

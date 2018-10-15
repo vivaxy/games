@@ -4,3 +4,4 @@
  */
 
 export const BALL_SPLIT = 'BALL_SPLIT';
+export const PLATE_EXTEND = 'PLATE_EXTEND';

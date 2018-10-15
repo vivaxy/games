@@ -16,6 +16,7 @@ import plateControlDesktopService from './services/plate-control/desktop.js';
 import plateControlMobileService from './services/plate-control/mobile.js';
 
 import ballSplitEffectService from './services/effects/ball-split.js';
+import plateExtendEffectService from './services/effects/plate-extend.js';
 
 import collisionService from './services/collision.js';
 
@@ -31,7 +32,9 @@ ballsService.init(ee);
 plateService.init(ee);
 plateControlDesktopService.init(ee);
 plateControlMobileService.init(ee);
+
 ballSplitEffectService.init(ee);
+plateExtendEffectService.init(ee);
 
 collisionService.init(ee);
 renderService.init(ee);

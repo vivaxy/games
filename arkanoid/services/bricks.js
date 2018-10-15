@@ -26,14 +26,8 @@ function init(ee) {
     bricks = [];
     for (let i = 0; i < sizes.BRICK_ROW_COUNT; i++) {
       for (let j = 0; j < sizes.BRICK_COLUMN_COUNT; j++) {
-        const brick = new Brick(
-          sizes.BRICK_HORIZONTAL_BORDER + j * (sizes.BRICK_WIDTH + sizes.BRICK_HORIZONTAL_SPACING),
-          sizes.BRICK_VERTICAL_BORDER + i * (sizes.BRICK_HEIGHT + sizes.BRICK_VERTICAL_SPACING),
-          sizes.BRICK_WIDTH,
-          sizes.BRICK_HEIGHT,
-          2,
-          [effectTypes.BALL_SPLIT],
-        );
+        const opt = getBrickOptions(i, j);
+        const brick = new Brick(opt.x, opt.y, opt.w, opt.h, opt.thickness, opt.effects);
         bricks.push(brick);
       }
     }
@@ -43,6 +37,30 @@ function init(ee) {
     bricks.forEach((brick) => {
       brick.render(ctx);
     });
+  }
+
+  function getBrickOptions(rowIndex, colIndex) {
+    const effects = getRandomEffects();
+
+    return {
+      x: sizes.BRICK_HORIZONTAL_BORDER + colIndex * (sizes.BRICK_WIDTH + sizes.BRICK_HORIZONTAL_SPACING),
+      y: sizes.BRICK_VERTICAL_BORDER + rowIndex * (sizes.BRICK_HEIGHT + sizes.BRICK_VERTICAL_SPACING),
+      w: sizes.BRICK_WIDTH,
+      h: sizes.BRICK_HEIGHT,
+      thickness: effects.length + 1,
+      effects,
+    };
+  }
+
+  function getRandomEffects() {
+    const rand = Math.random();
+    if (rand < 0.1) {
+      return [];
+    }
+    if (rand - 0.1 < 0.45) {
+      return [effectTypes.BALL_SPLIT];
+    }
+    return [effectTypes.PLATE_EXTEND];
   }
 
 }
