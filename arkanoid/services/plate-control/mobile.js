@@ -48,14 +48,20 @@ function init(ee) {
   }
 
   function handleTouchStart(e) {
+    e.stopPropagation();
+    e.preventDefault();
     targetX = getTargetX(e);
   }
 
   function handleTouchMove(e) {
+    e.stopPropagation();
+    e.preventDefault();
     targetX = getTargetX(e);
   }
 
-  function handleTouchEnd() {
+  function handleTouchEnd(e) {
+    e.stopPropagation();
+    e.preventDefault();
     targetX = null;
   }
 
