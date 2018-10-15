@@ -3,6 +3,10 @@
  * @author vivaxy
  */
 
+* {
+  user-select: none;
+}
+
 html {
   height: 100%;
   width: 100%;
