@@ -42,12 +42,7 @@ function getSpeed() {
 
 function movePlateX(xDiff) {
   plate.x += xDiff;
-  if (plate.x < 0) {
-    plate.x = 0;
-  }
-  if (plate.x > sizes.CANVAS_WIDTH - plate.w) {
-    plate.x = sizes.CANVAS_WIDTH - plate.w;
-  }
+  plate.normalizePosition();
 }
 
 export default { init, getPlate, getSpeed, movePlateX };

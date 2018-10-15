@@ -50,6 +50,7 @@ function init(ee) {
       const diffW = targetW - plate.w;
       plate.w += diffW;
       plate.x += diffW / 2;
+      plate.normalizePosition();
       if (plate.w >= extendX + sizes.PLATE_WIDTH || ed.now - startTime >= extendAnimationDuration) {
         plate.w = extendX + sizes.PLATE_WIDTH;
         ee.off(ET.TICK, handleTick);
@@ -67,6 +68,7 @@ function init(ee) {
       const diffW = targetW - plate.w;
       plate.w += diffW;
       plate.x += diffW / 2;
+      plate.normalizePosition();
       if (plate.w <= sizes.PLATE_WIDTH || ed.now - startTime >= extendAnimationDuration) {
         plate.w = sizes.PLATE_WIDTH;
         ee.off(ET.TICK, handleTick);
