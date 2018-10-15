@@ -63,7 +63,8 @@ function init(ee) {
     const x = getX(e);
     const canvas = canvasService.getCanvas();
     // make user finger at the plate right most
-    return x * sizes.CANVAS_WIDTH / canvas.offsetWidth - sizes.PLATE_WIDTH;
+    const plate = plateService.getPlate();
+    return x * sizes.CANVAS_WIDTH / canvas.offsetWidth - plate.w;
   }
 
   function getX(e) {
