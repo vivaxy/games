@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-import EventEmitter from '../../_framework/class/event-emitter.js';
+import EventEmitter from '../../event-based-framework/class/event-emitter.js';
 
 import canvas from './canvas.js';
 import Bird from './bird.js';
