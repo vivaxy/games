@@ -10,7 +10,7 @@
   "license": "MIT",
   "devDependencies": {
     "ava": "^0.25.0",
-    "esm": "^3.0.84"
+    "esm": "^3.1.0"
   },
   "ava": {
     "require": [
