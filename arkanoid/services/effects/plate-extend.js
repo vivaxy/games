@@ -3,11 +3,11 @@
  * @author vivaxy
  */
 
+import createBezierEasing from 'https://unpkg.com/event-based-framework/utils/bezier-easing.js';
 import plateService from '../plate.js';
 import * as ET from '../../enums/event-types.js';
 import * as sizes from '../../enums/sizes.js';
 import * as effectTypes from '../../enums/effect-types.js';
-import createBezierEasing from '../../../event-based-framework/utils/bezier-easing.js';
 
 const extendDuration = 5000;
 const extendAnimationDuration = 300;

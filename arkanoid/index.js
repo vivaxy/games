@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-import EventEmitter from '../event-based-framework/class/event-emitter.js';
+import EventEmitter from 'https://unpkg.com/event-based-framework/class/event-emitter.js';
 import tickLoopService from './services/tick-loop.js';
 import canvasService from './services/canvas.js';
 import renderService from './services/render.js';

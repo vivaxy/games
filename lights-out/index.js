@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-import Query from '../event-based-framework/class/query.js';
+import Query from 'https://unpkg.com/event-based-framework/class/query.js';
 
 const formatter = (v) => {
   const r = parseInt(v);

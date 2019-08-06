@@ -3,7 +3,7 @@
  * @author vivaxy
  */
 
-import EventEmitter from '../event-based-framework/class/event-emitter.js';
+import EventEmitter from 'https://unpkg.com/event-based-framework/class/event-emitter.js';
 
 import gameCore from './services/game-core.js';
 import canvas from './services/canvas.js';

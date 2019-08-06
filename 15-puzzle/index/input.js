@@ -1,4 +1,4 @@
-import EventEmitter from '../../event-based-framework/class/event-emitter.js';
+import EventEmitter from 'https://unpkg.com/event-based-framework/class/event-emitter.js';
 
 import { directions, events, browserEvents, mapPointToCanvas } from './configs.js';
 
