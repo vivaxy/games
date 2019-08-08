@@ -1,4 +1,4 @@
-[Game](https://vivaxy.github.io/game/)
+# [Game](https://vivaxy.github.io/game/)
 
 Table of contents
 =================
