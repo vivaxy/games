@@ -13,17 +13,32 @@ function init(ee) {
     });
   });
   let score = 0;
+  let shapeMoving = false;
+  const speed = 10;
+  let speedIndex = 0;
 
   ee.on(ET.GAME_STATE_CHANGE, handleGameStateChange);
   ee.on(ET.TICK, handleTick);
 
   function handleGameStateChange(eventType, { gameState: _gameState }) {
     gameState = _gameState;
+    if (gameState === GS.PLAYING) {
+      ee.emit(ET.UPDATE_GRID, { grid });
+    }
   }
 
   function handleTick() {
     if (gameState === GS.PLAYING) {
-      ee.emit(ET.UPDATE_GRID, { grid });
+      if (!shapeMoving) {
+        ee.emit(ET.INVOKE_A_SHAPE);
+        shapeMoving = true;
+      } else {
+        speedIndex++;
+        if (speedIndex > speed) {
+          ee.emit(ET.MOVE_SHAPE);
+          speedIndex = 0;
+        }
+      }
     }
   }
 }

@@ -16,7 +16,7 @@ function init(ee) {
 
   function start() {
     if (gameState === GS.NEW_GAME) {
-      gameState === GS.PLAYING;
+      gameState = GS.PLAYING;
       ee.emit(ET.GAME_STATE_CHANGE, { gameState });
       return;
     }

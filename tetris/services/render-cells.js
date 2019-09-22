@@ -1,5 +1,5 @@
 /**
- * @since 2019-09-22 07:47
+ * @since 2019-09-22 10:53
  * @author vivaxy
  */
 import * as ET from '../enums/event-types.js';
@@ -15,16 +15,27 @@ function init(ee) {
         if (!grid) {
           return;
         }
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = sizes.gridBorderWidth;
         const gridWidth = sizes.cellSize * grid[0].length;
         const gridHeight = sizes.cellSize * grid.length;
         const marginHorizontal = (width - gridWidth) / 2;
         const marginVertical = (height - gridHeight) / 2;
-        ctx.rect(marginHorizontal, marginVertical, gridWidth, gridHeight);
-        ctx.stroke();
-        ctx.closePath();
+
+        grid.forEach(function(row, rowIndex) {
+          row.forEach(function(item, colIndex) {
+            if (item) {
+              ctx.beginPath();
+              ctx.strokeStyle = 'grey';
+              ctx.rect(
+                marginHorizontal + colIndex * sizes.cellSize,
+                marginVertical + rowIndex * sizes.cellSize,
+                sizes.cellSize,
+                sizes.cellSize
+              );
+              ctx.fill();
+              ctx.closePath();
+            }
+          });
+        });
       },
     ],
   });

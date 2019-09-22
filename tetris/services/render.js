@@ -10,7 +10,7 @@ function init(
 ) {
   let renderLayers = [];
 
-  const $canvas = document.querySelector('$canvas');
+  const $canvas = document.querySelector('canvas');
   $canvas.width = canvas.width * window.devicePixelRatio;
   $canvas.height = canvas.height * window.devicePixelRatio;
   $canvas.style.width = canvas.width + 'px';
@@ -35,6 +35,7 @@ function init(
   }
 
   function render() {
+    ctx.clearRect(0, 0, $canvas.width, $canvas.height);
     renderLayers.forEach(function(layer) {
       layer(ctx, $canvas);
     });
