@@ -18,6 +18,7 @@ Table of contents
 * [Renju](https://vivaxy.github.io/game/renju/) Renju
 * [scratch](https://vivaxy.github.io/game/scratch/) scratch
 * [Snake](https://vivaxy.github.io/game/snake/) Snake
+* [Tetris](https://vivaxy.github.io/game/tetris/) Tetris
 * [Tomcat](https://vivaxy.github.io/game/tomcat/) Tomcat
 * [Whac-A-Mole](https://vivaxy.github.io/game/whac-a-mole/) Whac-A-Mole
 

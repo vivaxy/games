@@ -1,0 +1,11 @@
+/**
+ * @since 2019-09-22 05:27
+ * @author vivaxy
+ */
+body {
+  margin: 0;
+}
+
+canvas {
+  display: block;
+}

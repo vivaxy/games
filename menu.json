@@ -1,15 +1,19 @@
 [
   {
+    "name": "Tetris",
+    "link": "tetris/"
+  },
+  {
     "name": "Lights out",
-    "link": "lights-out/index.html"
+    "link": "lights-out/"
   },
   {
     "name": "Game of Life",
-    "link": "game-of-life/index.html"
+    "link": "game-of-life/"
   },
   {
     "name": "15 Puzzle",
-    "link": "15-puzzle/index.html"
+    "link": "15-puzzle/"
   },
   {
     "name": "Calculator The Game Solver",
@@ -17,58 +21,58 @@
   },
   {
     "name": "Arkanoid",
-    "link": "arkanoid/index.html"
+    "link": "arkanoid/"
   },
   {
     "name": "Eliminate",
-    "link": "eliminate/index.html"
+    "link": "eliminate/"
   },
   {
     "name": "Klotski",
-    "link": "klotski/index.html"
+    "link": "klotski/"
   },
   {
     "name": "Flappy Bird",
-    "link": "flappy-bird/index.html"
+    "link": "flappy-bird/"
   },
   {
     "name": "Renju",
-    "link": "renju/index.html"
+    "link": "renju/"
   },
   {
     "name": "Minefield",
-    "link": "minefield/index.html"
+    "link": "minefield/"
   },
   {
     "name": "WhacAMole",
-    "link": "whac-a-mole/index.html"
+    "link": "whac-a-mole/"
   },
   {
     "name": "Snake",
-    "link": "snake/index.html"
+    "link": "snake/"
   },
   {
     "name": "Balls",
-    "link": "balls/index.html"
+    "link": "balls/"
   },
   {
     "name": "Scratch",
-    "link": "scratch/index.html"
+    "link": "scratch/"
   },
   {
     "name": "Tomcat",
-    "link": "tomcat/index.html"
+    "link": "tomcat/"
   },
   {
     "name": "Jiugongge",
-    "link": "jiugongge/index.html"
+    "link": "jiugongge/"
   },
   {
     "name": "Goldrain",
-    "link": "goldrain/index.html"
+    "link": "goldrain/"
   },
   {
     "name": "Catapult",
-    "link": "catapult/index.html"
+    "link": "catapult/"
   }
 ]
