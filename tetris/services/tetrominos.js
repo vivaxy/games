@@ -110,6 +110,7 @@ function init(ee) {
       return;
     }
     removeTetrominoFromGrid();
+    // TODO prevent move if other tetromino in left
     position[0] -= 1;
     if (position[0] < 0) {
       position[0] = 0;
@@ -122,6 +123,7 @@ function init(ee) {
       return;
     }
     removeTetrominoFromGrid();
+    // TODO prevent move if other tetromino in right
     position[0] += 1;
     if (position[0] > grid[0].length - tetromino[0].length) {
       position[0] = grid[0].length - tetromino[0].length;
@@ -142,6 +144,7 @@ function init(ee) {
       }
       t.push(row);
     }
+    // TODO calculate accectped position
     tetromino = t;
     addTetromino();
   }
