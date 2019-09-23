@@ -43,12 +43,11 @@ function init(ee) {
         } else if (eliminatingRows.length) {
           let dropRowCount = 0;
           for (let i = grid.length - 1; i >= 0; i--) {
-            if (eliminatingRows[eliminatingRows.length - 1] === i) {
+            while (i - dropRowCount === eliminatingRows[eliminatingRows.length - 1]) {
               dropRowCount++;
               eliminatingRows.pop();
             }
             if (i - dropRowCount >= 0) {
-              // TODO fix bug when eliminate multiple rows
               grid[i - dropRowCount].forEach(function(item, colIndex) {
                 grid[i][colIndex] = item;
               });
