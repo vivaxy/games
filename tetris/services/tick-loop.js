@@ -18,7 +18,7 @@ function init(events) {
     events.emit(eventTypes.TICK, { now, deltaTime, tickId });
     tickId++;
     prevTime = now;
-    requestAnimationFrame(loop);
+    setTimeout(loop, 0);
   }
 }
 

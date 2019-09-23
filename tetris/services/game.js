@@ -33,8 +33,8 @@ function init(ee) {
       if (speedIndex > speed) {
         speedIndex = 0;
         if (!shapeMoving) {
-          ee.emit(ET.SHAPE_CREATE);
           shapeMoving = true;
+          ee.emit(ET.SHAPE_CREATE);
         } else {
           ee.emit(ET.SHAPE_MOVE);
         }
@@ -47,15 +47,19 @@ function init(ee) {
   function handleShapeSettled(et, { shape, position }) {
     shapeMoving = false;
     score += 1;
+    let gameOver = false;
     shape.forEach(function(row, rowIndex) {
       row.forEach(function(item) {
         if (item) {
           if (rowIndex + position[1] <= 0) {
-            ee.emit(GS.GAME_OVER);
+            gameOver = true;
           }
         }
       });
     });
+    if (gameOver) {
+      ee.emit(GS.GAME_OVER);
+    }
     console.log('score', score);
   }
 }
