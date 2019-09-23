@@ -14,7 +14,7 @@ function init(ee) {
   });
   let score = 0;
   let shapeMoving = false;
-  const speed = 100;
+  const speed = 1;
   let speedIndex = 0;
 
   ee.on(ET.GAME_STATE_CHANGE, handleGameStateChange);
@@ -46,11 +46,11 @@ function init(ee) {
 
   function handleShapeSettled(et, { shape, position }) {
     shapeMoving = false;
+    score += 1;
     shape.forEach(function(row, rowIndex) {
       row.forEach(function(item) {
         if (item) {
-          score += item;
-          if (rowIndex + position[1] === 0) {
+          if (rowIndex + position[1] <= 0) {
             ee.emit(GS.GAME_OVER);
           }
         }

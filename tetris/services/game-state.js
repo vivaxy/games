@@ -20,7 +20,7 @@ function init(ee) {
       ee.emit(ET.GAME_STATE_CHANGE, { gameState });
       return;
     }
-    throw new Error('invalid game action');
+    throw new Error('invalid game state', gameState);
   }
 
   function pause() {
@@ -29,7 +29,7 @@ function init(ee) {
       ee.emit(ET.GAME_STATE_CHANGE, { gameState });
       return;
     }
-    throw new Error('invalid game action');
+    throw new Error('invalid game state', gameState);
   }
 
   function resume() {
@@ -38,7 +38,7 @@ function init(ee) {
       ee.emit(ET.GAME_STATE_CHANGE, { gameState });
       return;
     }
-    throw new Error('invalid game action');
+    throw new Error('invalid game state', gameState);
   }
 
   function over() {
@@ -47,7 +47,7 @@ function init(ee) {
       ee.emit(ET.GAME_STATE_CHANGE, { gameState });
       return;
     }
-    throw new Error('invalid game action');
+    throw new Error('invalid game state', gameState);
   }
 
   function reset() {
@@ -56,7 +56,7 @@ function init(ee) {
       ee.emit(ET.GAME_STATE_CHANGE, { gameState });
       return;
     }
-    throw new Error('invalid game action');
+    throw new Error('invalid game state', gameState);
   }
 }
 
