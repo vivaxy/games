@@ -11,8 +11,9 @@ export const GAME_RESET = 'GAME_RESET';
 export const GAME_STATE_CHANGE = 'GAME_STATE_CHANGE';
 
 export const UPDATE_GRID = 'UPDATE_GRID';
-export const INVOKE_A_SHAPE = 'INVOKE_A_SHAPE';
-export const MOVE_SHAPE = 'MOVE_SHAPE';
+export const SHAPE_CREATE = 'SHAPE_CREATE';
+export const SHAPE_MOVE = 'SHAPE_MOVE';
+export const SHAPE_SETTLED = 'SHAPE_SETTLED';
 
 export const TICK = 'TICK';
 export const RENDER_LAYERS_ADD = 'RENDER_LAYERS_ADD';

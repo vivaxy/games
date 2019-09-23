@@ -14,11 +14,12 @@ function init(ee) {
   });
   let score = 0;
   let shapeMoving = false;
-  const speed = 10;
+  const speed = 100;
   let speedIndex = 0;
 
   ee.on(ET.GAME_STATE_CHANGE, handleGameStateChange);
   ee.on(ET.TICK, handleTick);
+  ee.on(ET.SHAPE_SETTLED, handleShapeSettled);
 
   function handleGameStateChange(eventType, { gameState: _gameState }) {
     gameState = _gameState;
@@ -29,17 +30,33 @@ function init(ee) {
 
   function handleTick() {
     if (gameState === GS.PLAYING) {
-      if (!shapeMoving) {
-        ee.emit(ET.INVOKE_A_SHAPE);
-        shapeMoving = true;
+      if (speedIndex > speed) {
+        speedIndex = 0;
+        if (!shapeMoving) {
+          ee.emit(ET.SHAPE_CREATE);
+          shapeMoving = true;
+        } else {
+          ee.emit(ET.SHAPE_MOVE);
+        }
       } else {
         speedIndex++;
-        if (speedIndex > speed) {
-          ee.emit(ET.MOVE_SHAPE);
-          speedIndex = 0;
-        }
       }
     }
+  }
+
+  function handleShapeSettled(et, { shape, position }) {
+    shapeMoving = false;
+    shape.forEach(function(row, rowIndex) {
+      row.forEach(function(item) {
+        if (item) {
+          score += item;
+          if (rowIndex + position[1] === 0) {
+            ee.emit(GS.GAME_OVER);
+          }
+        }
+      });
+    });
+    console.log('score', score);
   }
 }
 

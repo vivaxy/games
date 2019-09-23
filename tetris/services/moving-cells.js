@@ -9,15 +9,16 @@ function init(ee) {
   let shape = null;
   let shapePosition = [0, 0];
 
-  ee.on(ET.INVOKE_A_SHAPE, invokeAShape);
+  ee.on(ET.SHAPE_CREATE, invokeAShape);
   ee.on(ET.UPDATE_GRID, handleGridUpdate);
-  ee.on(ET.MOVE_SHAPE, handleMoveShape);
+  ee.on(ET.SHAPE_MOVE, handleMoveShape);
 
   function invokeAShape() {
     shape = [[1]];
     shapePosition[0] = Math.floor(
-      Math.random() * (grid[0].length - shape[0].length)
+      Math.random() * (grid[0].length - shape[0].length + 1)
     );
+    shapePosition[1] = 0;
     addShapeToGrid();
     ee.emit(ET.UPDATE_GRID, { grid });
   }
@@ -38,7 +39,17 @@ function init(ee) {
         if (grid[gridRowIndex][gridColIndex]) {
           throw new Error('Unexpected cell');
         }
-        grid[gridRowIndex][gridColIndex] = 1;
+        if (item) {
+          grid[gridRowIndex][gridColIndex] = 1;
+          if (gridRowIndex + 1 >= grid.length) {
+            settleShape();
+            return;
+          }
+          const nextRow = grid[gridRowIndex + 1][gridColIndex];
+          if (nextRow === 1) {
+            settleShape();
+          }
+        }
       });
     });
   }
@@ -51,13 +62,20 @@ function init(ee) {
         if (!grid[gridRowIndex][gridColIndex]) {
           throw new Error('Unexpected cell');
         }
-        grid[gridRowIndex][gridColIndex] = 0;
+        if (item) {
+          grid[gridRowIndex][gridColIndex] = 0;
+        }
       });
     });
   }
 
   function handleGridUpdate(et, { grid: _grid }) {
     grid = _grid;
+  }
+
+  function settleShape() {
+    ee.emit(ET.SHAPE_SETTLED, { shape, position: shapePosition });
+    shape = null;
   }
 }
 
