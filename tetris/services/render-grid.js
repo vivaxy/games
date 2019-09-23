@@ -16,13 +16,18 @@ function init(ee) {
           return;
         }
         ctx.beginPath();
-        ctx.strokeStyle = 'black';
+        ctx.strokeStyle = '#efefef';
         ctx.lineWidth = sizes.gridBorderWidth;
         const gridWidth = sizes.cellSize * grid[0].length;
         const gridHeight = sizes.cellSize * grid.length;
         const marginHorizontal = (width - gridWidth) / 2;
         const marginVertical = (height - gridHeight) / 2;
-        ctx.rect(marginHorizontal, marginVertical, gridWidth, gridHeight);
+        ctx.rect(
+          marginHorizontal - sizes.gridBorderWidth / 2,
+          marginVertical - sizes.gridBorderWidth / 2,
+          gridWidth + sizes.gridBorderWidth,
+          gridHeight + sizes.gridBorderWidth
+        );
         ctx.stroke();
         ctx.closePath();
       },

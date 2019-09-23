@@ -9,19 +9,19 @@ function init(ee) {
   let gameState = GS.NEW_GAME;
   let grid = Array.from({ length: 20 }, function() {
     return Array.from({ length: 10 }, function() {
-      return 0;
+      return null;
     });
   });
   let score = 0;
-  let shapeMoving = false;
+  let tetrominoMoving = false;
   const speed = 1;
   let speedIndex = 0;
 
   ee.on(ET.GAME_STATE_CHANGE, handleGameStateChange);
   ee.on(ET.TICK, handleTick);
-  ee.on(ET.SHAPE_SETTLED, handleShapeSettled);
+  ee.on(ET.TETROMINO_SETTLED, handleTetrominoSettled);
 
-  function handleGameStateChange(eventType, { gameState: _gameState }) {
+  function handleGameStateChange(et, { gameState: _gameState }) {
     gameState = _gameState;
     if (gameState === GS.PLAYING) {
       ee.emit(ET.UPDATE_GRID, { grid });
@@ -32,11 +32,11 @@ function init(ee) {
     if (gameState === GS.PLAYING) {
       if (speedIndex > speed) {
         speedIndex = 0;
-        if (!shapeMoving) {
-          shapeMoving = true;
-          ee.emit(ET.SHAPE_CREATE);
+        if (!tetrominoMoving) {
+          tetrominoMoving = true;
+          ee.emit(ET.TETROMINO_CREATE);
         } else {
-          ee.emit(ET.SHAPE_MOVE);
+          ee.emit(ET.TETROMINO_MOVE);
         }
       } else {
         speedIndex++;
@@ -44,11 +44,11 @@ function init(ee) {
     }
   }
 
-  function handleShapeSettled(et, { shape, position }) {
-    shapeMoving = false;
+  function handleTetrominoSettled(et, { tetromino, position }) {
+    tetrominoMoving = false;
     score += 1;
     let gameOver = false;
-    shape.forEach(function(row, rowIndex) {
+    tetromino.forEach(function(row, rowIndex) {
       row.forEach(function(item) {
         if (item) {
           if (rowIndex + position[1] <= 0) {

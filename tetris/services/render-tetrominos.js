@@ -24,7 +24,7 @@ function init(ee) {
           row.forEach(function(item, colIndex) {
             if (item) {
               ctx.beginPath();
-              ctx.strokeStyle = 'grey';
+              ctx.fillStyle = item.color;
               ctx.rect(
                 marginHorizontal + colIndex * sizes.cellSize,
                 marginVertical + rowIndex * sizes.cellSize,
@@ -32,6 +32,17 @@ function init(ee) {
                 sizes.cellSize
               );
               ctx.fill();
+              ctx.closePath();
+              ctx.beginPath();
+              ctx.strokeStyle = '#ccc';
+              ctx.lineWidth = 2;
+              ctx.rect(
+                marginHorizontal + colIndex * sizes.cellSize + 1,
+                marginVertical + rowIndex * sizes.cellSize + 1,
+                sizes.cellSize - 2,
+                sizes.cellSize - 2
+              );
+              ctx.stroke();
               ctx.closePath();
             }
           });

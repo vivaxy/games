@@ -21,11 +21,11 @@ function init(
   ee.on(ET.RENDER_LAYERS_ADD, addRenderLayers);
   ee.on(ET.RENDER_LAYERS_REMOVE, removeRenderLayers);
 
-  function addRenderLayers(eventType, { layers }) {
+  function addRenderLayers(et, { layers }) {
     renderLayers = renderLayers.concat(layers);
   }
 
-  function removeRenderLayers(eventType, { layers }) {
+  function removeRenderLayers(et, { layers }) {
     layers.forEach(function(layer) {
       const layerIndex = renderLayers.indexOf(layer);
       if (layerIndex !== -1) {
