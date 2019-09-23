@@ -12,6 +12,7 @@ import renderGrid from './services/render-grid.js';
 import renderTetrominos from './services/render-tetrominos.js';
 import tetrominos from './services/tetrominos.js';
 import tickLoop from './services/tick-loop.js';
+import input from './services/input.js';
 
 const ee = new EventEmitter();
 
@@ -22,6 +23,7 @@ renderGrid.init(ee);
 renderTetrominos.init(ee);
 tetrominos.init(ee);
 tickLoop.init(ee);
+input.init(ee);
 
 setTimeout(function() {
   ee.emit(ET.GAME_START);

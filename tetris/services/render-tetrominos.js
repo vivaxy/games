@@ -34,7 +34,7 @@ function init(ee) {
               ctx.fill();
               ctx.closePath();
               ctx.beginPath();
-              ctx.strokeStyle = '#ccc';
+              ctx.strokeStyle = '#fff';
               ctx.lineWidth = 2;
               ctx.rect(
                 marginHorizontal + colIndex * sizes.cellSize + 1,

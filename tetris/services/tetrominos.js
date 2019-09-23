@@ -14,6 +14,9 @@ function init(ee) {
   ee.on(ET.TETROMINO_CREATE, createTetromino);
   ee.on(ET.UPDATE_GRID, handleGridUpdate);
   ee.on(ET.TETROMINO_MOVE, moveTetromino);
+  ee.on(ET.TETROMINO_LEFT, moveTetrominoLeft);
+  ee.on(ET.TETROMINO_RIGHT, moveTetrominoRight);
+  ee.on(ET.TETROMINO_ROTATE, rotateTetromino);
 
   function createTetromino() {
     const color = getNextColor();
@@ -100,6 +103,47 @@ function init(ee) {
 
   function handleGridUpdate(et, { grid: _grid }) {
     grid = _grid;
+  }
+
+  function moveTetrominoLeft() {
+    if (!tetromino) {
+      return;
+    }
+    removeTetrominoFromGrid();
+    position[0] -= 1;
+    if (position[0] < 0) {
+      position[0] = 0;
+    }
+    addTetromino();
+  }
+
+  function moveTetrominoRight() {
+    if (!tetromino) {
+      return;
+    }
+    removeTetrominoFromGrid();
+    position[0] += 1;
+    if (position[0] > grid[0].length - tetromino[0].length) {
+      position[0] = grid[0].length - tetromino[0].length;
+    }
+    addTetromino();
+  }
+
+  function rotateTetromino() {
+    if (!tetromino) {
+      return;
+    }
+    removeTetrominoFromGrid();
+    const t = [];
+    for (let i = tetromino[0].length - 1; i >= 0; i--) {
+      const row = [];
+      for (let j = 0; j < tetromino.length; j++) {
+        row.push(tetromino[j][i]);
+      }
+      t.push(row);
+    }
+    tetromino = t;
+    addTetromino();
   }
 }
 

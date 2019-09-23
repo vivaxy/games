@@ -14,12 +14,14 @@ function init(ee) {
   });
   let score = 0;
   let tetrominoMoving = false;
-  const speed = 1;
+  let tetrominoDroping = false;
+  let speed = 100;
   let speedIndex = 0;
 
   ee.on(ET.GAME_STATE_CHANGE, handleGameStateChange);
   ee.on(ET.TICK, handleTick);
   ee.on(ET.TETROMINO_SETTLED, handleTetrominoSettled);
+  ee.on(ET.TETROMINO_DOWN, handleTetrominoDown);
 
   function handleGameStateChange(et, { gameState: _gameState }) {
     gameState = _gameState;
@@ -30,13 +32,16 @@ function init(ee) {
 
   function handleTick() {
     if (gameState === GS.PLAYING) {
-      if (speedIndex > speed) {
+      if (tetrominoDroping) {
         speedIndex = 0;
-        if (!tetrominoMoving) {
+        ee.emit(ET.TETROMINO_MOVE);
+      } else if (speedIndex > speed) {
+        speedIndex = 0;
+        if (tetrominoMoving) {
+          ee.emit(ET.TETROMINO_MOVE);
+        } else {
           tetrominoMoving = true;
           ee.emit(ET.TETROMINO_CREATE);
-        } else {
-          ee.emit(ET.TETROMINO_MOVE);
         }
       } else {
         speedIndex++;
@@ -46,6 +51,7 @@ function init(ee) {
 
   function handleTetrominoSettled(et, { tetromino, position }) {
     tetrominoMoving = false;
+    tetrominoDroping = false;
     score += 1;
     let gameOver = false;
     tetromino.forEach(function(row, rowIndex) {
@@ -61,6 +67,10 @@ function init(ee) {
       ee.emit(GS.GAME_OVER);
     }
     console.log('score', score);
+  }
+
+  function handleTetrominoDown() {
+    tetrominoDroping = true;
   }
 }
 
