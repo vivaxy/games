@@ -3,17 +3,17 @@
  * @author vivaxy
  */
 export default class StateMachine {
-  constructor(options) {
+  constructor({ maxHistoryLength = 10, default: _default, ...states }) {
     this.history = [];
     this.changeCallbacks = [];
-    this.maxHistoryLength = options.maxHistoryLength || 10;
-    this.state = options.default;
+    this.maxHistoryLength = maxHistoryLength;
+    this.state = _default;
 
-    Object.keys(options).forEach((action) => {
+    Object.keys(states).forEach((action) => {
       if (action === 'maxHistoryLength' || action === 'default') {
         return;
       }
-      const [from, to] = options[action];
+      const [from, to] = states[action];
       this[action] = function() {
         if (this.state === from) {
           this.state = to;

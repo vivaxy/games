@@ -5,6 +5,7 @@
 import * as ET from '../enums/event-types.js';
 import * as GS from '../enums/game-state.js';
 import StateMachine from '../class/state-machine.js';
+import Grid from '../class/grid.js';
 
 const gameStateMachine = new StateMachine({
   default: GS.NEW_GAME,
@@ -17,15 +18,8 @@ const gameStateMachine = new StateMachine({
 
 function init(ee) {
   const INITIAL_SPEED = 100;
-  function generateDefaultGrid() {
-    return Array.from({ length: 20 }, function() {
-      return Array.from({ length: 10 }, function() {
-        return null;
-      });
-    });
-  }
 
-  let grid = generateDefaultGrid();
+  let grid = new Grid();
   let score = 0;
   let tetrominoMoving = false;
   let tetrominoDroping = false;
@@ -35,7 +29,7 @@ function init(ee) {
 
   gameStateMachine.onChange(function() {
     if (gameStateMachine.getState() === GS.PLAYING) {
-      ee.emit(ET.UPDATE_GRID, { grid });
+      ee.emit(ET.UPDATE_GRID, { grid: grid.data });
     }
     if (gameStateMachine.getState() === GS.GAME_OVER) {
       const restart = confirm('Game Over! Restart?');
@@ -44,7 +38,7 @@ function init(ee) {
       }
     }
     if (gameStateMachine.getState() === GS.NEW_GAME) {
-      grid = generateDefaultGrid();
+      grid = new Grid();
       score = 0;
       tetrominoMoving = false;
       tetrominoDroping = false;
@@ -73,7 +67,7 @@ function init(ee) {
         } else if (eliminatingRows.length) {
           const addScore = eliminatingRows.length * eliminatingRows.length * 10;
           let dropRowCount = 0;
-          for (let i = grid.length - 1; i >= 0; i--) {
+          for (let i = grid.rowCount - 1; i >= 0; i--) {
             while (
               i - dropRowCount ===
               eliminatingRows[eliminatingRows.length - 1]
@@ -82,12 +76,12 @@ function init(ee) {
               eliminatingRows.pop();
             }
             if (i - dropRowCount >= 0) {
-              grid[i - dropRowCount].forEach(function(item, colIndex) {
-                grid[i][colIndex] = item;
+              grid.data[i - dropRowCount].forEach(function(item, colIndex) {
+                grid.data[i][colIndex] = item;
               });
             } else {
-              grid[i].forEach(function(_, colIndex) {
-                grid[i][colIndex] = null;
+              grid.data[i].forEach(function(_, colIndex) {
+                grid.data[i][colIndex] = null;
               });
             }
           }
@@ -104,7 +98,7 @@ function init(ee) {
         speedIndex++;
         if (eliminatingRows.length) {
           eliminatingRows.forEach(function(rowIndex) {
-            grid[rowIndex].forEach(function(item) {
+            grid.data[rowIndex].forEach(function(item) {
               if (item._color) {
                 item.color = item._color;
                 delete item._color;
@@ -134,7 +128,7 @@ function init(ee) {
     });
 
     eliminatingRows = [];
-    grid.forEach(function(row, rowIndex) {
+    grid.data.forEach(function(row, rowIndex) {
       let hasSpace = false;
       row.forEach(function(item) {
         if (!item) {
