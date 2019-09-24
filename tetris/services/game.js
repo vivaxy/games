@@ -31,6 +31,30 @@ function init(ee) {
     if (gameState === GS.PLAYING) {
       ee.emit(ET.UPDATE_GRID, { grid });
     }
+    if (gameState === GS.GAME_OVER) {
+      const restart = confirm('Game Over! Restart?');
+      if (restart) {
+        ee.emit(ET.GAME_RESET);
+      }
+    }
+    if (gameState === GS.NEW_GAME) {
+      grid = Array.from({ length: 20 }, function() {
+        return Array.from({ length: 10 }, function() {
+          return null;
+        });
+      });
+      score = 0;
+      tetrominoMoving = false;
+      tetrominoDroping = false;
+      eliminatingRows = [];
+      speed = INITIAL_SPEED;
+      speedIndex = 0;
+      ee.emit(ET.UPDATE_GRID, { grid });
+      ee.emit(ET.SCORE_UPDATE, { score });
+      setTimeout(function() {
+        ee.emit(ET.GAME_START);
+      }, 1000);
+    }
   }
 
   function handleTick() {
@@ -117,11 +141,13 @@ function init(ee) {
         eliminatingRows.push(rowIndex);
       }
     });
-    if (gameOver) {
-      ee.emit(GS.GAME_OVER);
-    }
     score++;
     ee.emit(ET.SCORE_UPDATE, { score });
+    if (gameOver) {
+      setTimeout(function() {
+        ee.emit(GS.GAME_OVER);
+      }, 0);
+    }
   }
 
   function handleTetrominoDown() {
