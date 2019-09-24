@@ -113,7 +113,11 @@ function init(ee) {
     tetromino.forEach(function(row, rowIndex) {
       for (let colIndex = 0; colIndex < row.length; colIndex++) {
         if (row[colIndex]) {
-          if (grid[rowIndex + position[1]][colIndex + position[0]]) {
+          if (
+            // tetromino may get position like [-1, 0]
+            grid[rowIndex + position[1]] &&
+            grid[rowIndex + position[1]][colIndex + position[0]]
+          ) {
             fit = false;
           }
           break;
@@ -131,7 +135,11 @@ function init(ee) {
     tetromino.forEach(function(row, rowIndex) {
       for (let colIndex = row.length - 1; colIndex >= 0; colIndex--) {
         if (row[colIndex]) {
-          if (grid[rowIndex + position[1]][colIndex + position[0]]) {
+          if (
+            // tetromino may get position like [-1, 0]
+            grid[rowIndex + position[1]] &&
+            grid[rowIndex + position[1]][colIndex + position[0]]
+          ) {
             fit = false;
           }
           break;

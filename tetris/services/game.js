@@ -16,13 +16,15 @@ function init(ee) {
   let tetrominoMoving = false;
   let tetrominoDroping = false;
   let eliminatingRows = [];
-  let speed = 100;
+  const INITIAL_SPEED = 100;
+  let speed = INITIAL_SPEED;
   let speedIndex = 0;
 
   ee.on(ET.GAME_STATE_CHANGE, handleGameStateChange);
   ee.on(ET.TICK, handleTick);
   ee.on(ET.TETROMINO_SETTLED, handleTetrominoSettled);
   ee.on(ET.TETROMINO_DOWN, handleTetrominoDown);
+  ee.on(ET.SCORE_UPDATE, updateScore);
 
   function handleGameStateChange(et, { gameState: _gameState }) {
     gameState = _gameState;
@@ -33,7 +35,7 @@ function init(ee) {
 
   function handleTick() {
     if (gameState === GS.PLAYING) {
-      if (tetrominoDroping) {
+      if (tetrominoDroping && tetrominoMoving) {
         speedIndex = 0;
         ee.emit(ET.TETROMINO_MOVE);
       } else if (speedIndex > speed) {
@@ -41,9 +43,13 @@ function init(ee) {
         if (tetrominoMoving) {
           ee.emit(ET.TETROMINO_MOVE);
         } else if (eliminatingRows.length) {
+          const addScore = eliminatingRows.length * eliminatingRows.length * 10;
           let dropRowCount = 0;
           for (let i = grid.length - 1; i >= 0; i--) {
-            while (i - dropRowCount === eliminatingRows[eliminatingRows.length - 1]) {
+            while (
+              i - dropRowCount ===
+              eliminatingRows[eliminatingRows.length - 1]
+            ) {
               dropRowCount++;
               eliminatingRows.pop();
             }
@@ -60,6 +66,8 @@ function init(ee) {
           if (eliminatingRows.length !== 0) {
             throw new Error('Unexpect loop result');
           }
+          score += addScore;
+          ee.emit(ET.SCORE_UPDATE, { score });
         } else {
           tetrominoMoving = true;
           ee.emit(ET.TETROMINO_CREATE);
@@ -86,7 +94,6 @@ function init(ee) {
   function handleTetrominoSettled(et, { tetromino, position }) {
     tetrominoMoving = false;
     tetrominoDroping = false;
-    score += 1;
     let gameOver = false;
     tetromino.forEach(function(row, rowIndex) {
       row.forEach(function(item) {
@@ -113,11 +120,19 @@ function init(ee) {
     if (gameOver) {
       ee.emit(GS.GAME_OVER);
     }
-    console.log('score', score);
+    score++;
+    ee.emit(ET.SCORE_UPDATE, { score });
   }
 
   function handleTetrominoDown() {
-    tetrominoDroping = true;
+    if (!tetrominoDroping) {
+      tetrominoDroping = true;
+    }
+  }
+
+  function updateScore() {
+    speed = INITIAL_SPEED * Math.pow(score + 1, -0.1);
+    ee.emit(ET.SPEED_UPDATE, { speed });
   }
 }
 
