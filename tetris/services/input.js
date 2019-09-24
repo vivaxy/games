@@ -27,6 +27,9 @@ function init(ee) {
   }
 
   function handleTouchEnd() {
+    if (!lastTouchMovePosition) {
+      return;
+    }
     const deltaX = lastTouchMovePosition[0] - touchStartPosition[0];
     const deltaY = lastTouchMovePosition[1] - touchStartPosition[1];
     if (
@@ -47,6 +50,8 @@ function init(ee) {
         }
       }
     }
+    touchStartPosition = null;
+    lastTouchMovePosition = null;
   }
 
   function getCoords(e) {

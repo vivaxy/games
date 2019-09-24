@@ -105,16 +105,61 @@ function init(ee) {
     grid = _grid;
   }
 
+  function fitLeft() {
+    if (position[0] < 0) {
+      return false;
+    }
+    let fit = true;
+    tetromino.forEach(function(row, rowIndex) {
+      for (let colIndex = 0; colIndex < row.length; colIndex++) {
+        if (row[colIndex]) {
+          if (grid[rowIndex + position[1]][colIndex + position[0]]) {
+            fit = false;
+          }
+          break;
+        }
+      }
+    });
+    return fit;
+  }
+
+  function fitRight() {
+    if (position[0] > grid[0].length - tetromino[0].length) {
+      return false;
+    }
+    let fit = true;
+    tetromino.forEach(function(row, rowIndex) {
+      for (let colIndex = row.length - 1; colIndex >= 0; colIndex--) {
+        if (row[colIndex]) {
+          if (grid[rowIndex + position[1]][colIndex + position[0]]) {
+            fit = false;
+          }
+          break;
+        }
+      }
+    });
+    return fit;
+  }
+
+  function makeLeftFit() {
+    while (!fitLeft()) {
+      position[0] += 1;
+    }
+  }
+
+  function makeRightFit() {
+    while (!fitRight()) {
+      position[0] -= 1;
+    }
+  }
+
   function moveTetrominoLeft() {
     if (!tetromino) {
       return;
     }
     removeTetrominoFromGrid();
-    // TODO prevent move if other tetromino in left
     position[0] -= 1;
-    if (position[0] < 0) {
-      position[0] = 0;
-    }
+    makeLeftFit();
     addTetromino();
   }
 
@@ -123,11 +168,8 @@ function init(ee) {
       return;
     }
     removeTetrominoFromGrid();
-    // TODO prevent move if other tetromino in right
     position[0] += 1;
-    if (position[0] > grid[0].length - tetromino[0].length) {
-      position[0] = grid[0].length - tetromino[0].length;
-    }
+    makeRightFit();
     addTetromino();
   }
 
@@ -144,8 +186,9 @@ function init(ee) {
       }
       t.push(row);
     }
-    // TODO calculate accectped position
     tetromino = t;
+    makeLeftFit();
+    makeRightFit();
     addTetromino();
   }
 }
