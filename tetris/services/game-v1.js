@@ -1,68 +1,64 @@
 /**
- * @since 2019-09-24 02:14
+ * @since 2019-09-22 05:30
  * @author vivaxy
  */
 import * as ET from '../enums/event-types.js';
 import * as GS from '../enums/game-state.js';
-import StateMachine from '../class/state-machine.js';
-
-const gameStateMachine = new StateMachine({
-  default: GS.NEW_GAME,
-  start: [GS.NEW_GAME, GS.PLAYING],
-  pause: [GS.PLAYING, GS.PAUSED],
-  resume: [GS.PAUSED, GS.PLAYING],
-  over: [GS.PLAYING, GS.GAME_OVER],
-  reset: [GS.GAME_OVER, GS.NEW_GAME],
-});
 
 function init(ee) {
-  const INITIAL_SPEED = 100;
-  function generateDefaultGrid() {
-    return Array.from({ length: 20 }, function() {
-      return Array.from({ length: 10 }, function() {
-        return null;
-      });
+  let gameState = GS.NEW_GAME;
+  let grid = Array.from({ length: 20 }, function() {
+    return Array.from({ length: 10 }, function() {
+      return null;
     });
-  }
-
-  let grid = generateDefaultGrid();
+  });
   let score = 0;
   let tetrominoMoving = false;
   let tetrominoDroping = false;
   let eliminatingRows = [];
+  const INITIAL_SPEED = 100;
   let speed = INITIAL_SPEED;
   let speedIndex = 0;
 
-  gameStateMachine.onChange(function() {
-    if (gameStateMachine.getState() === GS.PLAYING) {
+  ee.on(ET.GAME_STATE_CHANGE, handleGameStateChange);
+  ee.on(ET.TICK, handleTick);
+  ee.on(ET.TETROMINO_SETTLED, handleTetrominoSettled);
+  ee.on(ET.TETROMINO_DOWN, handleTetrominoDown);
+  ee.on(ET.SCORE_UPDATE, updateScore);
+
+  function handleGameStateChange(et, { gameState: _gameState }) {
+    gameState = _gameState;
+    if (gameState === GS.PLAYING) {
       ee.emit(ET.UPDATE_GRID, { grid });
     }
-    if (gameStateMachine.getState() === GS.GAME_OVER) {
+    if (gameState === GS.GAME_OVER) {
       const restart = confirm('Game Over! Restart?');
       if (restart) {
-        gameStateMachine.reset();
+        ee.emit(ET.GAME_RESET);
       }
     }
-    if (gameStateMachine.getState() === GS.NEW_GAME) {
-      grid = generateDefaultGrid();
+    if (gameState === GS.NEW_GAME) {
+      grid = Array.from({ length: 20 }, function() {
+        return Array.from({ length: 10 }, function() {
+          return null;
+        });
+      });
       score = 0;
       tetrominoMoving = false;
       tetrominoDroping = false;
       eliminatingRows = [];
       speed = INITIAL_SPEED;
       speedIndex = 0;
+      ee.emit(ET.UPDATE_GRID, { grid });
+      ee.emit(ET.SCORE_UPDATE, { score });
       setTimeout(function() {
-        gameStateMachine.start();
+        ee.emit(ET.GAME_START);
       }, 1000);
     }
-  });
-
-  ee.on(ET.TICK, handleTick);
-  ee.on(ET.TETROMINO_SETTLED, handleTetrominoSettled);
-  ee.on(ET.TETROMINO_DOWN, handleTetrominoDown);
+  }
 
   function handleTick() {
-    if (gameStateMachine.getState() === GS.PLAYING) {
+    if (gameState === GS.PLAYING) {
       if (tetrominoDroping && tetrominoMoving) {
         speedIndex = 0;
         ee.emit(ET.TETROMINO_MOVE);
@@ -159,9 +155,13 @@ function init(ee) {
       tetrominoDroping = true;
     }
   }
+
+  function updateScore() {
+    speed = INITIAL_SPEED * Math.pow(score + 1, -0.1);
+    ee.emit(ET.SPEED_UPDATE, { speed });
+  }
 }
 
 export default {
   init,
-  gameStateMachine,
 };
