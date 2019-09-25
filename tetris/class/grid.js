@@ -6,14 +6,23 @@ export default class Grid {
   constructor({ rowCount = 20, colCount = 10 } = {}) {
     this.rowCount = rowCount;
     this.colCount = colCount;
-    this.value = Array.from({ length: rowCount }, function() {
-      return Array.from({ length: colCount }, function() {
-        return null;
-      });
-    });
+    this.reset();
   }
 
   get() {
     return this.value;
+  }
+
+  reset() {
+    this.value = Array.from({ length: this.rowCount }, () => {
+      return Array.from({ length: this.colCount }, function() {
+        return null;
+      });
+    });
+    this.eliminatingRows = [];
+  }
+
+  getEliminatingRows() {
+    return this.eliminatingRows;
   }
 }

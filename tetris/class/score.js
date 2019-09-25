@@ -1,13 +1,14 @@
 /**
  * @since 2019-09-25 08:10
  * @author vivaxy
+ * TODO: put high score in
  */
 export default class Score {
   constructor() {
     this.value = 0;
   }
 
-  clear() {
+  reset() {
     this.value = 0;
   }
 

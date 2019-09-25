@@ -37,10 +37,14 @@ function init(ee) {
               ctx.strokeStyle = '#fff';
               ctx.lineWidth = 2;
               ctx.rect(
-                marginHorizontal + colIndex * sizes.cellSize + 1,
-                marginVertical + rowIndex * sizes.cellSize + 1,
-                sizes.cellSize - 2,
-                sizes.cellSize - 2
+                marginHorizontal +
+                  colIndex * sizes.cellSize +
+                  sizes.cellSize / 10,
+                marginVertical +
+                  rowIndex * sizes.cellSize +
+                  sizes.cellSize / 10,
+                sizes.cellSize - sizes.cellSize / 5,
+                sizes.cellSize - sizes.cellSize / 5
               );
               ctx.stroke();
               ctx.closePath();

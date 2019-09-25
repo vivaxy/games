@@ -14,6 +14,8 @@ import Speed from '../class/speed.js';
 const state = new StateMachine({
   default: GS.NEW_GAME,
   start: [GS.NEW_GAME, GS.PLAYING],
+  eliminate: [GS.PLAYING, GS.ELIMINATING],
+  continue: [GS.ELIMINATING, GS.PLAYING],
   pause: [GS.PLAYING, GS.PAUSED],
   resume: [GS.PAUSED, GS.PLAYING],
   over: [GS.PLAYING, GS.GAME_OVER],
@@ -21,11 +23,10 @@ const state = new StateMachine({
 });
 
 function init(ee) {
-  let grid = new Grid();
-  let score = new Score();
-  let tetromino = new Tetromino();
-  let eliminatingRows = [];
-  let speed = new Speed();
+  const grid = new Grid();
+  const score = new Score();
+  const tetromino = new Tetromino();
+  const speed = new Speed();
 
   state.onChange(function() {
     if (state.getState() === GS.PLAYING) {
@@ -38,9 +39,8 @@ function init(ee) {
       }
     }
     if (state.getState() === GS.NEW_GAME) {
-      grid = new Grid();
-      score.clear();
-      eliminatingRows = [];
+      grid.reset();
+      score.reset();
       speed.reset();
       setTimeout(function() {
         state.start();
@@ -59,16 +59,16 @@ function init(ee) {
       } else if (speed.nextTick()) {
         if (tetromino.getState() === TS.MOVING) {
           ee.emit(ET.TETROMINO_MOVE);
-        } else if (eliminatingRows.length) {
-          const addScore = eliminatingRows.length * eliminatingRows.length * 10;
+        } else if (grid.getEliminatingRows().length) {
+          const addScore = grid.getEliminatingRows().length * grid.getEliminatingRows().length * 10;
           let dropRowCount = 0;
           for (let i = grid.rowCount - 1; i >= 0; i--) {
             while (
               i - dropRowCount ===
-              eliminatingRows[eliminatingRows.length - 1]
+              grid.getEliminatingRows()[grid.getEliminatingRows().length - 1]
             ) {
               dropRowCount++;
-              eliminatingRows.pop();
+              grid.getEliminatingRows().pop();
             }
             if (i - dropRowCount >= 0) {
               grid.get()[i - dropRowCount].forEach(function(item, colIndex) {
@@ -80,7 +80,7 @@ function init(ee) {
               });
             }
           }
-          if (eliminatingRows.length !== 0) {
+          if (grid.getEliminatingRows().length !== 0) {
             throw new Error('Unexpect loop result');
           }
           score.add(addScore);
@@ -90,8 +90,8 @@ function init(ee) {
           ee.emit(ET.TETROMINO_CREATE);
         }
       } else {
-        if (eliminatingRows.length) {
-          eliminatingRows.forEach(function(rowIndex) {
+        if (grid.getEliminatingRows().length) {
+          grid.getEliminatingRows().forEach(function(rowIndex) {
             grid.get()[rowIndex].forEach(function(item) {
               if (item._color) {
                 item.color = item._color;
@@ -120,7 +120,6 @@ function init(ee) {
       });
     });
 
-    eliminatingRows = [];
     grid.get().forEach(function(row, rowIndex) {
       let hasSpace = false;
       row.forEach(function(item) {
@@ -129,7 +128,7 @@ function init(ee) {
         }
       });
       if (!hasSpace) {
-        eliminatingRows.push(rowIndex);
+        grid.getEliminatingRows().push(rowIndex);
       }
     });
     score.add(1);
