@@ -1,6 +1,8 @@
 /**
  * @since 2019-09-25 11:48
  * @author vivaxy
+ * TODO: speed show as index 0 ~ 100
+ * TODO: implement render
  */
 export default class Speed {
   constructor() {

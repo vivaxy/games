@@ -1,6 +1,7 @@
 /**
  * @since 2019-09-24 11:34
  * @author vivaxy
+ * TODO: implement render
  */
 export default class Grid {
   constructor({ rowCount = 20, colCount = 10 } = {}) {

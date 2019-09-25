@@ -28,30 +28,35 @@ function init(ee) {
   const tetromino = new Tetromino();
   const speed = new Speed();
 
-  state.onChange(function() {
-    if (state.getState() === GS.PLAYING) {
-      ee.emit(ET.UPDATE_GRID, { grid: grid.get() });
-    }
-    if (state.getState() === GS.GAME_OVER) {
-      const restart = confirm('Game Over! Restart?');
-      if (restart) {
-        state.reset();
-      }
-    }
-    if (state.getState() === GS.NEW_GAME) {
-      grid.reset();
-      score.reset();
-      speed.reset();
-      setTimeout(function() {
-        state.start();
-      }, 1000);
-    }
-  });
-
+  state.onChange(handleStateChange);
   ee.on(ET.TICK, handleTick);
+  ee.on(ET.RENDER, handleRender);
   ee.on(ET.TETROMINO_SETTLED, handleTetrominoSettled);
   ee.on(ET.TETROMINO_DOWN, handleTetrominoDown);
 
+  function handleStateChange({ to }) {
+    switch (to) {
+      case GS.PLAYING:
+        ee.emit(ET.UPDATE_GRID, { grid: grid.get() });
+        break;
+      case GS.GAME_OVER:
+        const restart = confirm('Game Over! Restart?');
+        if (restart) {
+          state.reset();
+        }
+        break;
+      case GS.NEW_GAME:
+        grid.reset();
+        score.reset();
+        speed.reset();
+        setTimeout(function() {
+          state.start();
+        }, 1000);
+        break;
+      default:
+        throw new Error('Unexpected state: ' + to);
+    }
+  }
   function handleTick() {
     if (state.getState() === GS.PLAYING) {
       if (tetromino.getState() === TS.DROPPING) {
@@ -60,7 +65,10 @@ function init(ee) {
         if (tetromino.getState() === TS.MOVING) {
           ee.emit(ET.TETROMINO_MOVE);
         } else if (grid.getEliminatingRows().length) {
-          const addScore = grid.getEliminatingRows().length * grid.getEliminatingRows().length * 10;
+          const addScore =
+            grid.getEliminatingRows().length *
+            grid.getEliminatingRows().length *
+            10;
           let dropRowCount = 0;
           for (let i = grid.rowCount - 1; i >= 0; i--) {
             while (
@@ -105,6 +113,10 @@ function init(ee) {
         }
       }
     }
+  }
+
+  function handleRender() {
+
   }
 
   function handleTetrominoSettled(et, { tetromino: _tetromino, position }) {

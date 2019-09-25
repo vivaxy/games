@@ -2,6 +2,7 @@
  * @since 2019-09-25 08:10
  * @author vivaxy
  * TODO: put high score in
+ * TODO: implement render
  */
 export default class Score {
   constructor() {

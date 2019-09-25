@@ -1,6 +1,7 @@
 /**
  * @since 2019-09-25 08:18
  * @author vivaxy
+ * TODO: implement render
  */
 import StateMachine from './state-machine.js';
 import * as TS from '../enums/tetromino-state.js';
