@@ -3,7 +3,7 @@
  * @author vivaxy
  * tickLoop Timeline
  *        ↓
- * Game = Tetrominos + Grid + GameState   ←   Input
+ * Game = Tetromino + Grid + GameState + Score   ←   Input
  *        ↑
  * Render Timeline
  */

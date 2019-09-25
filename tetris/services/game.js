@@ -4,8 +4,11 @@
  */
 import * as ET from '../enums/event-types.js';
 import * as GS from '../enums/game-state.js';
+import * as TS from '../enums/tetromino-state.js';
 import StateMachine from '../class/state-machine.js';
 import Grid from '../class/grid.js';
+import Score from '../class/score.js';
+import Tetromino from '../class/tetromino.js';
 
 const gameStateMachine = new StateMachine({
   default: GS.NEW_GAME,
@@ -20,16 +23,15 @@ function init(ee) {
   const INITIAL_SPEED = 100;
 
   let grid = new Grid();
-  let score = 0;
-  let tetrominoMoving = false;
-  let tetrominoDroping = false;
+  let score = new Score();
+  let tetromino = new Tetromino();
   let eliminatingRows = [];
   let speed = INITIAL_SPEED;
   let speedIndex = 0;
 
   gameStateMachine.onChange(function() {
     if (gameStateMachine.getState() === GS.PLAYING) {
-      ee.emit(ET.UPDATE_GRID, { grid: grid.data });
+      ee.emit(ET.UPDATE_GRID, { grid: grid.get() });
     }
     if (gameStateMachine.getState() === GS.GAME_OVER) {
       const restart = confirm('Game Over! Restart?');
@@ -39,9 +41,7 @@ function init(ee) {
     }
     if (gameStateMachine.getState() === GS.NEW_GAME) {
       grid = new Grid();
-      score = 0;
-      tetrominoMoving = false;
-      tetrominoDroping = false;
+      score.clear();
       eliminatingRows = [];
       speed = INITIAL_SPEED;
       speedIndex = 0;
@@ -57,12 +57,12 @@ function init(ee) {
 
   function handleTick() {
     if (gameStateMachine.getState() === GS.PLAYING) {
-      if (tetrominoDroping && tetrominoMoving) {
+      if (tetromino.getState() === TS.DROPPING) {
         speedIndex = 0;
         ee.emit(ET.TETROMINO_MOVE);
       } else if (speedIndex > speed) {
         speedIndex = 0;
-        if (tetrominoMoving) {
+        if (tetromino.getState() === TS.MOVING) {
           ee.emit(ET.TETROMINO_MOVE);
         } else if (eliminatingRows.length) {
           const addScore = eliminatingRows.length * eliminatingRows.length * 10;
@@ -76,29 +76,29 @@ function init(ee) {
               eliminatingRows.pop();
             }
             if (i - dropRowCount >= 0) {
-              grid.data[i - dropRowCount].forEach(function(item, colIndex) {
-                grid.data[i][colIndex] = item;
+              grid.get()[i - dropRowCount].forEach(function(item, colIndex) {
+                grid.get()[i][colIndex] = item;
               });
             } else {
-              grid.data[i].forEach(function(_, colIndex) {
-                grid.data[i][colIndex] = null;
+              grid.get()[i].forEach(function(_, colIndex) {
+                grid.get()[i][colIndex] = null;
               });
             }
           }
           if (eliminatingRows.length !== 0) {
             throw new Error('Unexpect loop result');
           }
-          score += addScore;
-          ee.emit(ET.SCORE_UPDATE, { score });
+          score.add(addScore);
+          ee.emit(ET.SCORE_UPDATE, { score: score.get() });
         } else {
-          tetrominoMoving = true;
+          tetromino.create();
           ee.emit(ET.TETROMINO_CREATE);
         }
       } else {
         speedIndex++;
         if (eliminatingRows.length) {
           eliminatingRows.forEach(function(rowIndex) {
-            grid.data[rowIndex].forEach(function(item) {
+            grid.get()[rowIndex].forEach(function(item) {
               if (item._color) {
                 item.color = item._color;
                 delete item._color;
@@ -113,11 +113,10 @@ function init(ee) {
     }
   }
 
-  function handleTetrominoSettled(et, { tetromino, position }) {
-    tetrominoMoving = false;
-    tetrominoDroping = false;
+  function handleTetrominoSettled(et, { tetromino: _tetromino, position }) {
+    tetromino.settle();
     let gameOver = false;
-    tetromino.forEach(function(row, rowIndex) {
+    _tetromino.forEach(function(row, rowIndex) {
       row.forEach(function(item) {
         if (item) {
           if (rowIndex + position[1] <= 0) {
@@ -128,7 +127,7 @@ function init(ee) {
     });
 
     eliminatingRows = [];
-    grid.data.forEach(function(row, rowIndex) {
+    grid.get().forEach(function(row, rowIndex) {
       let hasSpace = false;
       row.forEach(function(item) {
         if (!item) {
@@ -139,8 +138,8 @@ function init(ee) {
         eliminatingRows.push(rowIndex);
       }
     });
-    score++;
-    ee.emit(ET.SCORE_UPDATE, { score });
+    score.add(1);
+    ee.emit(ET.SCORE_UPDATE, { score: score.get() });
     if (gameOver) {
       setTimeout(function() {
         ee.emit(GS.GAME_OVER);
@@ -149,8 +148,8 @@ function init(ee) {
   }
 
   function handleTetrominoDown() {
-    if (!tetrominoDroping) {
-      tetrominoDroping = true;
+    if (tetromino.getState() === TS.MOVING) {
+      tetromino.drop();
     }
   }
 }

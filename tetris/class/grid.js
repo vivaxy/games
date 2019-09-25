@@ -6,10 +6,14 @@ export default class Grid {
   constructor({ rowCount = 20, colCount = 10 } = {}) {
     this.rowCount = rowCount;
     this.colCount = colCount;
-    this.data = Array.from({ length: rowCount }, function() {
+    this.value = Array.from({ length: rowCount }, function() {
       return Array.from({ length: colCount }, function() {
         return null;
       });
     });
+  }
+
+  get() {
+    return this.value;
   }
 }
