@@ -29,5 +29,5 @@ tickLoop.init(ee);
 input.init(ee);
 
 setTimeout(function() {
-  game.gameStateMachine.start();
+  game.start();
 }, 0);
