@@ -9,6 +9,7 @@ import StateMachine from '../class/state-machine.js';
 import Grid from '../class/grid.js';
 import Score from '../class/score.js';
 import Tetromino from '../class/tetromino.js';
+import Speed from '../class/speed.js';
 
 const state = new StateMachine({
   default: GS.NEW_GAME,
@@ -20,14 +21,11 @@ const state = new StateMachine({
 });
 
 function init(ee) {
-  const INITIAL_SPEED = 100;
-
   let grid = new Grid();
   let score = new Score();
   let tetromino = new Tetromino();
   let eliminatingRows = [];
-  let speed = INITIAL_SPEED;
-  let speedIndex = 0;
+  let speed = new Speed();
 
   state.onChange(function() {
     if (state.getState() === GS.PLAYING) {
@@ -43,8 +41,7 @@ function init(ee) {
       grid = new Grid();
       score.clear();
       eliminatingRows = [];
-      speed = INITIAL_SPEED;
-      speedIndex = 0;
+      speed.reset();
       setTimeout(function() {
         state.start();
       }, 1000);
@@ -58,10 +55,8 @@ function init(ee) {
   function handleTick() {
     if (state.getState() === GS.PLAYING) {
       if (tetromino.getState() === TS.DROPPING) {
-        speedIndex = 0;
         ee.emit(ET.TETROMINO_MOVE);
-      } else if (speedIndex > speed) {
-        speedIndex = 0;
+      } else if (speed.nextTick()) {
         if (tetromino.getState() === TS.MOVING) {
           ee.emit(ET.TETROMINO_MOVE);
         } else if (eliminatingRows.length) {
@@ -95,7 +90,6 @@ function init(ee) {
           ee.emit(ET.TETROMINO_CREATE);
         }
       } else {
-        speedIndex++;
         if (eliminatingRows.length) {
           eliminatingRows.forEach(function(rowIndex) {
             grid.get()[rowIndex].forEach(function(item) {
