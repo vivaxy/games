@@ -18,12 +18,20 @@
   "homepage": "https://github.com/vivaxy/game#readme",
   "devDependencies": {
     "@vivaxy/github-demo-scripts": "^0.5.0",
-    "husky": "^3.0.0"
+    "husky": "^3.0.0",
+    "lint-staged": "^9.4.0",
+    "prettier": "^1.18.2"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "gds && git add ."
+      "pre-commit": "lint-staged && gds && git add ."
     }
+  },
+  "lint-staged": {
+    "*.{js,ts,css,less,json,md,html,yml,yaml,pcss,jsx,tsx}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "gds": {
     "readme-prefix": "# [Game](https://vivaxy.github.io/game/)",
