@@ -115,8 +115,10 @@ function init(ee) {
     }
   }
 
-  function handleRender() {
-
+  function handleRender(et, { ctx, canvas }) {
+    grid.render(ctx, canvas);
+    tetromino.render(ctx, canvas, grid.get());
+    score.render(ctx, canvas, speed.get());
   }
 
   function handleTetrominoSettled(et, { tetromino: _tetromino, position }) {

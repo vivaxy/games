@@ -17,5 +17,4 @@ export const SCORE_UPDATE = 'SCORE_UPDATE';
 export const SPEED_UPDATE = 'SPEED_UPDATE';
 
 export const TICK = 'TICK';
-export const RENDER_LAYERS_ADD = 'RENDER_LAYERS_ADD';
-export const RENDER_LAYERS_REMOVE = 'RENDER_LAYERS_REMOVE';
+export const RENDER = 'RENDER';

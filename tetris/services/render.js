@@ -8,8 +8,6 @@ function init(
   ee,
   { canvas = { width: window.innerWidth, height: window.innerHeight } } = {}
 ) {
-  let renderLayers = [];
-
   const $canvas = document.querySelector('canvas');
   $canvas.width = canvas.width * window.devicePixelRatio;
   $canvas.height = canvas.height * window.devicePixelRatio;
@@ -18,27 +16,9 @@ function init(
 
   const ctx = $canvas.getContext('2d');
 
-  ee.on(ET.RENDER_LAYERS_ADD, addRenderLayers);
-  ee.on(ET.RENDER_LAYERS_REMOVE, removeRenderLayers);
-
-  function addRenderLayers(et, { layers }) {
-    renderLayers = renderLayers.concat(layers);
-  }
-
-  function removeRenderLayers(et, { layers }) {
-    layers.forEach(function(layer) {
-      const layerIndex = renderLayers.indexOf(layer);
-      if (layerIndex !== -1) {
-        renderLayers.spice(layerIndex, 1);
-      }
-    });
-  }
-
   function render() {
     ctx.clearRect(0, 0, $canvas.width, $canvas.height);
-    renderLayers.forEach(function(layer) {
-      layer(ctx, $canvas);
-    });
+    ee.emit(ET.RENDER, { ctx, canvas: $canvas });
     requestAnimationFrame(render);
   }
 
