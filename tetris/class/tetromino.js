@@ -34,6 +34,9 @@ export default class Tetromino {
     return this.position;
   }
 
+  get(){
+    return this.value;
+  }
   create(grid) {
     const color = getNextColor();
     const randomTetrominoIndex = Math.floor(tetrominos.length * Math.random());

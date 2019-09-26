@@ -69,16 +69,16 @@ export default class Grid {
     };
   }
   removeTetromino(tetromino) {
-    for (let rowIndex = 0; rowIndex < tetromino.length; rowIndex++) {
-      const row = tetromino[rowIndex];
+    for (let rowIndex = 0; rowIndex < tetromino.get().length; rowIndex++) {
+      const row = tetromino.get()[rowIndex];
       for (let colIndex = 0; colIndex < row.length; colIndex++) {
         const gridRowIndex = rowIndex + tetromino.getPosition()[1];
         const gridColIndex = colIndex + tetromino.getPosition()[0];
         if (gridRowIndex < 0) {
-          return;
+          continue;
         }
         if (row[colIndex]) {
-          if (this.value[gridRowIndex][gridColIndex]) {
+          if (!this.value[gridRowIndex][gridColIndex]) {
             throw new Error('Unexpected cell');
           }
           this.value[gridRowIndex][gridColIndex] = null;
@@ -88,8 +88,8 @@ export default class Grid {
   }
 
   addTetromino(tetromino) {
-    for (let rowIndex = 0; rowIndex < tetromino.length; rowIndex++) {
-      const row = tetromino[rowIndex];
+    for (let rowIndex = 0; rowIndex < tetromino.get().length; rowIndex++) {
+      const row = tetromino.get()[rowIndex];
       for (let colIndex = 0; colIndex < row.length; colIndex++) {
         const gridRowIndex = rowIndex + tetromino.getPosition()[1];
         const gridColIndex = colIndex + tetromino.getPosition()[0];
@@ -100,7 +100,7 @@ export default class Grid {
           if (this.value[gridRowIndex][gridColIndex]) {
             throw new Error('Unexpected cell');
           }
-          this.value[gridRowIndex][gridColIndex] = item;
+          this.value[gridRowIndex][gridColIndex] = row[colIndex];
         }
       }
     }
