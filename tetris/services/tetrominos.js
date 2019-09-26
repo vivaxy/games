@@ -16,7 +16,6 @@ function init(ee) {
   ee.on(ET.TETROMINO_RIGHT, moveTetrominoRight);
   ee.on(ET.TETROMINO_ROTATE, rotateTetromino);
 
-
   function addTetromino() {
     const isSettled = addTetrominoToGrid();
     ee.emit(ET.UPDATE_GRID, { grid });
@@ -26,51 +25,8 @@ function init(ee) {
     }
   }
 
-  function addTetrominoToGrid() {
-    let isSettled = false;
-    tetromino.forEach(function(row, rowIndex) {
-      row.forEach(function(item, colIndex) {
-        const gridRowIndex = rowIndex + position[1];
-        const gridColIndex = colIndex + position[0];
-        if (gridRowIndex < 0) {
-          return;
-        }
-        if (item) {
-          if (grid[gridRowIndex][gridColIndex]) {
-            throw new Error('Unexpected cell');
-          }
-          grid[gridRowIndex][gridColIndex] = item;
-
-          if (gridRowIndex + 1 >= grid.length) {
-            isSettled = true;
-            return;
-          }
-          const nextRow = grid[gridRowIndex + 1][gridColIndex];
-          if (nextRow) {
-            isSettled = true;
-          }
-        }
-      });
-    });
-    return isSettled;
-  }
-
   function removeTetrominoFromGrid() {
-    tetromino.forEach(function(row, rowIndex) {
-      row.forEach(function(item, colIndex) {
-        const gridRowIndex = rowIndex + position[1];
-        const gridColIndex = colIndex + position[0];
-        if (gridRowIndex < 0) {
-          return;
-        }
-        if (item) {
-          if (!grid[gridRowIndex][gridColIndex]) {
-            throw new Error('Unexpected cell');
-          }
-          grid[gridRowIndex][gridColIndex] = null;
-        }
-      });
-    });
+
   }
 
   function handleGridUpdate(et, { grid: _grid }) {

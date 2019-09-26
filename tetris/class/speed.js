@@ -10,11 +10,12 @@ export default class Speed {
 
   nextTick() {
     this._s++;
-    if (this._s > this.value) {
-      this._s = 0;
-      return true;
-    }
-    return false;
+  }
+  clearTick() {
+    this._s = 0;
+  }
+  isNextFrame() {
+    return this._s > this.value;
   }
 
   reset() {

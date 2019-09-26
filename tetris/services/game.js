@@ -29,24 +29,19 @@ function init(ee) {
   const speed = new Speed();
 
   state.onChange(handleStateChange);
-  tetromino.onStateChange(handleTetrominoStateChange);
   ee.on(ET.TICK, handleTick);
   ee.on(ET.RENDER, handleRender);
-  ee.on(ET.TETROMINO_SETTLED, handleTetrominoSettled);
   ee.on(ET.TETROMINO_DOWN, handleTetrominoDown);
 
-  function handleStateChange({ to }) {
-    switch (to) {
-      case GS.PLAYING:
-        ee.emit(ET.UPDATE_GRID, { grid: grid.get() });
-        break;
-      case GS.GAME_OVER:
+  function handleStateChange({ from, to }) {
+    switch (true) {
+      case to === GS.GAME_OVER:
         const restart = confirm('Game Over! Restart?');
         if (restart) {
           state.reset();
         }
         break;
-      case GS.NEW_GAME:
+      case to === GS.NEW_GAME:
         grid.reset();
         score.reset();
         speed.reset();
@@ -54,23 +49,58 @@ function init(ee) {
           state.start();
         }, 1000);
         break;
-      default:
-        throw new Error('Unexpected state: ' + to);
+      case to === GS.PLAYING && from === GS.ELIMINATING:
+        const { scoreToAdd } = grid.eliminate(grid);
+        score.add(scoreToAdd);
+        break;
+      case to === GS.PLAYING && from === GS.NEW_GAME:
+        tetromino.create(grid);
+        grid.addTetromino(tetromino);
+        break;
     }
   }
 
-  function handleTetrominoStateChange({ to }) {
-    switch (to) {
+  function handleEliminating() {
+    speed.nextTick();
+    if (speed.isNextFrame()) {
+      grid.eliminateRows();
+      game.continue();
+    }
+    const eliminatingRows = grid.getEliminatingRows();
+    if (eliminatingRows.length) {
+      eliminatingRows.forEach(function(rowIndex) {
+        grid.get()[rowIndex].forEach(function(item) {
+          if (item._color) {
+            item.color = item._color;
+            delete item._color;
+          } else {
+            item._color = item.color;
+            item.color = '#fff';
+          }
+        });
+      });
+    }
+  }
+
+  function handlePlaying() {
+    switch (tetromino.getState()) {
+      case TS.DROPPING:
+        tetromino.move(grid);
+        break;
       case TS.MOVING:
-        const isSettled = addTetrominoToGrid();
-        ee.emit(ET.UPDATE_GRID, { grid });
-        if (isSettled) {
-          const { scoreToAdd, isGameOver } = tetromino.settle(grid);
-          score.add(scoreToAdd);
-          if (isGameOver) {
-            setTimeout(function() {
-              ee.emit(ET.GAME_OVER);
-            }, 1000);
+        speed.nextTick();
+        if (speed.isNextFrame()) {
+          speed.clearTick();
+          if (tetromino.canMove(grid)) {
+            grid.removeTetromino(tetromino);
+            tetromino.move();
+            grid.addTetromino(tetromino)
+          } else {
+            tetromino.settle();
+            grid.computeEliminatingRows();
+            if (grid.getEliminatingRows().length) {
+              game.eliminate();
+            }
           }
         }
         break;
@@ -78,70 +108,18 @@ function init(ee) {
   }
 
   function handleTick() {
-    if (state.getState() === GS.PLAYING) {
-      if (tetromino.getState() === TS.DROPPING) {
-        ee.emit(ET.TETROMINO_MOVE);
-      } else if (speed.nextTick()) {
-        if (tetromino.getState() === TS.MOVING) {
-          ee.emit(ET.TETROMINO_MOVE);
-        } else if (grid.getEliminatingRows().length) {
-          const addScore =
-            grid.getEliminatingRows().length *
-            grid.getEliminatingRows().length *
-            10;
-          let dropRowCount = 0;
-          for (let i = grid.rowCount - 1; i >= 0; i--) {
-            while (
-              i - dropRowCount ===
-              grid.getEliminatingRows()[grid.getEliminatingRows().length - 1]
-            ) {
-              dropRowCount++;
-              grid.getEliminatingRows().pop();
-            }
-            if (i - dropRowCount >= 0) {
-              grid.get()[i - dropRowCount].forEach(function(item, colIndex) {
-                grid.get()[i][colIndex] = item;
-              });
-            } else {
-              grid.get()[i].forEach(function(_, colIndex) {
-                grid.get()[i][colIndex] = null;
-              });
-            }
-          }
-          if (grid.getEliminatingRows().length !== 0) {
-            throw new Error('Unexpect loop result');
-          }
-          score.add(addScore);
-          ee.emit(ET.SCORE_UPDATE, { score: score.get() });
-        } else {
-          tetromino.create();
-          ee.emit(ET.TETROMINO_CREATE);
-        }
-      } else {
-        if (grid.getEliminatingRows().length) {
-          grid.getEliminatingRows().forEach(function(rowIndex) {
-            grid.get()[rowIndex].forEach(function(item) {
-              if (item._color) {
-                item.color = item._color;
-                delete item._color;
-              } else {
-                item._color = item.color;
-                item.color = '#fff';
-              }
-            });
-          });
-        }
-      }
+    if (state.getState() === GS.ELIMINATING) {
+      handleEliminating();
+    } else if (GS.PLAYING) {
+      handlePlaying();
     }
   }
 
   function handleRender(et, { ctx, canvas }) {
     grid.render(ctx, canvas);
-    tetromino.render(ctx, canvas, grid.get());
+    tetromino.render(ctx, canvas);
     score.render(ctx, canvas, speed.get());
   }
-
-  function handleTetrominoSettled(et, { tetromino: _tetromino, position }) {}
 
   function handleTetrominoDown() {
     if (tetromino.getState() === TS.MOVING) {

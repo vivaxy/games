@@ -30,6 +30,10 @@ export default class Tetromino {
     return this.state.getState();
   }
 
+  getPosition() {
+    return this.position;
+  }
+
   create(grid) {
     const color = getNextColor();
     const randomTetrominoIndex = Math.floor(tetrominos.length * Math.random());
@@ -44,18 +48,19 @@ export default class Tetromino {
       });
     });
     this.position = [
-      Math.floor(Math.random() * (grid[0].length - this.value[0].length + 1)),
+      Math.floor(
+        Math.random() * (grid.get()[0].length - this.value[0].length + 1)
+      ),
       1 - this.value.length,
     ];
     this.state.create();
-    this.addTetromino(grid);
   }
 
   drop() {
     this.state.drop();
   }
 
-  settle(grid, score) {
+  settle() {
     const ret = {
       isGameOver: false,
       scoreToAdd: 0,
@@ -70,17 +75,6 @@ export default class Tetromino {
       });
     });
 
-    grid.get().forEach(function(row, rowIndex) {
-      let hasSpace = false;
-      row.forEach(function(item) {
-        if (!item) {
-          hasSpace = true;
-        }
-      });
-      if (!hasSpace) {
-        grid.getEliminatingRows().push(rowIndex);
-      }
-    });
     ret.scoreToAdd = 1;
 
     this.value = null;
@@ -95,49 +89,32 @@ export default class Tetromino {
     throw new Error('settle from state: ' + this.getState());
   }
 
-  addTetromino(grid) {
-
+  canMove(grid) {
+    for (let rowIndex = 0; rowIndex < this.value.length; rowIndex++) {
+      const row = this.value[rowIndex];
+      for (let colIndex = 0; colIndex < this.value.length; colIndex++) {
+        const gridRowIndex = rowIndex + this.position[1];
+        const gridColIndex = colIndex + this.position[0];
+        if (gridRowIndex < 0) {
+          continue;
+        }
+        if (row[colIndex]) {
+          if (gridRowIndex + 1 > grid.rowCount - 1) {
+            return false;
+          }
+          if (grid.get()[gridRowIndex + 1][gridColIndex]) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 
-  move(grid, { direction: { x = 0, y = 1 } = {} } = {}) {
-    removeTetrominoFromGrid();
+  move({ direction: { x = 0, y = 1 } = {} } = {}) {
     this.position[0] += x;
     this.position[1] += y;
-    this.addTetromino(grid);
   }
 
-  render(ctx, canvas, grid) {
-    const gridWidth = sizes.cellSize * grid[0].length;
-    const gridHeight = sizes.cellSize * grid.length;
-    const marginHorizontal = (canvas.width - gridWidth) / 2;
-    const marginVertical = (canvas.height - gridHeight) / 2;
-
-    grid.forEach(function(row, rowIndex) {
-      row.forEach(function(item, colIndex) {
-        if (item) {
-          ctx.beginPath();
-          ctx.fillStyle = item.color;
-          ctx.rect(
-            marginHorizontal + colIndex * sizes.cellSize,
-            marginVertical + rowIndex * sizes.cellSize,
-            sizes.cellSize,
-            sizes.cellSize
-          );
-          ctx.fill();
-          ctx.closePath();
-          ctx.beginPath();
-          ctx.strokeStyle = '#fff';
-          ctx.lineWidth = 2;
-          ctx.rect(
-            marginHorizontal + colIndex * sizes.cellSize + sizes.cellSize / 10,
-            marginVertical + rowIndex * sizes.cellSize + sizes.cellSize / 10,
-            sizes.cellSize - sizes.cellSize / 5,
-            sizes.cellSize - sizes.cellSize / 5
-          );
-          ctx.stroke();
-          ctx.closePath();
-        }
-      });
-    });
-  }
+  render(ctx, canvas) {}
 }
