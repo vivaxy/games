@@ -29,6 +29,7 @@ function init(ee) {
   const speed = new Speed();
 
   state.onChange(handleStateChange);
+  tetromino.onStateChange(handleTetrominoStateChange);
   ee.on(ET.TICK, handleTick);
   ee.on(ET.RENDER, handleRender);
   ee.on(ET.TETROMINO_SETTLED, handleTetrominoSettled);
@@ -57,6 +58,25 @@ function init(ee) {
         throw new Error('Unexpected state: ' + to);
     }
   }
+
+  function handleTetrominoStateChange({ to }) {
+    switch (to) {
+      case TS.MOVING:
+        const isSettled = addTetrominoToGrid();
+        ee.emit(ET.UPDATE_GRID, { grid });
+        if (isSettled) {
+          const { scoreToAdd, isGameOver } = tetromino.settle(grid);
+          score.add(scoreToAdd);
+          if (isGameOver) {
+            setTimeout(function() {
+              ee.emit(ET.GAME_OVER);
+            }, 1000);
+          }
+        }
+        break;
+    }
+  }
+
   function handleTick() {
     if (state.getState() === GS.PLAYING) {
       if (tetromino.getState() === TS.DROPPING) {
@@ -121,38 +141,7 @@ function init(ee) {
     score.render(ctx, canvas, speed.get());
   }
 
-  function handleTetrominoSettled(et, { tetromino: _tetromino, position }) {
-    tetromino.settle();
-    let gameOver = false;
-    _tetromino.forEach(function(row, rowIndex) {
-      row.forEach(function(item) {
-        if (item) {
-          if (rowIndex + position[1] <= 0) {
-            gameOver = true;
-          }
-        }
-      });
-    });
-
-    grid.get().forEach(function(row, rowIndex) {
-      let hasSpace = false;
-      row.forEach(function(item) {
-        if (!item) {
-          hasSpace = true;
-        }
-      });
-      if (!hasSpace) {
-        grid.getEliminatingRows().push(rowIndex);
-      }
-    });
-    score.add(1);
-    ee.emit(ET.SCORE_UPDATE, { score: score.get() });
-    if (gameOver) {
-      setTimeout(function() {
-        ee.emit(GS.GAME_OVER);
-      }, 0);
-    }
-  }
+  function handleTetrominoSettled(et, { tetromino: _tetromino, position }) {}
 
   function handleTetrominoDown() {
     if (tetromino.getState() === TS.MOVING) {

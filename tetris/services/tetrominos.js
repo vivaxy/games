@@ -2,9 +2,7 @@
  * @since 2019-09-22 11:06
  * @author vivaxy
  */
-import tetrominos from '../helpers/tetrominos.js';
 import * as ET from '../enums/event-types.js';
-import { getNextColor } from '../helpers/colors.js';
 
 function init(ee) {
   let grid = null;
@@ -18,32 +16,6 @@ function init(ee) {
   ee.on(ET.TETROMINO_RIGHT, moveTetrominoRight);
   ee.on(ET.TETROMINO_ROTATE, rotateTetromino);
 
-  function createTetromino() {
-    const color = getNextColor();
-    const randomTetrominoIndex = Math.floor(tetrominos.length * Math.random());
-    tetromino = tetrominos[randomTetrominoIndex].map(function(row) {
-      return row.map(function(item) {
-        if (item) {
-          return {
-            color,
-          };
-        }
-        return null;
-      });
-    });
-    position = [
-      Math.floor(Math.random() * (grid[0].length - tetromino[0].length + 1)),
-      1 - tetromino.length,
-    ];
-    addTetromino();
-  }
-
-  function moveTetromino(et, { direction: { x = 0, y = 1 } = {} } = {}) {
-    removeTetrominoFromGrid();
-    position[0] += x;
-    position[1] += y;
-    addTetromino();
-  }
 
   function addTetromino() {
     const isSettled = addTetrominoToGrid();

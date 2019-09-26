@@ -6,6 +6,8 @@
 import StateMachine from './state-machine.js';
 import * as TS from '../enums/tetromino-state.js';
 import * as sizes from '../helpers/sizes.js';
+import { getNextColor } from '../helpers/colors.js';
+import tetrominos from '../helpers/tetrominos.js';
 
 export default class Tetromino {
   constructor() {
@@ -16,30 +18,92 @@ export default class Tetromino {
       settleFromMoving: [TS.MOVING, TS.SETTLED],
       settleFromDropping: [TS.DROPPING, TS.SETTLED],
     });
+    this.position = [0, 0];
+    this.value = null;
+  }
+
+  onStateChange(callback) {
+    this.state.onChange(callback);
   }
 
   getState() {
     return this.state.getState();
   }
 
-  create() {
+  create(grid) {
+    const color = getNextColor();
+    const randomTetrominoIndex = Math.floor(tetrominos.length * Math.random());
+    this.value = tetrominos[randomTetrominoIndex].map(function(row) {
+      return row.map(function(item) {
+        if (item) {
+          return {
+            color,
+          };
+        }
+        return null;
+      });
+    });
+    this.position = [
+      Math.floor(Math.random() * (grid[0].length - this.value[0].length + 1)),
+      1 - this.value.length,
+    ];
     this.state.create();
+    this.addTetromino(grid);
   }
 
   drop() {
     this.state.drop();
   }
 
-  settle() {
+  settle(grid, score) {
+    const ret = {
+      isGameOver: false,
+      scoreToAdd: 0,
+    };
+    this.value.forEach((row, rowIndex) => {
+      row.forEach((item) => {
+        if (item) {
+          if (rowIndex + this.position[1] <= 0) {
+            ret.isGameOver = true;
+          }
+        }
+      });
+    });
+
+    grid.get().forEach(function(row, rowIndex) {
+      let hasSpace = false;
+      row.forEach(function(item) {
+        if (!item) {
+          hasSpace = true;
+        }
+      });
+      if (!hasSpace) {
+        grid.getEliminatingRows().push(rowIndex);
+      }
+    });
+    ret.scoreToAdd = 1;
+
+    this.value = null;
     if (this.getState() === TS.MOVING) {
       this.state.settleFromMoving();
-      return;
+      return ret;
     }
     if (this.getState() === TS.DROPPING) {
       this.state.settleFromDropping();
-      return;
+      return ret;
     }
     throw new Error('settle from state: ' + this.getState());
+  }
+
+  addTetromino(grid) {
+
+  }
+
+  move(grid, { direction: { x = 0, y = 1 } = {} } = {}) {
+    removeTetrominoFromGrid();
+    this.position[0] += x;
+    this.position[1] += y;
+    this.addTetromino(grid);
   }
 
   render(ctx, canvas, grid) {
