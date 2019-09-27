@@ -71,12 +71,12 @@ export default class Grid {
   removeTetromino(tetromino) {
     for (let rowIndex = 0; rowIndex < tetromino.get().length; rowIndex++) {
       const row = tetromino.get()[rowIndex];
+      const gridRowIndex = rowIndex + tetromino.getPosition()[1];
+      if (gridRowIndex < 0) {
+        continue;
+      }
       for (let colIndex = 0; colIndex < row.length; colIndex++) {
-        const gridRowIndex = rowIndex + tetromino.getPosition()[1];
         const gridColIndex = colIndex + tetromino.getPosition()[0];
-        if (gridRowIndex < 0) {
-          continue;
-        }
         if (row[colIndex]) {
           if (!this.value[gridRowIndex][gridColIndex]) {
             throw new Error('Unexpected cell');
@@ -90,12 +90,12 @@ export default class Grid {
   addTetromino(tetromino) {
     for (let rowIndex = 0; rowIndex < tetromino.get().length; rowIndex++) {
       const row = tetromino.get()[rowIndex];
+      const gridRowIndex = rowIndex + tetromino.getPosition()[1];
+      if (gridRowIndex < 0) {
+        continue;
+      }
       for (let colIndex = 0; colIndex < row.length; colIndex++) {
-        const gridRowIndex = rowIndex + tetromino.getPosition()[1];
         const gridColIndex = colIndex + tetromino.getPosition()[0];
-        if (gridRowIndex < 0) {
-          continue;
-        }
         if (row[colIndex]) {
           if (this.value[gridRowIndex][gridColIndex]) {
             throw new Error('Unexpected cell');
@@ -122,7 +122,7 @@ export default class Grid {
       marginHorizontal - sizes.gridBorderWidth / 2,
       marginVertical - sizes.gridBorderWidth / 2,
       gridWidth + sizes.gridBorderWidth,
-      gridHeight + sizes.gridBorderWidth
+      gridHeight + sizes.gridBorderWidth,
     );
     ctx.stroke();
     ctx.closePath();
@@ -143,7 +143,7 @@ export default class Grid {
             marginHorizontal + colIndex * sizes.cellSize,
             marginVertical + rowIndex * sizes.cellSize,
             sizes.cellSize,
-            sizes.cellSize
+            sizes.cellSize,
           );
           ctx.fill();
           ctx.closePath();
@@ -154,7 +154,7 @@ export default class Grid {
             marginHorizontal + colIndex * sizes.cellSize + sizes.cellSize / 10,
             marginVertical + rowIndex * sizes.cellSize + sizes.cellSize / 10,
             sizes.cellSize - sizes.cellSize / 5,
-            sizes.cellSize - sizes.cellSize / 5
+            sizes.cellSize - sizes.cellSize / 5,
           );
           ctx.stroke();
           ctx.closePath();

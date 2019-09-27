@@ -29,8 +29,11 @@ function init(ee) {
   const speed = new Speed();
 
   state.onChange(handleStateChange);
+  tetromino.onStateChange(handleTetrominoStateChange);
   ee.on(ET.TICK, handleTick);
   ee.on(ET.RENDER, handleRender);
+  ee.on(ET.TETROMINO_LEFT, handleTetrominoLeft);
+  ee.on(ET.TETROMINO_ROTATE, handleTetrominoRight);
   ee.on(ET.TETROMINO_DOWN, handleTetrominoDown);
 
   function handleStateChange({ from, to }) {
@@ -54,14 +57,34 @@ function init(ee) {
         score.add(scoreToAdd);
         break;
       case to === GS.PLAYING && from === GS.NEW_GAME:
-        tetromino.create(grid);
+        tetromino.create();
+        break;
+    }
+  }
+
+  function handleTetrominoStateChange({ from, to }) {
+    switch (to) {
+      case TS.MOVING:
+        if (speed.toOriginalSpeed) {
+          speed.toOriginalSpeed();
+        }
+        tetromino.createTetromino(grid);
         grid.addTetromino(tetromino);
+        break;
+      case TS.SETTLED:
+        if (tetromino.isOnTopBorder()) {
+          game.over();
+        } else {
+          tetromino.create();
+        }
+        break;
+      case TS.DROPPING:
+        speed.toMaxSpeed();
         break;
     }
   }
 
   function handleEliminating() {
-    speed.nextTick();
     if (speed.isNextFrame()) {
       grid.eliminateRows();
       game.continue();
@@ -85,16 +108,13 @@ function init(ee) {
   function handlePlaying() {
     switch (tetromino.getState()) {
       case TS.DROPPING:
-        tetromino.move(grid);
-        break;
       case TS.MOVING:
-        speed.nextTick();
         if (speed.isNextFrame()) {
           speed.clearTick();
           if (tetromino.canMove(grid)) {
             grid.removeTetromino(tetromino);
             tetromino.move();
-            grid.addTetromino(tetromino)
+            grid.addTetromino(tetromino);
           } else {
             tetromino.settle();
             grid.computeEliminatingRows();
@@ -117,7 +137,6 @@ function init(ee) {
 
   function handleRender(et, { ctx, canvas }) {
     grid.render(ctx, canvas);
-    tetromino.render(ctx, canvas);
     score.render(ctx, canvas, speed.get());
   }
 
@@ -125,6 +144,18 @@ function init(ee) {
     if (tetromino.getState() === TS.MOVING) {
       tetromino.drop();
     }
+  }
+
+  function handleTetrominoLeft() {
+    grid.removeTetromino(tetromino);
+    tetromino.move(-1, 0);
+    grid.addTetromino(tetromino);
+  }
+
+  function handleTetrominoRight() {
+    grid.removeTetromino(tetromino);
+    tetromino.move(1, 0);
+    grid.addTetromino(tetromino);
   }
 }
 

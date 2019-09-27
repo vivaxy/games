@@ -1,11 +1,9 @@
 /**
  * @since 2019-09-25 08:18
  * @author vivaxy
- * TODO: put service tetrominos in this or in game
  */
 import StateMachine from './state-machine.js';
 import * as TS from '../enums/tetromino-state.js';
-import * as sizes from '../helpers/sizes.js';
 import { getNextColor } from '../helpers/colors.js';
 import tetrominos from '../helpers/tetrominos.js';
 
@@ -34,10 +32,15 @@ export default class Tetromino {
     return this.position;
   }
 
-  get(){
+  get() {
     return this.value;
   }
-  create(grid) {
+
+  create() {
+    this.state.create();
+  }
+
+  createTetromino(grid) {
     const color = getNextColor();
     const randomTetrominoIndex = Math.floor(tetrominos.length * Math.random());
     this.value = tetrominos[randomTetrominoIndex].map(function(row) {
@@ -52,42 +55,29 @@ export default class Tetromino {
     });
     this.position = [
       Math.floor(
-        Math.random() * (grid.get()[0].length - this.value[0].length + 1)
+        Math.random() * (grid.get()[0].length - this.value[0].length + 1),
       ),
       1 - this.value.length,
     ];
-    this.state.create();
   }
 
   drop() {
     this.state.drop();
   }
 
+  isOnTopBorder() {
+    return this.position[1] <= 0;
+  }
+
   settle() {
-    const ret = {
-      isGameOver: false,
-      scoreToAdd: 0,
-    };
-    this.value.forEach((row, rowIndex) => {
-      row.forEach((item) => {
-        if (item) {
-          if (rowIndex + this.position[1] <= 0) {
-            ret.isGameOver = true;
-          }
-        }
-      });
-    });
-
-    ret.scoreToAdd = 1;
-
     this.value = null;
     if (this.getState() === TS.MOVING) {
       this.state.settleFromMoving();
-      return ret;
+      return;
     }
     if (this.getState() === TS.DROPPING) {
       this.state.settleFromDropping();
-      return ret;
+      return;
     }
     throw new Error('settle from state: ' + this.getState());
   }
@@ -95,17 +85,21 @@ export default class Tetromino {
   canMove(grid) {
     for (let rowIndex = 0; rowIndex < this.value.length; rowIndex++) {
       const row = this.value[rowIndex];
-      for (let colIndex = 0; colIndex < this.value.length; colIndex++) {
-        const gridRowIndex = rowIndex + this.position[1];
+      const gridRowIndex = rowIndex + this.position[1];
+      if (gridRowIndex < 0) {
+        continue;
+      }
+      for (let colIndex = 0; colIndex < row.length; colIndex++) {
         const gridColIndex = colIndex + this.position[0];
-        if (gridRowIndex < 0) {
-          continue;
-        }
         if (row[colIndex]) {
           if (gridRowIndex + 1 > grid.rowCount - 1) {
             return false;
           }
-          if (grid.get()[gridRowIndex + 1][gridColIndex]) {
+          if (
+            grid.get()[gridRowIndex + 1][gridColIndex] &&
+            // next row is not itself
+            !(this.value[rowIndex + 1] && this.value[rowIndex + 1][colIndex])
+          ) {
             return false;
           }
         }
@@ -114,10 +108,78 @@ export default class Tetromino {
     return true;
   }
 
-  move({ direction: { x = 0, y = 1 } = {} } = {}) {
+  move(x = 0, y = 1) {
     this.position[0] += x;
     this.position[1] += y;
   }
 
-  render(ctx, canvas) {}
+  canMoveLeft(grid) {
+    if (this.position[0] <= 0) {
+      return false;
+    }
+    for (let rowIndex = 0; rowIndex < this.value.length; rowIndex++) {
+      const row = this.value[row];
+      const gridRowIndex = rowIndex + this.position[1];
+      if (gridRowIndex < 0) {
+        continue;
+      }
+      for (let colIndex = 0; colIndex < row.length; colIndex++) {
+        const gridColIndex = colIndex + this.position[0];
+        if (row[colIndex]) {
+          if (
+            grid.get()[gridRowIndex][gridColIndex - 1] &&
+            // not self
+            !this.value[rowIndex][colIndex - 1]
+          ) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  canMoveRight(grid) {
+    if (this.position[0] >= grid.colCount - 1) {
+      return false;
+    }
+    for (let rowIndex = 0; rowIndex < this.value.length; rowIndex++) {
+      const row = this.value[row];
+      const gridRowIndex = rowIndex + this.position[1];
+      if (gridRowIndex < 0) {
+        continue;
+      }
+      for (let colIndex = 0; colIndex < row.length; colIndex++) {
+        const gridColIndex = colIndex + this.position[0];
+        if (row[colIndex]) {
+          if (
+            grid.get()[gridRowIndex][gridColIndex + 1] &&
+            !this.value[rowIndex][colIndex + 1]
+          ) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  rotate() {
+    if (!tetromino) {
+      return;
+    }
+    removeTetrominoFromGrid();
+    const t = [];
+    for (let i = tetromino[0].length - 1; i >= 0; i--) {
+      const row = [];
+      for (let j = 0; j < tetromino.length; j++) {
+        row.push(tetromino[j][i]);
+      }
+      t.push(row);
+    }
+    tetromino = t;
+    makeLeftFit();
+    makeRightFit();
+    addTetromino();
+  }
 }

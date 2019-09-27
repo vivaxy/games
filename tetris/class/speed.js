@@ -1,27 +1,38 @@
 /**
  * @since 2019-09-25 11:48
  * @author vivaxy
- * TODO: speed show as index 0 ~ 100
+ * 0: 1000
+ * 100: 16
  */
 export default class Speed {
   constructor() {
     this.reset();
   }
 
-  nextTick() {
-    this._s++;
-  }
   clearTick() {
-    this._s = 0;
+    this.startTime = Date.now();
   }
+
   isNextFrame() {
-    return this._s > this.value;
+    return (
+      this.startTime + ((16 - 1000) / 100) * this.value + 1000 < Date.now()
+    );
   }
 
   reset() {
-    this.value = 100;
-    this._s = 0;
+    this.value = 0;
+    this.startTime = Date.now();
   }
+
+  toMaxSpeed() {
+    const value = this.value;
+    this.value = 100;
+    this.toOriginalSpeed = () => {
+      this.value = value;
+      delete this.toOriginalSpeed;
+    };
+  }
+
   get() {
     return this.value;
   }
