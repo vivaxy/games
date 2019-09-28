@@ -55,8 +55,6 @@ function init(ee) {
         }, 1000);
         break;
       case to === GS.PLAYING && from === GS.ELIMINATING:
-        const { scoreToAdd } = grid.eliminate(grid);
-        score.add(scoreToAdd);
         break;
       case to === GS.PLAYING && from === GS.NEW_GAME:
         tetromino.create();
@@ -64,7 +62,7 @@ function init(ee) {
     }
   }
 
-  function handleTetrominoStateChange({ from, to }) {
+  function handleTetrominoStateChange({ to }) {
     switch (to) {
       case TS.MOVING:
         if (speed.toOriginalSpeed) {
@@ -77,6 +75,7 @@ function init(ee) {
         if (tetromino.isOnTopBorder()) {
           state.over();
         } else {
+          score.add(1);
           tetromino.create();
         }
         break;
@@ -88,8 +87,10 @@ function init(ee) {
 
   function handleEliminating() {
     if (speed.isNextFrame()) {
-      grid.eliminateRows();
+      const { scoreToAdd } = grid.eliminateRows();
+      score.add(scoreToAdd);
       state.continue();
+      return;
     }
     const eliminatingRows = grid.getEliminatingRows();
     if (eliminatingRows.length) {

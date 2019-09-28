@@ -44,7 +44,7 @@ export default class Grid {
 
   eliminateRows() {
     const eliminatingRows = this.eliminatingRows;
-    const scoreToAdd = Math.pow(eliminatingRows.length, 2);
+    const scoreToAdd = Math.pow(eliminatingRows.length * 10, 2);
 
     let dropRowCount = 0;
     for (let i = this.rowCount - 1; i >= 0; i--) {
@@ -69,6 +69,7 @@ export default class Grid {
       scoreToAdd,
     };
   }
+
   removeTetromino(tetromino) {
     for (let rowIndex = 0; rowIndex < tetromino.get().length; rowIndex++) {
       const row = tetromino.get()[rowIndex];

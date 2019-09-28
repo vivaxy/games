@@ -3,198 +3,199 @@
  * @author vivaxy
  */
 body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    background: rgb(200, 200, 200);
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgb(200, 200, 200);
 }
 
 canvas {
-    display: block;
+  display: block;
 }
 
 a {
-    outline: none;
-    display: block;
-    background: rgb(26, 188, 156);
-    text-decoration: none;
-    text-align: center;
-    letter-spacing: 4px;
-    color: rgba(255, 255, 255, 1);
-    text-shadow: 0px 0px 1px rgba(255, 255, 255, 0.5);
-    transition: background 0.5s;
+  outline: none;
+  display: block;
+  background: rgb(26, 188, 156);
+  text-decoration: none;
+  text-align: center;
+  letter-spacing: 4px;
+  color: rgba(255, 255, 255, 1);
+  text-shadow: 0px 0px 1px rgba(255, 255, 255, 0.5);
+  transition: background 0.5s;
 }
 
 a:hover {
-    background: rgb(22, 160, 133);
+  background: rgb(22, 160, 133);
 }
 
 .disabled {
-    background: rgb(150, 150, 150);
+  background: rgb(150, 150, 150);
 }
 
 .disabled:hover {
-    background: rgb(150, 150, 150);
+  background: rgb(150, 150, 150);
 }
 
 .container {
-    margin: 20px auto;
-    width: 400px;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+  margin: 20px auto;
+  width: 400px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
 }
 
 .menu-container {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .restart {
-    margin: 350px auto 0 auto;
-    width: 350px;
-    height: 50px;
-    line-height: 50px;
-    font-size: 36px;
+  margin: 350px auto 0 auto;
+  width: 350px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 36px;
 }
 
 .timer {
-    width: 400px;
-    height: 50px;
+  width: 400px;
+  height: 50px;
 }
 
 .score {
-    width: 400px;
-    height: 50px;
-    line-height: 50px;
-    font-size: 50px;
-    text-align: right;
-    background: rgb(255, 255, 255);
-    color: rgb(52, 152, 219);
+  width: 400px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 50px;
+  text-align: right;
+  background: rgb(255, 255, 255);
+  color: rgb(52, 152, 219);
 }
 
 .score-addition {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    color: rgb(52, 152, 219);
-    line-height: 50px;
-    font-size: 50px;
-    transform: translateY(-100%);
-    -webkit-transform: translateY(-100%);
-    -webkit-animation: move 600ms ease-in;
-    animation: move 600ms ease-in;
-    -webkit-animation-fill-mode: both;
-    animation: both;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  color: rgb(52, 152, 219);
+  line-height: 50px;
+  font-size: 50px;
+  transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
+  -webkit-animation: move 600ms ease-in;
+  animation: move 600ms ease-in;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  animation: both;
 }
 
 .game {
-    width: 400px;
-    height: 400px;
+  width: 400px;
+  height: 400px;
 }
 
 .hide {
-    display: none;
+  display: none;
 }
 
 @media screen and (max-width: 500px) {
-    .container {
-        margin: 15px auto;
-        width: 300px;
-    }
+  .container {
+    margin: 15px auto;
+    width: 300px;
+  }
 
-    .restart {
-        margin: 250px auto 0 auto;
-        width: 250px;
-        height: 37.5px;
-        line-height: 37.5px;
-        font-size: 24px;
-    }
+  .restart {
+    margin: 250px auto 0 auto;
+    width: 250px;
+    height: 37.5px;
+    line-height: 37.5px;
+    font-size: 24px;
+  }
 
-    .timer {
-        width: 300px;
-        height: 37.5px;
-    }
+  .timer {
+    width: 300px;
+    height: 37.5px;
+  }
 
-    .score {
-        width: 300px;
-        height: 37.5px;
-        line-height: 37.5px;
-        font-size: 37.5px;
-    }
+  .score {
+    width: 300px;
+    height: 37.5px;
+    line-height: 37.5px;
+    font-size: 37.5px;
+  }
 
-    .score-addition {
-        width: 37.5px;
-        height: 37.5px;
-        line-height: 37.5px;
-        font-size: 37.5px;
-    }
+  .score-addition {
+    width: 37.5px;
+    height: 37.5px;
+    line-height: 37.5px;
+    font-size: 37.5px;
+  }
 
-    .game {
-        width: 300px;
-        height: 300px;
-    }
+  .game {
+    width: 300px;
+    height: 300px;
+  }
 }
 
 @media screen and (max-width: 300px) {
-    .container {
-        margin: 10px auto;
-        width: 200px;
-    }
+  .container {
+    margin: 10px auto;
+    width: 200px;
+  }
 
-    .restart {
-        margin: 165px auto 0 auto;
-        width: 165px;
-        height: 25px;
-        line-height: 25px;
-        font-size: 16px;
-    }
+  .restart {
+    margin: 165px auto 0 auto;
+    width: 165px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 16px;
+  }
 
-    .timer {
-        width: 200px;
-        height: 25px;
-    }
+  .timer {
+    width: 200px;
+    height: 25px;
+  }
 
-    .score {
-        width: 200px;
-        height: 25px;
-        line-height: 25px;
-        font-size: 25px;
-    }
+  .score {
+    width: 200px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 25px;
+  }
 
-    .score-addition {
-        width: 25px;
-        height: 25px;
-        line-height: 25px;
-        font-size: 25px;
-    }
+  .score-addition {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 25px;
+  }
 
-    .game {
-        width: 200px;
-        height: 200px;
-    }
+  .game {
+    width: 200px;
+    height: 200px;
+  }
 }
 
 @keyframes move {
-    0% {
-        transform: translate3D(0, -100%, 0);
-        opacity: 1;
-    }
-    100% {
-        transform: translate3D(600%, -100%, 0);
-        opacity: 0;
-    }
+  0% {
+    transform: translate3D(0, -100%, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3D(600%, -100%, 0);
+    opacity: 0;
+  }
 }
 
 @-webkit-keyframes move {
-    0% {
-        -webkit-transform: translate3D(0, -100%, 0);
-        opacity: 1;
-    }
-    100% {
-        -webkit-transform: translate3D(600%, -100%, 0);
-        opacity: 0;
-    }
+  0% {
+    -webkit-transform: translate3D(0, -100%, 0);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translate3D(600%, -100%, 0);
+    opacity: 0;
+  }
 }
