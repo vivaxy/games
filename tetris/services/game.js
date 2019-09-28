@@ -38,13 +38,11 @@ function init(ee) {
   ee.on(ET.TETROMINO_ROTATE, handleTetrominoRotate);
   ee.on(ET.TETROMINO_DOWN, handleTetrominoDown);
 
-  function handleStateChange({ from, to }) {
+  function handleStateChange({ to }) {
     switch (true) {
       case to === GS.GAME_OVER:
-        const restart = confirm('Game Over! Restart?');
-        if (restart) {
-          state.reset();
-        }
+        alert('Game Over!');
+        state.reset();
         break;
       case to === GS.NEW_GAME:
         grid.reset();
@@ -54,29 +52,23 @@ function init(ee) {
           state.start();
         }, 1000);
         break;
-      case to === GS.PLAYING && from === GS.ELIMINATING:
-        break;
-      case to === GS.PLAYING && from === GS.NEW_GAME:
-        tetromino.create();
-        break;
     }
   }
 
   function handleTetrominoStateChange({ to }) {
     switch (to) {
       case TS.MOVING:
-        if (speed.toOriginalSpeed) {
-          speed.toOriginalSpeed();
-        }
         tetromino.createTetromino(grid);
         grid.addTetromino(tetromino);
         break;
       case TS.SETTLED:
+        if (speed.toOriginalSpeed) {
+          speed.toOriginalSpeed();
+        }
         if (tetromino.isOnTopBorder()) {
           state.over();
         } else {
           score.add(1);
-          tetromino.create();
         }
         break;
       case TS.DROPPING:
@@ -126,6 +118,9 @@ function init(ee) {
             }
           }
         }
+        break;
+      case TS.SETTLED:
+        tetromino.create();
         break;
     }
   }

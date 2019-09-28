@@ -25,11 +25,11 @@ export default class Speed {
   }
 
   toMaxSpeed() {
-    const value = this.value;
-    this.value = 100;
+    this.isNextFrame = function() {
+      return this.startTime + 16 < Date.now();
+    };
     this.toOriginalSpeed = () => {
-      this.value = value;
-      delete this.toOriginalSpeed;
+      delete this.isNextFrame;
     };
   }
 

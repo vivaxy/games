@@ -77,7 +77,6 @@ export default class Tetromino {
   }
 
   settle() {
-    this.value = null;
     if (this.getState() === TS.MOVING) {
       this.state.settleFromMoving();
       return;
