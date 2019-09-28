@@ -65,6 +65,7 @@ function init(ee) {
         if (speed.toOriginalSpeed) {
           speed.toOriginalSpeed();
         }
+        speed.add();
         if (tetromino.isOnTopBorder()) {
           state.over();
         } else {

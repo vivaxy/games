@@ -13,6 +13,10 @@ export default class Speed {
     this.startTime = Date.now();
   }
 
+  add() {
+    this.value += 1;
+  }
+
   isNextFrame() {
     return (
       this.startTime + ((16 - 1000) / 100) * this.value + 1000 < Date.now()
