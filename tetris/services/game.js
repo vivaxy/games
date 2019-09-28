@@ -5,6 +5,7 @@
 import * as ET from '../enums/event-types.js';
 import * as GS from '../enums/game-state.js';
 import * as TS from '../enums/tetromino-state.js';
+import * as DIRECTIONS from '../enums/directions.js';
 import StateMachine from '../class/state-machine.js';
 import Grid from '../class/grid.js';
 import Score from '../class/score.js';
@@ -33,7 +34,8 @@ function init(ee) {
   ee.on(ET.TICK, handleTick);
   ee.on(ET.RENDER, handleRender);
   ee.on(ET.TETROMINO_LEFT, handleTetrominoLeft);
-  ee.on(ET.TETROMINO_ROTATE, handleTetrominoRight);
+  ee.on(ET.TETROMINO_RIGHT, handleTetrominoRight);
+  ee.on(ET.TETROMINO_ROTATE, handleTetrominoRotate);
   ee.on(ET.TETROMINO_DOWN, handleTetrominoDown);
 
   function handleStateChange({ from, to }) {
@@ -73,7 +75,7 @@ function init(ee) {
         break;
       case TS.SETTLED:
         if (tetromino.isOnTopBorder()) {
-          game.over();
+          state.over();
         } else {
           tetromino.create();
         }
@@ -87,7 +89,7 @@ function init(ee) {
   function handleEliminating() {
     if (speed.isNextFrame()) {
       grid.eliminateRows();
-      game.continue();
+      state.continue();
     }
     const eliminatingRows = grid.getEliminatingRows();
     if (eliminatingRows.length) {
@@ -111,15 +113,15 @@ function init(ee) {
       case TS.MOVING:
         if (speed.isNextFrame()) {
           speed.clearTick();
-          if (tetromino.canMove(grid)) {
+          if (tetromino.canMove(grid, DIRECTIONS.DOWN)) {
             grid.removeTetromino(tetromino);
-            tetromino.move();
+            tetromino.move(DIRECTIONS.DOWN);
             grid.addTetromino(tetromino);
           } else {
             tetromino.settle();
             grid.computeEliminatingRows();
             if (grid.getEliminatingRows().length) {
-              game.eliminate();
+              state.eliminate();
             }
           }
         }
@@ -147,14 +149,24 @@ function init(ee) {
   }
 
   function handleTetrominoLeft() {
-    grid.removeTetromino(tetromino);
-    tetromino.move(-1, 0);
-    grid.addTetromino(tetromino);
+    if (tetromino.canMove(grid, DIRECTIONS.LEFT)) {
+      grid.removeTetromino(tetromino);
+      tetromino.move(DIRECTIONS.LEFT);
+      grid.addTetromino(tetromino);
+    }
   }
 
   function handleTetrominoRight() {
+    if (tetromino.canMove(grid, DIRECTIONS.RIGHT)) {
+      grid.removeTetromino(tetromino);
+      tetromino.move(DIRECTIONS.RIGHT);
+      grid.addTetromino(tetromino);
+    }
+  }
+
+  function handleTetrominoRotate() {
     grid.removeTetromino(tetromino);
-    tetromino.move(1, 0);
+    tetromino.rotate(grid);
     grid.addTetromino(tetromino);
   }
 }

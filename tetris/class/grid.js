@@ -3,6 +3,7 @@
  * @author vivaxy
  */
 import * as sizes from '../helpers/sizes.js';
+
 export default class Grid {
   constructor({ rowCount = 20, colCount = 10 } = {}) {
     this.rowCount = rowCount;
@@ -56,7 +57,7 @@ export default class Grid {
           this.value[i][colIndex] = item;
         });
       } else {
-        this.value[i].forEach(function(_, colIndex) {
+        this.value[i].forEach((_, colIndex) => {
           this.value[i][colIndex] = null;
         });
       }
@@ -110,6 +111,7 @@ export default class Grid {
     this.renderBorder(ctx, canvas);
     this.renderGrid(ctx, canvas);
   }
+
   renderBorder(ctx, canvas) {
     ctx.beginPath();
     ctx.strokeStyle = '#efefef';
@@ -149,12 +151,12 @@ export default class Grid {
           ctx.closePath();
           ctx.beginPath();
           ctx.strokeStyle = '#fff';
-          ctx.lineWidth = 2;
+          ctx.lineWidth = sizes.cellSize / 20;
           ctx.rect(
-            marginHorizontal + colIndex * sizes.cellSize + sizes.cellSize / 10,
-            marginVertical + rowIndex * sizes.cellSize + sizes.cellSize / 10,
-            sizes.cellSize - sizes.cellSize / 5,
-            sizes.cellSize - sizes.cellSize / 5,
+            marginHorizontal + colIndex * sizes.cellSize + sizes.cellSize / 8,
+            marginVertical + rowIndex * sizes.cellSize + sizes.cellSize / 8,
+            sizes.cellSize - sizes.cellSize / 4,
+            sizes.cellSize - sizes.cellSize / 4,
           );
           ctx.stroke();
           ctx.closePath();
