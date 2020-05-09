@@ -9,8 +9,8 @@
   "author": "vivaxy",
   "license": "MIT",
   "devDependencies": {
-    "ava": "^2.4.0",
-    "esm": "^3.1.0"
+    "ava": "2.4.0",
+    "esm": "3.1.0"
   },
   "ava": {
     "require": [
