@@ -19,7 +19,7 @@
   "devDependencies": {
     "@vivaxy/github-demo-scripts": "^0.5.0",
     "husky": "6",
-    "lint-staged": "^10.0.0",
+    "lint-staged": "^11.0.0",
     "pinst": "^2.1.4",
     "prettier": "^2.0.0"
   },
