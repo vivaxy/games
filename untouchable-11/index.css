@@ -1,57 +1,39 @@
-.block {
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+#root {
+  flex: none;
+  position: relative;
+}
+
+.block, .board {
   display: flex;
   flex-direction: column;
 }
 
-.row {
+.block {
+  position: absolute;
+}
+
+#root, .board-cell {
+  border: 1px solid #efefef;
+}
+
+.block-row, .board-row {
   display: flex;
 }
 
-.cell {
+.block-cell, .board-cell {
   width: 20px;
   height: 20px;
-}
-
-.block:nth-child(1) .cell[data-value="1"] {
-  background: rgb(255, 156, 156);
-}
-
-.block:nth-child(2) .cell[data-value="1"] {
-  background: rgb(255, 209, 156);
-}
-
-.block:nth-child(3) .cell[data-value="1"] {
-  background: rgb(255, 237, 164);
-}
-
-.block:nth-child(4) .cell[data-value="1"] {
-  background: rgb(232, 255, 164);
-}
-
-.block:nth-child(5) .cell[data-value="1"] {
-  background: rgb(197, 255, 164);
-}
-
-.block:nth-child(6) .cell[data-value="1"] {
-  background: rgb(164, 255, 234);
-}
-
-.block:nth-child(7) .cell[data-value="1"] {
-  background: rgb(164, 206, 255);
-}
-
-.block:nth-child(8) .cell[data-value="1"] {
-  background: rgb(176, 164, 255);
-}
-
-.block:nth-child(9) .cell[data-value="1"] {
-  background: rgb(243, 164, 255);
-}
-
-.block:nth-child(10) .cell[data-value="1"] {
-  background: rgb(255, 164, 202);
-}
-
-.block:nth-child(11) .cell[data-value="1"] {
-  background: rgb(255, 164, 164);
+  box-sizing: border-box;
 }
