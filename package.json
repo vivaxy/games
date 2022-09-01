@@ -1,21 +1,22 @@
 {
-  "name": "game",
+  "name": "games",
   "version": "0.0.0",
-  "description": "[Game](https://vivaxy.github.io/game/)",
+  "description": "[Games](https://vivaxy.github.io/games/)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vivaxy/game.git"
+    "url": "git+https://github.com/vivaxy/games.git"
   },
   "keywords": [
     "vivaxy",
+    "games",
     "game"
   ],
   "author": "vivaxy <xyxuye2007@126.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vivaxy/game/issues"
+    "url": "https://github.com/vivaxy/games/issues"
   },
-  "homepage": "https://github.com/vivaxy/game#readme",
+  "homepage": "https://github.com/vivaxy/games#readme",
   "devDependencies": {
     "@vivaxy/github-demo-scripts": "^0.5.0",
     "husky": "7",
@@ -29,8 +30,8 @@
     ]
   },
   "gds": {
-    "readme-prefix": "# [Game](https://vivaxy.github.io/game/)",
-    "link-prefix": "https://vivaxy.github.io/game/"
+    "readme-prefix": "# [Games](https://vivaxy.github.io/games/)",
+    "link-prefix": "https://vivaxy.github.io/games/"
   },
   "scripts": {
     "postinstall": "husky install",
