@@ -1,5 +1,7 @@
 # [Games](https://vivaxy.github.io/games/)
 
+Choose a game from the list below to play it in your browser.
+
 # Table of contents
 
 - [15 Puzzle](https://vivaxy.github.io/games/15-puzzle/) 15 Puzzle

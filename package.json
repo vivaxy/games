@@ -30,7 +30,7 @@
     ]
   },
   "gps": {
-    "readme-prefix": "# [Games](https://vivaxy.github.io/games/)",
+    "readme-prefix": "# [Games](https://vivaxy.github.io/games/)\n\nChoose a game from the list below to play it in your browser.",
     "link-prefix": "https://vivaxy.github.io/games/"
   },
   "scripts": {
