@@ -16,9 +16,39 @@
 
   <body>
     <canvas class="js-canvas"></canvas>
-    <div class="js-score-container score-container">
-      Scores are not available.
-    </div>
+    <dialog class="score-container" aria-labelledby="scores-heading">
+      <header>
+        <h1 id="scores-heading">Scores</h1>
+        <form method="dialog"><button type="submit">Close</button></form>
+      </header>
+      <p class="js-storage-status" role="status" hidden>
+        Local storage is unavailable. Some scores are only available for this
+        visit.
+      </p>
+      <table aria-label="Score summary">
+        <thead>
+          <tr>
+            <th>Score</th>
+            <th>Current</th>
+            <th>Best</th>
+          </tr>
+        </thead>
+        <tbody class="js-statistics"></tbody>
+      </table>
+      <h2>History</h2>
+      <div class="score-history">
+        <table aria-label="Attempt history">
+          <thead>
+            <tr>
+              <th>Result</th>
+              <th>Steps</th>
+              <th>Finished</th>
+            </tr>
+          </thead>
+          <tbody class="js-attempts"></tbody>
+        </table>
+      </div>
+    </dialog>
     <script type="module" src="index.js"></script>
     <script type="text/javascript" charset="utf-8" src="/cm.js"></script>
   </body>

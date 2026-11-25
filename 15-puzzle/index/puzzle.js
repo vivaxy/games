@@ -8,7 +8,6 @@ import {
   buttonTypes,
   directions,
   puzzleStatusCodes,
-  browserEvents,
 } from './configs.js';
 
 import Grid from './puzzle/grid.js';
@@ -16,6 +15,7 @@ import Tile from './puzzle/tile.js';
 import Buttons from './puzzle/buttons.js';
 import Timer from './puzzle/timer.js';
 import Stepper from './puzzle/stepper.js';
+import Scores from './puzzle/scores.js';
 import Copyright from './puzzle/copyright.js';
 
 const whenDirection = (direction) => {
@@ -39,20 +39,22 @@ export default class Puzzle {
     this.buttons = new Buttons({ ctx });
     this.timer = new Timer({ ctx });
     this.stepper = new Stepper({ ctx });
+    this.scores = new Scores({ ctx });
     this.copyright = new Copyright({ ctx });
 
     this.tileList = this.initializeTileList();
     this.initializeInput();
     this.buttons.enable([buttonTypes.SCRAMBLE]);
     this.puzzleStatus = puzzleStatusCodes.SCRAMBLING;
-
   }
 
   initializeInput() {
-    const scoreContainer = document.querySelector('.js-score-container');
-
     this.input.on(events.TRY_MOVE, (eventType, { direction, point }) => {
-      if ([puzzleStatusCodes.SCRAMBLING, puzzleStatusCodes.WINNING].includes(this.puzzleStatus)) {
+      if (
+        [puzzleStatusCodes.SCRAMBLING, puzzleStatusCodes.WINNING].includes(
+          this.puzzleStatus,
+        )
+      ) {
         return;
       }
       this.tryMove(direction, point);
@@ -87,6 +89,9 @@ export default class Puzzle {
       const buttonAction = this.buttons.hitButton(point);
       switch (buttonAction) {
         case buttonTypes.SCRAMBLE:
+          if (this.puzzleStatus === puzzleStatusCodes.STARTED) {
+            this.finishAttempt({ dnf: true });
+          }
           this.puzzleStatus = puzzleStatusCodes.SCRAMBLING;
           this.timer.reset();
           this.stepper.reset();
@@ -95,29 +100,13 @@ export default class Puzzle {
           this.buttons.enable([buttonTypes.SCRAMBLE]);
           return;
         case buttonTypes.SHOW_SCORE:
-          scoreContainer.style.display = 'flex';
+          this.scores.open();
           this.buttons.enable([buttonTypes.SHOW_SCORE]);
           return;
       }
       if (this.copyright.hit(point)) {
         location.href = 'https://vivaxyblog.github.io/';
       }
-    });
-
-    scoreContainer.addEventListener(browserEvents.TOUCH_START, (e) => {
-      e.stopPropagation();
-    }, { passive: true });
-    scoreContainer.addEventListener(browserEvents.TOUCH_MOVE, (e) => {
-      e.stopPropagation();
-    }, { passive: true });
-    scoreContainer.addEventListener(browserEvents.TOUCH_END, (e) => {
-      e.stopPropagation();
-    }, { passive: true });
-    scoreContainer.addEventListener(browserEvents.TOUCH_CANCEL, (e) => {
-      e.stopPropagation();
-    }, { passive: true });
-    scoreContainer.addEventListener(browserEvents.CLICK, () => {
-      scoreContainer.style.display = 'none';
     });
   }
 
@@ -134,7 +123,10 @@ export default class Puzzle {
           colIndex,
           rowIndex,
           text: String(rowIndex * row + colIndex + 1),
-          type: colIndex === col - 1 && rowIndex === row - 1 ? tileTypes.SPACE : tileTypes.NORMAL,
+          type:
+            colIndex === col - 1 && rowIndex === row - 1
+              ? tileTypes.SPACE
+              : tileTypes.NORMAL,
         });
       });
     });
@@ -162,7 +154,10 @@ export default class Puzzle {
     tile.deltaY = point.deltaY;
   }
 
-  swapTiles({ rowIndex: fromRowIndex, colIndex: fromColIndex }, { rowIndex: toRowIndex, colIndex: toColIndex }) {
+  swapTiles(
+    { rowIndex: fromRowIndex, colIndex: fromColIndex },
+    { rowIndex: toRowIndex, colIndex: toColIndex },
+  ) {
     const fromTile = this.tileList[fromRowIndex][fromColIndex]; // space tile
     const toTile = this.tileList[toRowIndex][toColIndex]; // the other tile
 
@@ -176,8 +171,10 @@ export default class Puzzle {
 
     const deltaX = fromTile.deltaX;
     const deltaY = fromTile.deltaY;
-    fromTile.deltaX = (fromColIndex - toColIndex) * (tileSize + tileSpacing) + deltaX;
-    fromTile.deltaY = (fromRowIndex - toRowIndex) * (tileSize + tileSpacing) + deltaY;
+    fromTile.deltaX =
+      (fromColIndex - toColIndex) * (tileSize + tileSpacing) + deltaX;
+    fromTile.deltaY =
+      (fromRowIndex - toRowIndex) * (tileSize + tileSpacing) + deltaY;
     toTile.deltaX = (toColIndex - fromColIndex) * (tileSize + tileSpacing);
     toTile.deltaY = (toRowIndex - fromRowIndex) * (tileSize + tileSpacing);
     toTile.animateToResetPosition();
@@ -204,7 +201,10 @@ export default class Puzzle {
           return;
         }
         // move left
-        this.swapTiles({ rowIndex, colIndex }, { rowIndex, colIndex: colIndex - 1 });
+        this.swapTiles(
+          { rowIndex, colIndex },
+          { rowIndex, colIndex: colIndex - 1 },
+        );
       },
       up: () => {
         if (rowIndex <= 0) {
@@ -212,7 +212,10 @@ export default class Puzzle {
           return;
         }
         // move up
-        this.swapTiles({ rowIndex, colIndex }, { rowIndex: rowIndex - 1, colIndex });
+        this.swapTiles(
+          { rowIndex, colIndex },
+          { rowIndex: rowIndex - 1, colIndex },
+        );
       },
       right: () => {
         if (colIndex >= this.col - 1) {
@@ -220,7 +223,10 @@ export default class Puzzle {
           return;
         }
         // move right
-        this.swapTiles({ rowIndex, colIndex }, { rowIndex, colIndex: colIndex + 1 });
+        this.swapTiles(
+          { rowIndex, colIndex },
+          { rowIndex, colIndex: colIndex + 1 },
+        );
       },
       down: () => {
         if (rowIndex >= this.row - 1) {
@@ -228,7 +234,10 @@ export default class Puzzle {
           return;
         }
         // move down
-        this.swapTiles({ rowIndex, colIndex }, { rowIndex: rowIndex + 1, colIndex });
+        this.swapTiles(
+          { rowIndex, colIndex },
+          { rowIndex: rowIndex + 1, colIndex },
+        );
       },
     });
   }
@@ -236,27 +245,39 @@ export default class Puzzle {
   findSpaceTile() {
     const { tileList } = this;
     return tileList.reduce((result, tileRow) => {
-      return result || tileRow.reduce((tileResult, tile) => {
-        if (tile.type === tileTypes.SPACE) {
-          return tile;
-        }
-        return tileResult;
-      }, null);
+      return (
+        result ||
+        tileRow.reduce((tileResult, tile) => {
+          if (tile.type === tileTypes.SPACE) {
+            return tile;
+          }
+          return tileResult;
+        }, null)
+      );
     }, null);
   }
 
   render() {
-    const { grid, tileList, buttons, timer, stepper, copyright } = this;
-    const renders = tileList.reduce(({ list: accRowList, spaceTile: accRowSpaceTile }, tileRow) => {
-      const { list: rowList, spaceTile: rowSpaceTile } = tileRow.reduce(({ list, spaceTile }, tile) => {
-        if (tile.type !== tileTypes.SPACE) {
-          return { list: [...list, tile], spaceTile };
-        } else {
-          return { list, spaceTile: tile };
-        }
-      }, { list: [], spaceTile: null });
-      return { list: [...accRowList, ...rowList], spaceTile: accRowSpaceTile || rowSpaceTile };
-    }, { list: [], spaceTile: null });
+    const { grid, tileList, buttons, timer, stepper, scores, copyright } = this;
+    const renders = tileList.reduce(
+      ({ list: accRowList, spaceTile: accRowSpaceTile }, tileRow) => {
+        const { list: rowList, spaceTile: rowSpaceTile } = tileRow.reduce(
+          ({ list, spaceTile }, tile) => {
+            if (tile.type !== tileTypes.SPACE) {
+              return { list: [...list, tile], spaceTile };
+            } else {
+              return { list, spaceTile: tile };
+            }
+          },
+          { list: [], spaceTile: null },
+        );
+        return {
+          list: [...accRowList, ...rowList],
+          spaceTile: accRowSpaceTile || rowSpaceTile,
+        };
+      },
+      { list: [], spaceTile: null },
+    );
     grid.render();
     renders.spaceTile.render();
     renders.list.map((tile) => {
@@ -265,6 +286,7 @@ export default class Puzzle {
     buttons.render();
     timer.render();
     stepper.render();
+    scores.render();
     copyright.render();
   }
 
@@ -280,7 +302,9 @@ export default class Puzzle {
   scramble() {
     const directionKeys = Object.keys(directions);
     Array.from({ length: 1000 }, () => {
-      return directions[directionKeys[Math.floor(Math.random() * directionKeys.length)]];
+      return directions[
+        directionKeys[Math.floor(Math.random() * directionKeys.length)]
+      ];
     }).map((direction) => {
       return this.move(direction, { x: 0, y: 0 });
     });
@@ -297,7 +321,17 @@ export default class Puzzle {
     });
     if (winning) {
       this.puzzleStatus = puzzleStatusCodes.WINNING;
-      this.timer.stop();
+      this.finishAttempt({ dnf: false });
     }
+  }
+
+  finishAttempt({ dnf }) {
+    this.timer.stop();
+    this.scores.record({
+      dnf,
+      timeMs: this.timer.getTime(),
+      steps: this.stepper.getSteps(),
+      endedAt: Date.now(),
+    });
   }
 }

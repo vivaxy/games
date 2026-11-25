@@ -5,7 +5,6 @@
 
 * {
   -webkit-tap-highlight-color: transparent;
-  color: #fff
 }
 
 html {
@@ -26,79 +25,71 @@ canvas {
 }
 
 .score-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #fff;
-  font-size: 12px;
-  display: none;
-  flex-direction: column;
-  padding: 60px 20px;
+  box-sizing: border-box;
+  width: min(32rem, calc(100% - 2rem));
+  max-height: calc(100% - 2rem);
+  padding: 1.25rem;
+  border: 2px solid #1e2e45;
+  color: #1e2e45;
+  background: #fff;
+  font: 1rem/1.4 serif;
+  font-variant-numeric: tabular-nums;
 }
 
-.score-container .score-tab {
-  flex: none;
+.score-container::backdrop {
+  background: rgba(30, 46, 69, 0.6);
+}
+
+.score-container header {
   display: flex;
-  text-align: center;
-  height: 30px;
-  line-height: 30px;
-  margin-bottom: 30px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
-.score-container .score-tab .score-tab-item {
-  flex: 1;
-  border-bottom: 1px solid transparent;
-}
-
-.score-container .score-tab .score-tab-item[data-active] {
-  border-bottom-color: #fff;
-}
-
-.score-container .score-list {
-  flex: 1;
-  overflow-y: auto;
-}
-
-.score-container .score-list ul {
+.score-container h1,
+.score-container h2 {
   margin: 0;
-  padding: 0;
 }
 
-.score-container .score-list ul li {
-  display: flex;
-  margin-bottom: 10px;
+.score-container h2 {
+  margin-top: 1.5rem;
+  font-size: 1.25rem;
 }
 
-.score-container .score-list ul li div {
-  display: inline-block;
-  height: 20px;
-  line-height: 20px;
+.score-container button {
+  padding: 0.4rem 0.85rem;
+  border: 0;
+  color: #fff;
+  background: #1e2e45;
+  font: inherit;
+  cursor: pointer;
 }
 
-.score-container .score-list ul li .index {
-  width: 5%;
+.score-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.score-container th,
+.score-container td {
+  padding: 0.4rem 0.25rem;
+  border-bottom: 1px solid #e7e2ea;
   text-align: right;
 }
 
-.score-container .score-list ul li .username {
-  width: 35%;
-  text-indent: 10px;
+.score-container tr > :first-child {
+  text-align: left;
 }
 
-.score-container .score-list ul li .steps {
-  width: 10%;
-  text-align: right;
+.score-history {
+  max-height: 42vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
-.score-container .score-list ul li .time {
-  width: 15%;
-  text-align: right;
-}
-
-.score-container .score-list ul li .timestamp {
-  width: 35%;
-  text-align: right;
+.score-history thead {
+  position: sticky;
+  top: 0;
+  background: #fff;
 }

@@ -15,13 +15,22 @@ export const gridBackgroundColor = '#1e2e45';
 // tile
 export const tileSpacing = 10;
 export const tileBorderWidth = 0;
-export const tileSize = (gridSize - tileSpacing * (size + 1) - gridBorderWidth * 2) / size; // border 在内
+export const tileSize =
+  (gridSize - tileSpacing * (size + 1) - gridBorderWidth * 2) / size; // border 在内
 export const tileBorderColor = 'rgb(255, 0, 0)';
 export const tileTextColor = '#1e2e45';
 export const tileColors = ['#ff778d', '#ffce54', '#54c0ff', '#e7e2ea'];
 export const getTilePosition = ({ rowIndex, colIndex }) => {
-  const x = gridX + (colIndex + 1) * tileSpacing + tileSize * colIndex + gridBorderWidth;
-  const y = gridY + (rowIndex + 1) * tileSpacing + tileSize * rowIndex + gridBorderWidth;
+  const x =
+    gridX +
+    (colIndex + 1) * tileSpacing +
+    tileSize * colIndex +
+    gridBorderWidth;
+  const y =
+    gridY +
+    (rowIndex + 1) * tileSpacing +
+    tileSize * rowIndex +
+    gridBorderWidth;
   return { x, y };
 };
 
@@ -56,7 +65,7 @@ export const stepperFontSize = 60;
 export const stepperFontColor = '#1e2e45';
 
 // copyright
-export const copyrightTop = gridY + gridSize + 60;
+export const copyrightTop = gridY + gridSize + 160;
 export const copyrightLeft = gridX;
 export const copyrightWidth = gridSize;
 export const copyrightHeight = 30;
@@ -66,14 +75,6 @@ export const copyrightFontColor = '#1e2e45';
 export const tileTypes = {
   SPACE: 'SPACE',
   NORMAL: 'NORMAL',
-};
-
-export const mapCanvasToPoint = (dimension) => {
-  return window.innerWidth / canvasWidth * dimension;
-};
-
-export const mapPointToCanvas = (dimension) => {
-  return canvasWidth / window.innerWidth * dimension;
 };
 
 export const movementThreshold = (tileSize + tileSpacing) / 2;
@@ -116,4 +117,5 @@ export const puzzleStatusCodes = {
 
 export const storageKeys = {
   USERNAME: '@15-puzzle/username',
+  ATTEMPT_PREFIX: '@15-puzzle/attempt/',
 };

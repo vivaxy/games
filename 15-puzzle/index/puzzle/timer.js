@@ -3,7 +3,13 @@
  * @author vivaxy
  */
 
-import { getNow, timerFontColor, timerFontSize, timerHeight, timerLeft, timerTop } from '../configs.js';
+import {
+  timerFontColor,
+  timerFontSize,
+  timerHeight,
+  timerLeft,
+  timerTop,
+} from '../configs.js';
 
 const pad = (string, length) => {
   while (length - string.length > 0) {
@@ -14,13 +20,15 @@ const pad = (string, length) => {
 
 export const formatTime = (time) => {
   const milliseconds = time % 1000;
-  const seconds = (time - milliseconds) / 1000 % 60;
+  const seconds = ((time - milliseconds) / 1000) % 60;
   const minutes = ((time - milliseconds) / 1000 - seconds) / 60;
-  return `${minutes}:${pad(String(seconds), 2)}.${pad(String(milliseconds), 3)}`;
+  return `${minutes}:${pad(String(seconds), 2)}.${pad(
+    String(milliseconds),
+    3,
+  )}`;
 };
 
 export default class Timer {
-
   constructor({ ctx }) {
     this.ctx = ctx;
     this.time = 0;
@@ -37,13 +45,14 @@ export default class Timer {
   }
 
   start() {
-    if (!this.startingTime) {
+    if (this.startingTime === null) {
       this.time = 0;
-      this.startingTime = getNow();
+      this.startingTime = performance.now();
     }
   }
 
   stop() {
+    this.update();
     this.startingTime = null;
   }
 
@@ -53,13 +62,12 @@ export default class Timer {
   }
 
   update() {
-    if (this.startingTime) {
-      this.time = getNow() - this.startingTime;
+    if (this.startingTime !== null) {
+      this.time = Math.floor(performance.now() - this.startingTime);
     }
   }
 
   getTime() {
     return this.time;
   }
-
 }

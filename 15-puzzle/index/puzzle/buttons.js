@@ -20,7 +20,7 @@ export default class Buttons {
     this.ctx = ctx;
     this.buttons = [
       { text: 'Scramble', disabled: true, type: buttonTypes.SCRAMBLE },
-      // { text: 'Scores', disabled: false, type: buttonTypes.SHOW_SCORE },
+      { text: 'Scores', disabled: false, type: buttonTypes.SHOW_SCORE },
     ];
   }
 
@@ -35,10 +35,16 @@ export default class Buttons {
   }
 
   hitButton({ x, y }) {
-    const buttonWidth = (buttonAreaWidth + buttonSpacing) / this.buttons.length - buttonSpacing;
+    const buttonWidth =
+      (buttonAreaWidth + buttonSpacing) / this.buttons.length - buttonSpacing;
     const foundButton = this.buttons.find((button, index) => {
       const buttonLeft = buttonAreaLeft + index * (buttonWidth + buttonSpacing);
-      if (x > buttonLeft && x < buttonLeft + buttonWidth && y > buttonAreaTop && y < buttonAreaTop + buttonAreaHeight) {
+      if (
+        x > buttonLeft &&
+        x < buttonLeft + buttonWidth &&
+        y > buttonAreaTop &&
+        y < buttonAreaTop + buttonAreaHeight
+      ) {
         if (!button.disabled) {
           button.disabled = true;
           return true;
@@ -54,17 +60,24 @@ export default class Buttons {
 
   render() {
     const { ctx } = this;
-    const buttonWidth = (buttonAreaWidth + buttonSpacing) / this.buttons.length - buttonSpacing;
+    const buttonWidth =
+      (buttonAreaWidth + buttonSpacing) / this.buttons.length - buttonSpacing;
     this.buttons.forEach((button, index) => {
       const x = buttonAreaLeft + index * (buttonWidth + buttonSpacing);
-      ctx.fillStyle = button.disabled ? buttonDisabledBackgroundColor : buttonBackgroundColor;
+      ctx.fillStyle = button.disabled
+        ? buttonDisabledBackgroundColor
+        : buttonBackgroundColor;
       ctx.fillRect(x, buttonAreaTop, buttonWidth, buttonAreaHeight);
 
       ctx.font = '48px serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillStyle = buttonTextColor;
-      ctx.fillText(button.text, x + buttonWidth / 2, buttonAreaTop + buttonAreaHeight / 2);
+      ctx.fillText(
+        button.text,
+        x + buttonWidth / 2,
+        buttonAreaTop + buttonAreaHeight / 2,
+      );
     });
   }
 }
